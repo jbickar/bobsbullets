@@ -72,8 +72,19 @@ The `$options` array must be an associative array whose key is the name of the o
 
 - The boolean value `false`, which indicates that the option takes no value.
 - A **string** containing the default value for options that may be provided a value, but are not required to.
-- NULL for options that may be provided an optional value, but that have no default when a value is not provided.
 - The special value InputOption::VALUE_REQUIRED, which indicates that the user must provide a value for the option whenever it is used.
+- The special value InputOption::VALUE_OPTIONAL, which produces the following behavior:
+  - If the option is given a value (e.g. `--foo=bar`), then the value will be a string.
+  - If the option exists on the commandline, but has no value (e.g. `--foo`), then the value will be `true`.
+  - If the option does not exist on the commandline at all, then the value will be `null`.
+  - If the user explicitly sets `--foo=0`, then the value will be converted to `false`.
+  - LIMITATION: If any Input object other than ArgvInput (or a subclass thereof) is used, then the value will be `null` for both the no-value case (`--foo`) and the no-option case. When using a StringInput, use `--foo=1` instead of `--foo` to avoid this problem.
+- The special value `true` produces the following behavior:
+  - If the option is given a value (e.g. `--foo=bar`), then the value will be a string.
+  - If the option exists on the commandline, but has no value (e.g. `--foo`), then the value will be `true`.
+  - If the option does not exist on the commandline at all, then the value will also be `true`.
+  - If the user explicitly sets `--foo=0`, then the value will be converted to `false`.
+  - If the user adds `--no-foo` on the commandline, then the value of `foo` will be `false`.
 - An empty array, which indicates that the option may appear multiple times on the command line.
 
 No other values should be used for the default value. For example, `$options = ['a' => 1]` is **incorrect**; instead, use `$options = ['a' => '1']`. Similarly, `$options = ['a' => true]` is unsupported, or at least not useful, as this would indicate that the value of `--a` was always `true`, whether or not it appeared on the command line.

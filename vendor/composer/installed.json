@@ -1187,60 +1187,6 @@
         "description": "Format text by applying transformations provided by plug-in formatters."
     },
     {
-        "name": "consolidation/annotated-command",
-        "version": "2.6.1",
-        "version_normalized": "2.6.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/consolidation/annotated-command.git",
-            "reference": "7a634471471b913e63888b64b626b544799db282"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/consolidation/annotated-command/zipball/7a634471471b913e63888b64b626b544799db282",
-            "reference": "7a634471471b913e63888b64b626b544799db282",
-            "shasum": ""
-        },
-        "require": {
-            "consolidation/output-formatters": "^3.1.10",
-            "php": ">=5.4.0",
-            "phpdocumentor/reflection-docblock": "^2.0|^3.0.2|^4.0",
-            "psr/log": "^1",
-            "symfony/console": "^2.8|~3",
-            "symfony/event-dispatcher": "^2.5|^3",
-            "symfony/finder": "^2.5|^3"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8",
-            "satooshi/php-coveralls": "^1.0",
-            "squizlabs/php_codesniffer": "^2.7"
-        },
-        "time": "2017-09-18T21:45:28+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Consolidation\\AnnotatedCommand\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Greg Anderson",
-                "email": "greg.1.anderson@greenknowe.org"
-            }
-        ],
-        "description": "Initialize Symfony Console commands from annotated command class methods."
-    },
-    {
         "name": "squizlabs/php_codesniffer",
         "version": "2.9.1",
         "version_normalized": "2.9.1.0",
@@ -6963,71 +6909,6 @@
         ]
     },
     {
-        "name": "drupal/entity",
-        "version": "1.0.0-alpha4",
-        "version_normalized": "1.0.0.0-alpha4",
-        "source": {
-            "type": "git",
-            "url": "https://git.drupal.org/project/entity",
-            "reference": "8.x-1.0-alpha4"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/entity-8.x-1.0-alpha4.zip",
-            "reference": "8.x-1.0-alpha4",
-            "shasum": "c081d3757c159dfee74c9e5acb63bdee81c42e18"
-        },
-        "require": {
-            "drupal/core": "~8.1"
-        },
-        "type": "drupal-module",
-        "extra": {
-            "branch-alias": {
-                "dev-1.x": "1.x-dev"
-            },
-            "drupal": {
-                "version": "8.x-1.0-alpha4",
-                "datestamp": "1481194983",
-                "security-coverage": {
-                    "status": "not-covered",
-                    "message": "Alpha releases are not covered by Drupal security advisories."
-                }
-            }
-        },
-        "installation-source": "dist",
-        "notification-url": "https://packages.drupal.org/8/downloads",
-        "license": [
-            "GPL-2.0+"
-        ],
-        "authors": [
-            {
-                "name": "Berdir",
-                "homepage": "https://www.drupal.org/user/214652"
-            },
-            {
-                "name": "bojanz",
-                "homepage": "https://www.drupal.org/user/86106"
-            },
-            {
-                "name": "dawehner",
-                "homepage": "https://www.drupal.org/user/99340"
-            },
-            {
-                "name": "dixon_",
-                "homepage": "https://www.drupal.org/user/239911"
-            },
-            {
-                "name": "fago",
-                "homepage": "https://www.drupal.org/user/16747"
-            }
-        ],
-        "description": "Provides expanded entity APIs, which will be moved to Drupal core one day.",
-        "homepage": "http://drupal.org/project/entity",
-        "support": {
-            "source": "http://cgit.drupalcode.org/entity"
-        }
-    },
-    {
         "name": "drupal/media_entity",
         "version": "1.6.0",
         "version_normalized": "1.6.0.0",
@@ -10621,5 +10502,183 @@
             "drupal",
             "symfony"
         ]
+    },
+    {
+        "name": "consolidation/annotated-command",
+        "version": "2.7.0",
+        "version_normalized": "2.7.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/consolidation/annotated-command.git",
+            "reference": "5e22a86f53ab1417a6002234fe205e69645326b8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/consolidation/annotated-command/zipball/5e22a86f53ab1417a6002234fe205e69645326b8",
+            "reference": "5e22a86f53ab1417a6002234fe205e69645326b8",
+            "shasum": ""
+        },
+        "require": {
+            "consolidation/output-formatters": "^3.1.10",
+            "php": ">=5.4.0",
+            "phpdocumentor/reflection-docblock": "^2.0|^3.0.2|^4.0",
+            "psr/log": "^1",
+            "symfony/console": "^2.8|~3",
+            "symfony/event-dispatcher": "^2.5|^3",
+            "symfony/finder": "^2.5|^3"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8",
+            "satooshi/php-coveralls": "^1.0",
+            "squizlabs/php_codesniffer": "^2.7"
+        },
+        "time": "2017-09-18T22:52:16+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Consolidation\\AnnotatedCommand\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Greg Anderson",
+                "email": "greg.1.anderson@greenknowe.org"
+            }
+        ],
+        "description": "Initialize Symfony Console commands from annotated command class methods."
+    },
+    {
+        "name": "drupal/entity",
+        "version": "1.0.0-beta1",
+        "version_normalized": "1.0.0.0-beta1",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupal.org/project/entity",
+            "reference": "8.x-1.0-beta1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/entity-8.x-1.0-beta1.zip",
+            "reference": "8.x-1.0-beta1",
+            "shasum": "6965349818de8cb820113b6841076162190c1a4c"
+        },
+        "require": {
+            "drupal/core": "~8.3"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-1.x": "1.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-1.0-beta1",
+                "datestamp": "1505895844",
+                "security-coverage": {
+                    "status": "not-covered",
+                    "message": "Beta releases are not covered by Drupal security advisories."
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Berdir",
+                "homepage": "https://www.drupal.org/user/214652"
+            },
+            {
+                "name": "bojanz",
+                "homepage": "https://www.drupal.org/user/86106"
+            },
+            {
+                "name": "dawehner",
+                "homepage": "https://www.drupal.org/user/99340"
+            },
+            {
+                "name": "dixon_",
+                "homepage": "https://www.drupal.org/user/239911"
+            },
+            {
+                "name": "fago",
+                "homepage": "https://www.drupal.org/user/16747"
+            }
+        ],
+        "description": "Provides expanded entity APIs, which will be moved to Drupal core one day.",
+        "homepage": "http://drupal.org/project/entity",
+        "support": {
+            "source": "http://cgit.drupalcode.org/entity"
+        }
+    },
+    {
+        "name": "drupal/admin_menu",
+        "version": "dev-3.x",
+        "version_normalized": "dev-3.x",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupal.org/project/admin_menu",
+            "reference": "61acfcb5bf14f7e58d6a3b79d82b42a5a9cafd78"
+        },
+        "require": {
+            "drupal/core": "~8.0"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-3.x": "3.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-3.x-dev",
+                "datestamp": "1426875781",
+                "security-coverage": {
+                    "status": "not-covered",
+                    "message": "Project has not opted into security advisory coverage!"
+                }
+            }
+        },
+        "installation-source": "source",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Dave Reid",
+                "homepage": "https://www.drupal.org/user/53892"
+            },
+            {
+                "name": "fubhy",
+                "homepage": "https://www.drupal.org/user/761344"
+            },
+            {
+                "name": "pwolanin",
+                "homepage": "https://www.drupal.org/user/49851"
+            },
+            {
+                "name": "smk-ka",
+                "homepage": "https://www.drupal.org/user/48898"
+            },
+            {
+                "name": "sun",
+                "homepage": "https://www.drupal.org/user/54136"
+            }
+        ],
+        "description": "Provides a dropdown menu to most administrative tasks and other common destinations (to users with the proper permissions).",
+        "homepage": "https://www.drupal.org/project/admin_menu",
+        "support": {
+            "source": "http://cgit.drupalcode.org/admin_menu"
+        }
     }
 ]
