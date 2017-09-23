@@ -411,6 +411,22 @@ class ExampleCommandFile
     }
 
     /**
+     * @return string
+     */
+    public function defaultOptionalValue($options = ['foo' => InputOption::VALUE_OPTIONAL])
+    {
+        return "Foo is " . var_export($options['foo'], true);
+    }
+
+    /**
+     * @return string
+     */
+    public function defaultOptionDefaultsToTrue($options = ['foo' => true])
+    {
+        return "Foo is " . var_export($options['foo'], true);
+    }
+
+    /**
      * This is the test:required-array-option command
      *
      * This command will print all the valused of passed option
