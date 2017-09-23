@@ -10623,16 +10623,89 @@
         }
     },
     {
-        "name": "drupal/admin_menu",
-        "version": "dev-3.x",
-        "version_normalized": "dev-3.x",
+        "name": "drupal/migrate_plus",
+        "version": "4.0.0-beta1",
+        "version_normalized": "4.0.0.0-beta1",
         "source": {
             "type": "git",
-            "url": "https://git.drupal.org/project/admin_menu",
-            "reference": "61acfcb5bf14f7e58d6a3b79d82b42a5a9cafd78"
+            "url": "https://git.drupal.org/project/migrate_plus",
+            "reference": "8.x-4.0-beta1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/migrate_plus-8.x-4.0-beta1.zip",
+            "reference": "8.x-4.0-beta1",
+            "shasum": "e64bac006e3ef9ae697b0f2c4b3744af0524e208"
         },
         "require": {
-            "drupal/core": "~8.0"
+            "drupal/core": "^8.3"
+        },
+        "require-dev": {
+            "drupal/migrate_example_advanced_setup": "*",
+            "drupal/migrate_example_setup": "*"
+        },
+        "suggest": {
+            "sainsburys/guzzle-oauth2-plugin": "3.0 required for the OAuth2 authentication plugin"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-4.x": "4.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-4.0-beta1",
+                "datestamp": "1494450185",
+                "security-coverage": {
+                    "status": "not-covered",
+                    "message": "Beta releases are not covered by Drupal security advisories."
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Mike Ryan",
+                "homepage": "https://www.drupal.org/u/mikeryan",
+                "role": "Maintainer"
+            },
+            {
+                "name": "mikeryan",
+                "homepage": "https://www.drupal.org/user/4420"
+            }
+        ],
+        "description": "Enhancements to core migration support.",
+        "homepage": "https://www.drupal.org/project/migrate_plus",
+        "support": {
+            "source": "https://cgit.drupalcode.org/migrate_plus",
+            "issues": "https://www.drupal.org/project/issues/migrate_plus",
+            "irc": "irc://irc.freenode.org/drupal-migrate"
+        }
+    },
+    {
+        "name": "drupal/migrate_upgrade",
+        "version": "3.0.0-rc2",
+        "version_normalized": "3.0.0.0-RC2",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupal.org/project/migrate_upgrade",
+            "reference": "8.x-3.0-rc2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/migrate_upgrade-8.x-3.0-rc2.zip",
+            "reference": "8.x-3.0-rc2",
+            "shasum": "55df65ac7b6104b5e8f8f673591b8dc0a7f6cce6"
+        },
+        "require": {
+            "drupal/core": "*",
+            "drupal/migrate_plus": "*"
+        },
+        "require-dev": {
+            "drupal/coder": "*"
         },
         "type": "drupal-module",
         "extra": {
@@ -10640,45 +10713,107 @@
                 "dev-3.x": "3.x-dev"
             },
             "drupal": {
-                "version": "8.x-3.x-dev",
-                "datestamp": "1426875781",
+                "version": "8.x-3.0-rc2",
+                "datestamp": "1504384144",
                 "security-coverage": {
                     "status": "not-covered",
-                    "message": "Project has not opted into security advisory coverage!"
+                    "message": "RC releases are not covered by Drupal security advisories."
                 }
             }
         },
-        "installation-source": "source",
+        "installation-source": "dist",
         "notification-url": "https://packages.drupal.org/8/downloads",
         "license": [
             "GPL-2.0+"
         ],
         "authors": [
             {
-                "name": "Dave Reid",
-                "homepage": "https://www.drupal.org/user/53892"
+                "name": "abhishek-anand",
+                "homepage": "https://www.drupal.org/user/468982"
             },
             {
-                "name": "fubhy",
-                "homepage": "https://www.drupal.org/user/761344"
+                "name": "heddn",
+                "homepage": "https://www.drupal.org/user/1463982"
             },
             {
-                "name": "pwolanin",
-                "homepage": "https://www.drupal.org/user/49851"
+                "name": "ksenzee",
+                "homepage": "https://www.drupal.org/user/139855"
             },
             {
-                "name": "smk-ka",
-                "homepage": "https://www.drupal.org/user/48898"
+                "name": "mikeryan",
+                "homepage": "https://www.drupal.org/user/4420"
             },
             {
-                "name": "sun",
-                "homepage": "https://www.drupal.org/user/54136"
+                "name": "ultimike",
+                "homepage": "https://www.drupal.org/user/51132"
+            },
+            {
+                "name": "xjm",
+                "homepage": "https://www.drupal.org/user/65776"
             }
         ],
-        "description": "Provides a dropdown menu to most administrative tasks and other common destinations (to users with the proper permissions).",
-        "homepage": "https://www.drupal.org/project/admin_menu",
+        "description": "Drush support for direct upgrades from older Drupal versions.",
+        "homepage": "https://www.drupal.org/project/migrate_upgrade",
         "support": {
-            "source": "http://cgit.drupalcode.org/admin_menu"
+            "source": "http://cgit.drupalcode.org/migrate_upgrade"
+        }
+    },
+    {
+        "name": "drupal/migrate_tools",
+        "version": "4.0.0-beta1",
+        "version_normalized": "4.0.0.0-beta1",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupal.org/project/migrate_tools",
+            "reference": "8.x-4.0-beta1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/migrate_tools-8.x-4.0-beta1.zip",
+            "reference": "8.x-4.0-beta1",
+            "shasum": "81ef335ea37053c26d4bcb4f5339fd77051e59e0"
+        },
+        "require": {
+            "drupal/core": "^8.3",
+            "drupal/migrate_plus": "*"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-4.x": "4.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-4.0-beta1",
+                "datestamp": "1494450185",
+                "security-coverage": {
+                    "status": "not-covered",
+                    "message": "Beta releases are not covered by Drupal security advisories."
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "heddn",
+                "homepage": "https://www.drupal.org/user/1463982"
+            },
+            {
+                "name": "mikeryan",
+                "homepage": "https://www.drupal.org/user/4420"
+            },
+            {
+                "name": "moshe weitzman",
+                "homepage": "https://www.drupal.org/user/23"
+            }
+        ],
+        "description": "Tools to assist in developing and running migrations.",
+        "homepage": "https://www.drupal.org/project/migrate_tools",
+        "support": {
+            "source": "http://cgit.drupalcode.org/migrate_tools"
         }
     }
 ]
