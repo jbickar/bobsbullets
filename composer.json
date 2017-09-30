@@ -25,6 +25,7 @@
         "drupal-composer/drupal-scaffold": "^2.0.0",
         "cweagans/composer-patches": "^1.6.0",
         "acquia/lightning": "~2.1.0",
+        "drupal/basic": "~1.2",
         "drupal/migrate_upgrade": "3.0-rc2",
         "drupal/migrate_plus": "4.0-beta1",
         "drupal/migrate_tools": "4.0-beta1",
