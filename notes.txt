@@ -1,0 +1,27 @@
+dr8 migrate-import upgrade_d6_node_type
+dr8 migrate-import upgrade_d6_field
+dr8 migrate-import upgrade_d6_field_instance
+dr8 migrate-import upgrade_d6_view_modes
+dr8 migrate-import upgrade_d6_field_formatter_settings
+dr8 migrate-import upgrade_d6_field_instance_widget_settings
+dr8 migrate-import upgrade_d6_file
+dr8 migrate-import upgrade_d6_node_settings
+dr8 migrate-import upgrade_d6_upload_field
+dr8 migrate-import upgrade_d6_upload_field_instance
+dr8 migrate-import upgrade_d6_filter_format
+dr8 migrate-import upgrade_d6_node_bullet
+dr8 migrate-import upgrade_d6_user_role
+dr8 migrate-import upgrade_d6_user
+dr8 migrate-import upgrade_d6_node_bullet
+dr8 migrate-import upgrade_d6_node_page
+dr8 migrate-import upgrade_d6_node_revision_bullet
+dr8 migrate-import upgrade_d6_node_setting_status
+dr8 migrate-import upgrade_d6_taxonomy_vocabulary
+dr8 migrate-import upgrade_d6_taxonomy_term
+dr8 migrate-import upgrade_d6_vocabulary_field
+dr8 migrate-import upgrade_d6_node_image
+# dr8 migrate-import upgrade_d6_upload
+dr8 migrate-import upgrade_d6_upload_entity_display
+dr8 migrate-import upgrade_d6_upload_entity_form_display
+dr8 migrate-import upgrade_d6_url_alias
+dr8 migrate-import upgrade_d6_imagecache_presets

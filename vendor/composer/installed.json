@@ -10870,5 +10870,33 @@
             "issues": "https://www.drupal.org/project/issues/migrate_manifest",
             "irc": "irc://irc.freenode.org/drupal-migrate"
         }
+    },
+    {
+        "name": "su-sws/stanford_basic",
+        "version": "dev-8.x-1.x",
+        "version_normalized": "dev-8.x-1.x",
+        "source": {
+            "type": "git",
+            "url": "git@github.com:SU-SWS/stanford_basic.git",
+            "reference": "021cd8aba709840bc66c8c5046b07f27b4780622"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/SU-SWS/stanford_basic/zipball/021cd8aba709840bc66c8c5046b07f27b4780622",
+            "reference": "021cd8aba709840bc66c8c5046b07f27b4780622",
+            "shasum": ""
+        },
+        "time": "2017-09-29T18:08:56+00:00",
+        "type": "stanford-theme",
+        "installation-source": "source",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "description": "Stanford Basic Branding Theme.",
+        "homepage": "https://github.com/SU-SWS/stanford_basic",
+        "support": {
+            "source": "https://github.com/SU-SWS/stanford_basic/tree/8.x-1.x",
+            "issues": "https://github.com/SU-SWS/stanford_basic/issues"
+        }
     }
 ]
