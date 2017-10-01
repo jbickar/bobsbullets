@@ -30,6 +30,7 @@
         "drupal/migrate_plus": "4.0-beta1",
         "drupal/migrate_tools": "4.0-beta1",
         "drupal/migrate_manifest": "1.5",
+        "su-sws/nobots": "dev-8.x-1.x",
         "su-sws/stanford_basic": "dev-8.x-1.x"
     },
     "repositories": [

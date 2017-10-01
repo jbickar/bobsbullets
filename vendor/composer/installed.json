@@ -10970,5 +10970,32 @@
         "support": {
             "source": "http://cgit.drupalcode.org/basic"
         }
+    },
+    {
+        "name": "su-sws/nobots",
+        "version": "dev-8.x-1.x",
+        "version_normalized": "dev-8.x-1.x",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/SU-SWS/nobots.git",
+            "reference": "a826c4340f12f7035bae66ce23a0b64a861a2fcb"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/SU-SWS/nobots/zipball/a826c4340f12f7035bae66ce23a0b64a861a2fcb",
+            "reference": "a826c4340f12f7035bae66ce23a0b64a861a2fcb",
+            "shasum": ""
+        },
+        "require": {
+            "composer/installers": "~1.0"
+        },
+        "time": "2016-11-01T16:10:40+00:00",
+        "type": "stanford-module",
+        "installation-source": "source",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "description": "This module blocks (well-behaved) search engine robots from crawling, indexing, or archiving your site by setting a \"X-Robots-Tag: noindex,nofollow,noarchive\" HTTP header."
     }
 ]
