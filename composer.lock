@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "33a194d606e1966ea6d4908157dc9f8a",
+    "content-hash": "00e27835f6372a083e87923cf8ec59b8",
     "packages": [
         {
             "name": "acquia/lightning",
@@ -4861,6 +4861,57 @@
                 "stack"
             ],
             "time": "2016-06-02T06:58:42+00:00"
+        },
+        {
+            "name": "su-sws/nobots",
+            "version": "dev-8.x-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SU-SWS/nobots.git",
+                "reference": "a826c4340f12f7035bae66ce23a0b64a861a2fcb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SU-SWS/nobots/zipball/a826c4340f12f7035bae66ce23a0b64a861a2fcb",
+                "reference": "a826c4340f12f7035bae66ce23a0b64a861a2fcb",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "stanford-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "This module blocks (well-behaved) search engine robots from crawling, indexing, or archiving your site by setting a \"X-Robots-Tag: noindex,nofollow,noarchive\" HTTP header.",
+            "time": "2016-11-01 16:10:40"
+        },
+        {
+            "name": "su-sws/stanford_basic",
+            "version": "dev-8.x-1.x",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:SU-SWS/stanford_basic.git",
+                "reference": "021cd8aba709840bc66c8c5046b07f27b4780622"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SU-SWS/stanford_basic/zipball/021cd8aba709840bc66c8c5046b07f27b4780622",
+                "reference": "021cd8aba709840bc66c8c5046b07f27b4780622",
+                "shasum": ""
+            },
+            "type": "stanford-theme",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Stanford Basic Branding Theme.",
+            "homepage": "https://github.com/SU-SWS/stanford_basic",
+            "support": {
+                "source": "https://github.com/SU-SWS/stanford_basic/tree/8.x-1.x",
+                "issues": "https://github.com/SU-SWS/stanford_basic/issues"
+            },
+            "time": "2017-09-29 18:08:56"
         },
         {
             "name": "sunra/php-simple-html-dom-parser",
@@ -10606,7 +10657,10 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "su-sws/nobots": 20,
+        "su-sws/stanford_basic": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],

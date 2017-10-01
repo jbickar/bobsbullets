@@ -1,0 +1,146 @@
+@charset 'UTF-8';
+
+// My Config.
+@import "config/config";
+
+// Decanter config.
+@import "decanter/core/utilities/decanter-utilities.scss";
+
+// Grab our mixins.
+@import "utilities/utilities";
+
+$gutter: 2rem !default;
+
+#footer__global-footer {
+  background-color: color(bright-red);
+  color: color(reverse-text);
+  width: 100%;
+  @include responsive-container($default-container);
+
+  a {
+    color: color(reverse-text);
+  }
+
+  .su-brand {
+    padding-top: 0.15em;
+    line-height: 0.75;
+    @include on-event {
+      text-decoration: none;
+    }
+  }
+
+  #global-footer__brand {
+    display: block;
+    float: left;
+    @include grid-media($media-xs-only) {
+      margin-right: _retrieve-neat-setting($media-xs-only, gutter);
+      width: 10rem;
+    }
+    @include grid-media($media-sm) {
+      margin-right: _retrieve-neat-setting($media-xs-only, gutter);
+      width: 12rem;
+      max-height: 70px;
+    }
+    @include grid-media($media-lg-only) {
+      margin-right: _retrieve-neat-setting($media-lg-only, gutter);
+    }
+    @include grid-media($media-xl) {
+      margin-right: _retrieve-neat-setting($media-xl, gutter);
+    }
+
+  }
+
+  #global-footer__nav {
+    color: color(reverse-text);
+    display: block;
+    font-weight: 300;
+
+    #nav__global-links {
+      @include font-size(16px);
+      margin-bottom: 0.25em;
+
+      a {
+        margin-right: 1.5em;
+      }
+    }
+
+    #nav__policy-links {
+      @include font-size(13px);
+
+      a {
+        margin-right: 1.2em;
+      }
+    }
+
+    a {
+      display: inline-block;
+      @include grid-media($media-xs-only) {
+        display: block;
+        width: 15rem;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  #global-footer__info {
+    .vcard {
+      @include font-size(13px);
+      font-weight: 300;
+
+      .adr {
+        margin-left: $small-spacing / 2;
+        margin-right: $small-spacing / 2;
+      }
+    }
+  }
+
+  .termsofuse {
+    font-size: em(13px);
+    font-weight: 300;
+
+    > * {
+      white-space: nowrap;
+    }
+
+    :first-child {
+      margin-right: $small-spacing / 2;
+    }
+  }
+}
+
+#footer__global-footer {
+  @media (max-width: 767px) {
+    #global-footer__brand {
+      float: none;
+      margin: 0 auto 1em;
+    }
+
+    #global-footer__nav {
+      display: inline-block;
+      overflow: hidden;
+      text-align: left;
+
+      #nav__global-links {
+        margin-right: 30px;
+      }
+
+
+      #nav__global-links,
+      #nav__policy-links {
+        float: left;
+        @include font-size(16px);
+        margin-bottom: .5em;
+
+        a {
+          display: block;
+          margin-bottom: .5em;
+        }
+      }
+    }
+
+    #global-footer__info {
+      clear: both;
+      text-align: center;
+    }
+  }
+}
