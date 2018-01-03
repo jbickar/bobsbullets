@@ -25,3 +25,7 @@ dr8 migrate-import upgrade_d6_upload_entity_display
 dr8 migrate-import upgrade_d6_upload_entity_form_display
 dr8 migrate-import upgrade_d6_url_alias
 dr8 migrate-import upgrade_d6_imagecache_presets
+
+Favicons:
+
+https://realfavicongenerator.net/

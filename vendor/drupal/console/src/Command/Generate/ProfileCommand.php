@@ -17,6 +17,7 @@ use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Console\Extension\Manager;
 use Drupal\Console\Core\Utils\StringConverter;
 use Drupal\Console\Utils\Validator;
+use Webmozart\PathUtil\Path;
 
 /**
  * Class ProfileCommand
@@ -94,6 +95,12 @@ class ProfileCommand extends Command
                 $this->trans('commands.generate.profile.options.machine-name')
             )
             ->addOption(
+                'profile-path',
+                null,
+                InputOption::VALUE_REQUIRED,
+                $this->trans('commands.generate.profile.options.profile-path')
+            )
+            ->addOption(
                 'description',
                 null,
                 InputOption::VALUE_OPTIONAL,
@@ -138,6 +145,14 @@ class ProfileCommand extends Command
             return 1;
         }
 
+
+        // Get the profile path and define a profile path if it is null
+        // Check that it is an absolute path or otherwise create an absolute path using appRoot
+        $profile_path = $input->getOption('profile-path');
+        $profile_path = $profile_path == null ? 'profiles' : $profile_path;
+        $profile_path = Path::isAbsolute($profile_path) ? $profile_path : Path::makeAbsolute($profile_path, $this->appRoot);
+        $profile_path = $this->validator->validateModulePath($profile_path, true);
+
         $profile = $this->validator->validateModuleName($input->getOption('profile'));
         $machine_name = $this->validator->validateMachineName($input->getOption('machine-name'));
         $description = $input->getOption('description');
@@ -145,7 +160,6 @@ class ProfileCommand extends Command
         $dependencies = $this->validator->validateExtensions($input->getOption('dependencies'), 'module', $io);
         $themes = $this->validator->validateExtensions($input->getOption('themes'), 'theme', $io);
         $distribution = $input->getOption('distribution');
-        $profile_path = $this->appRoot . '/profiles';
 
         $this->generator->generate(
             $profile,
@@ -208,6 +222,29 @@ class ProfileCommand extends Command
             );
             $input->setOption('machine-name', $machine_name);
         }
+
+        $profile_path = $input->getOption('profile-path');
+        if (!$profile_path) {
+            $profile_path = $io->ask(
+                $this->trans('commands.generate.profile.questions.profile-path'),
+                'profiles',
+                function ($profile_path) use ($machine_name) {
+                    $fullPath = Path::isAbsolute($profile_path) ? $profile_path : Path::makeAbsolute($profile_path, $this->appRoot);
+                    $fullPath = $fullPath.'/'.$machine_name;
+                    if (file_exists($fullPath)) {
+                        throw new \InvalidArgumentException(
+                            sprintf(
+                                $this->trans('commands.generate.profile.errors.directory-exists'),
+                                $fullPath
+                            )
+                        );
+                    }
+
+                    return $profile_path;
+                }
+            );
+        }
+        $input->setOption('profile-path', $profile_path);
 
         $description = $input->getOption('description');
         if (!$description) {

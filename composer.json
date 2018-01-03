@@ -31,6 +31,8 @@
         "drupal/migrate_tools": "4.0-beta1",
         "drupal/migrate_manifest": "1.5",
         "drupal/business": "1.7",
+        "drupal/asset_injector": "2.1",
+        "drupal/google_analytics": "2.2",
         "drupal/at_tools": "2.0",
         "drupal/adaptivetheme": "2.0",
         "drupal/pixture_reloaded": "1.0-rc1",
