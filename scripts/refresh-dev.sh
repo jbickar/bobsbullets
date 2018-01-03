@@ -5,5 +5,6 @@ if test $destroy = Y; then
   drush -y sql-sync @bob.prod @bob.dev
   drush -y rsync @bob.prod:%files @bob.dev:%files
   drush @bob.dev -y en nobots
+  drush @bob.dev -y pm-uninstall googleanalytics
   drush @bob.dev cr
 fi
