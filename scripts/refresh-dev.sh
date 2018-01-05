@@ -3,7 +3,7 @@ read -p "Are you sure you want to completely blow away the database and files on
 if test $destroy = Y; then
   drush @bob.dev -y sql-drop
   drush -y sql-sync @bob.prod @bob.dev
-  drush -y rsync @bob.prod:%files @bob.dev:%files
+  drush -y rsync @bob.prod:%files/ @bob.dev:%files
   drush @bob.dev -y en nobots
   drush @bob.dev -y pm-uninstall googleanalytics
   drush @bob.dev cr
