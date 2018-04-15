@@ -11,3 +11,6 @@ docroot/sites/default/settings.php
 
 # Ignore Composer-managed dependencies.
 #vendor/
+
+# Ignore backups
+backup*
