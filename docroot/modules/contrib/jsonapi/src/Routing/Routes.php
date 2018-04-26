@@ -26,7 +26,7 @@ class Routes implements ContainerInjectionInterface {
    *
    * @var string
    */
-  const FRONT_CONTROLLER = '\Drupal\jsonapi\Controller\RequestHandler::handle';
+  const FRONT_CONTROLLER = 'jsonapi.request_handler:handle';
 
   /**
    * The JSON API resource type repository.
@@ -80,7 +80,8 @@ class Routes implements ContainerInjectionInterface {
   public function entryPoint() {
     $collection = new RouteCollection();
 
-    $route_collection = (new Route('/jsonapi', [
+    $path_prefix = $this->resourceTypeRepository->getPathPrefix();
+    $route_collection = (new Route('/' . $path_prefix, [
       RouteObjectInterface::CONTROLLER_NAME => '\Drupal\jsonapi\Controller\EntryPoint::index',
     ]))
       ->setRequirement('_permission', 'access jsonapi resource list')
@@ -100,13 +101,20 @@ class Routes implements ContainerInjectionInterface {
   public function routes() {
     $collection = new RouteCollection();
     foreach ($this->resourceTypeRepository->all() as $resource_type) {
-      $route_base_path = sprintf('/jsonapi/%s/%s', $resource_type->getEntityTypeId(), $resource_type->getBundle());
+      if ($resource_type->isInternal()) {
+        continue;
+      }
+
+      $path_prefix = $this->resourceTypeRepository->getPathPrefix();
+      $resource_path = $resource_type->getPath();
+      $route_base_path = sprintf('/%s/%s', $path_prefix, $resource_path);
       $build_route_name = function ($key) use ($resource_type) {
         return sprintf('jsonapi.%s.%s', $resource_type->getTypeName(), $key);
       };
 
       $defaults = [
         RouteObjectInterface::CONTROLLER_NAME => static::FRONT_CONTROLLER,
+        'resource_type' => $resource_type->getTypeName(),
       ];
       // Options that apply to all routes.
       $options = [
@@ -114,37 +122,47 @@ class Routes implements ContainerInjectionInterface {
         '_is_jsonapi' => TRUE,
       ];
 
+      $parameters = [
+        'resource_type' => [
+          'type' => 'jsonapi_resource_type',
+        ],
+      ];
+
       // Collection endpoint, like /jsonapi/file/photo.
-      $route_collection = (new Route($route_base_path, $defaults))
-        ->setRequirement('_entity_type', $resource_type->getEntityTypeId())
-        ->setRequirement('_bundle', $resource_type->getBundle())
-        ->setRequirement('_permission', 'access content')
+      $route_collection = (new Route($route_base_path))
+        ->addDefaults($defaults + ['serialization_class' => JsonApiDocumentTopLevel::class])
+        ->setRequirement('_entity_type', (string) $resource_type->getEntityTypeId())
+        ->setRequirement('_bundle', (string) $resource_type->getBundle())
         ->setRequirement('_jsonapi_custom_query_parameter_names', 'TRUE')
-        ->setOption('serialization_class', JsonApiDocumentTopLevel::class)
+        ->setRequirement('_csrf_request_header_token', 'TRUE')
+        ->setOption('parameters', $parameters)
         ->setMethods(['GET', 'POST']);
       $route_collection->addOptions($options);
       $collection->add($build_route_name('collection'), $route_collection);
 
       // Individual endpoint, like /jsonapi/file/photo/123.
-      $parameters = [$resource_type->getEntityTypeId() => ['type' => 'entity:' . $resource_type->getEntityTypeId()]];
+      $parameters = array_merge($parameters, [
+        $resource_type->getEntityTypeId() => [
+          'type' => 'entity:' . $resource_type->getEntityTypeId(),
+        ],
+      ]);
       $route_individual = (new Route(sprintf('%s/{%s}', $route_base_path, $resource_type->getEntityTypeId())))
-        ->addDefaults($defaults)
-        ->setRequirement('_entity_type', $resource_type->getEntityTypeId())
-        ->setRequirement('_bundle', $resource_type->getBundle())
-        ->setRequirement('_permission', 'access content')
+        ->addDefaults($defaults + ['serialization_class' => JsonApiDocumentTopLevel::class])
+        ->setRequirement('_entity_type', (string) $resource_type->getEntityTypeId())
+        ->setRequirement('_bundle', (string) $resource_type->getBundle())
         ->setRequirement('_jsonapi_custom_query_parameter_names', 'TRUE')
+        ->setRequirement('_csrf_request_header_token', 'TRUE')
         ->setOption('parameters', $parameters)
         ->setOption('_auth', $this->authProviderList())
-        ->setOption('serialization_class', JsonApiDocumentTopLevel::class)
         ->setMethods(['GET', 'PATCH', 'DELETE']);
       $route_individual->addOptions($options);
       $collection->add($build_route_name('individual'), $route_individual);
 
       // Related resource, like /jsonapi/file/photo/123/comments.
-      $route_related = (new Route(sprintf('%s/{%s}/{related}', $route_base_path, $resource_type->getEntityTypeId()), $defaults))
-        ->setRequirement('_entity_type', $resource_type->getEntityTypeId())
-        ->setRequirement('_bundle', $resource_type->getBundle())
-        ->setRequirement('_permission', 'access content')
+      $route_related = (new Route(sprintf('%s/{%s}/{related}', $route_base_path, $resource_type->getEntityTypeId())))
+        ->addDefaults($defaults)
+        ->setRequirement('_entity_type', (string) $resource_type->getEntityTypeId())
+        ->setRequirement('_bundle', (string) $resource_type->getBundle())
         ->setRequirement('_jsonapi_custom_query_parameter_names', 'TRUE')
         ->setOption('parameters', $parameters)
         ->setOption('_auth', $this->authProviderList())
@@ -153,14 +171,19 @@ class Routes implements ContainerInjectionInterface {
       $collection->add($build_route_name('related'), $route_related);
 
       // Related endpoint, like /jsonapi/file/photo/123/relationships/comments.
-      $route_relationship = (new Route(sprintf('%s/{%s}/relationships/{related}', $route_base_path, $resource_type->getEntityTypeId()), $defaults + ['_on_relationship' => TRUE]))
-        ->setRequirement('_entity_type', $resource_type->getEntityTypeId())
-        ->setRequirement('_bundle', $resource_type->getBundle())
-        ->setRequirement('_permission', 'access content')
+      $route_relationship = (new Route(sprintf('%s/{%s}/relationships/{related}', $route_base_path, $resource_type->getEntityTypeId())))
+        ->addDefaults(
+          $defaults + [
+            '_on_relationship' => TRUE,
+            'serialization_class' => EntityReferenceFieldItemList::class,
+          ]
+        )
+        ->setRequirement('_entity_type', (string) $resource_type->getEntityTypeId())
+        ->setRequirement('_bundle', (string) $resource_type->getBundle())
         ->setRequirement('_jsonapi_custom_query_parameter_names', 'TRUE')
+        ->setRequirement('_csrf_request_header_token', 'TRUE')
         ->setOption('parameters', $parameters)
         ->setOption('_auth', $this->authProviderList())
-        ->setOption('serialization_class', EntityReferenceFieldItemList::class)
         ->setMethods(['GET', 'POST', 'PATCH', 'DELETE']);
       $route_relationship->addOptions($options);
       $collection->add($build_route_name('relationship'), $route_relationship);

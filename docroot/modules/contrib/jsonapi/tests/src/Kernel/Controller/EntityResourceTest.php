@@ -3,11 +3,11 @@
 namespace Drupal\Tests\jsonapi\Kernel\Controller;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Config\ConfigException;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\jsonapi\Exception\EntityAccessDeniedHttpException;
 use Drupal\jsonapi\ResourceType\ResourceType;
-use Drupal\jsonapi\Context\CurrentContext;
 use Drupal\jsonapi\Controller\EntityResource;
 use Drupal\jsonapi\Resource\EntityCollection;
 use Drupal\jsonapi\Resource\JsonApiDocumentTopLevel;
@@ -26,12 +26,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Route;
 
 /**
  * @coversDefaultClass \Drupal\jsonapi\Controller\EntityResource
  * @group jsonapi
  * @group legacy
+ *
+ * @internal
  */
 class EntityResourceTest extends JsonapiKernelTestBase {
 
@@ -169,13 +172,13 @@ class EntityResourceTest extends JsonapiKernelTestBase {
 
   /**
    * @covers ::getIndividual
-   * @expectedException \Drupal\jsonapi\Exception\EntityAccessDeniedHttpException
    */
   public function testGetIndividualDenied() {
     $role = Role::load(RoleInterface::ANONYMOUS_ID);
     $role->revokePermission('access content');
     $role->save();
     $entity_resource = $this->buildEntityResource('node', 'article');
+    $this->setExpectedException(EntityAccessDeniedHttpException::class);
     $entity_resource->getIndividual($this->node, new Request());
   }
 
@@ -230,19 +233,11 @@ class EntityResourceTest extends JsonapiKernelTestBase {
     ]);
     $request_stack = new RequestStack();
     $request_stack->push($request);
-    // Get the entity resource.
-    $current_context = new CurrentContext(
-      $this->container->get('jsonapi.resource_type.repository'),
-      $request_stack,
-      new CurrentRouteMatch($request_stack)
-    );
-    $this->container->set('jsonapi.current_context', $current_context);
 
     $entity_resource = new EntityResource(
       $this->container->get('jsonapi.resource_type.repository')->get('node_type', 'node_type'),
       $this->container->get('entity_type.manager'),
       $field_manager,
-      $current_context,
       $this->container->get('plugin.manager.field.field_type'),
       $this->container->get('jsonapi.link_manager'),
       $this->container->get('jsonapi.resource_type.repository')
@@ -284,19 +279,11 @@ class EntityResourceTest extends JsonapiKernelTestBase {
     ]);
     $request_stack = new RequestStack();
     $request_stack->push($request);
-    // Get the entity resource.
-    $current_context = new CurrentContext(
-      $this->container->get('jsonapi.resource_type.repository'),
-      $request_stack,
-      new CurrentRouteMatch($request_stack)
-    );
-    $this->container->set('jsonapi.current_context', $current_context);
 
     $entity_resource = new EntityResource(
       $this->container->get('jsonapi.resource_type.repository')->get('node_type', 'node_type'),
       $this->container->get('entity_type.manager'),
       $field_manager,
-      $current_context,
       $this->container->get('plugin.manager.field.field_type'),
       $this->container->get('jsonapi.link_manager'),
       $this->container->get('jsonapi.resource_type.repository')
@@ -339,19 +326,11 @@ class EntityResourceTest extends JsonapiKernelTestBase {
     ]);
     $request_stack = new RequestStack();
     $request_stack->push($request);
-    // Get the entity resource.
-    $current_context = new CurrentContext(
-      $this->container->get('jsonapi.resource_type.repository'),
-      $request_stack,
-      new CurrentRouteMatch($request_stack)
-    );
-    $this->container->set('jsonapi.current_context', $current_context);
 
     $entity_resource = new EntityResource(
       $this->container->get('jsonapi.resource_type.repository')->get('node', 'article'),
       $this->container->get('entity_type.manager'),
       $field_manager,
-      $current_context,
       $this->container->get('plugin.manager.field.field_type'),
       $this->container->get('jsonapi.link_manager'),
       $this->container->get('jsonapi.resource_type.repository')
@@ -401,30 +380,20 @@ class EntityResourceTest extends JsonapiKernelTestBase {
    */
   public function testGetRelated() {
     // to-one relationship.
-    $entity_resource = $this->buildEntityResource('node', 'article');
+    $entity_resource = $this->buildEntityResource('node', 'article', [
+      'uid' => [new ResourceType('user', 'user', NULL)],
+      'roles' => [new ResourceType('user_role', 'user_role', NULL)],
+      'field_relationships' => [new ResourceType('node', 'article', NULL)],
+    ]);
     $response = $entity_resource->getRelated($this->node, 'uid', new Request());
     $this->assertInstanceOf(JsonApiDocumentTopLevel::class, $response->getResponseData());
     $this->assertInstanceOf(User::class, $response->getResponseData()
       ->getData());
     $this->assertEquals(1, $response->getResponseData()->getData()->id());
     $this->assertEquals(
-      ['node:1'],
+      ['node:1', 'user:1'],
       $response->getCacheableMetadata()->getCacheTags()
     );
-    // to-many relationship.
-    $response = $entity_resource->getRelated($this->user, 'roles', new Request());
-    $this->assertInstanceOf(JsonApiDocumentTopLevel::class, $response
-      ->getResponseData());
-    $this->assertInstanceOf(EntityCollection::class, $response
-      ->getResponseData()
-      ->getData());
-    $this->assertEquals([
-      'config:user.role.test_role_one',
-      'config:user.role.test_role_two',
-      'user:1',
-    ], $response
-      ->getCacheableMetadata()
-      ->getCacheTags());
     // to-many relationship.
     $response = $entity_resource->getRelated($this->node4, 'field_relationships', new Request());
     $this->assertInstanceOf(JsonApiDocumentTopLevel::class, $response
@@ -443,7 +412,9 @@ class EntityResourceTest extends JsonapiKernelTestBase {
    */
   public function testGetRelationship() {
     // to-one relationship.
-    $entity_resource = $this->buildEntityResource('node', 'article');
+    $entity_resource = $this->buildEntityResource('node', 'article', [
+      'uid' => [new ResourceType('user', 'user', NULL)],
+    ]);
     $response = $entity_resource->getRelationship($this->node, 'uid', new Request());
     $this->assertInstanceOf(JsonApiDocumentTopLevel::class, $response->getResponseData());
     $this->assertInstanceOf(
@@ -655,9 +626,9 @@ class EntityResourceTest extends JsonapiKernelTestBase {
   /**
    * @covers ::patchIndividual
    * @dataProvider patchIndividualConfigFailedProvider
-   * @expectedException \Drupal\Core\Config\ConfigException
    */
   public function testPatchIndividualFailedConfig($values) {
+    $this->setExpectedException(ConfigException::class);
     $this->testPatchIndividualConfig($values);
   }
 
@@ -742,7 +713,9 @@ class EntityResourceTest extends JsonapiKernelTestBase {
       ->grantPermission('edit any article content')
       ->save();
 
-    $entity_resource = $this->buildEntityResource('node', 'article');
+    $entity_resource = $this->buildEntityResource('node', 'article', [
+      'field_relationships' => [new ResourceType('node', 'article', NULL)],
+    ]);
     $response = $entity_resource->createRelationship($this->node, 'field_relationships', $parsed_field_list, new Request());
 
     // As a side effect, the node will also be saved.
@@ -769,7 +742,9 @@ class EntityResourceTest extends JsonapiKernelTestBase {
       ->grantPermission('edit any article content')
       ->save();
 
-    $entity_resource = $this->buildEntityResource('node', 'article');
+    $entity_resource = $this->buildEntityResource('node', 'article', [
+      'field_relationships' => [new ResourceType('node', 'article', NULL)],
+    ]);
     $response = $entity_resource->patchRelationship($this->node, 'field_relationships', $parsed_field_list, new Request());
 
     // As a side effect, the node will also be saved.
@@ -812,7 +787,9 @@ class EntityResourceTest extends JsonapiKernelTestBase {
       ->grantPermission('edit any article content')
       ->save();
 
-    $entity_resource = $this->buildEntityResource('node', 'article');
+    $entity_resource = $this->buildEntityResource('node', 'article', [
+      'field_relationships' => [new ResourceType('node', 'article', NULL)],
+    ]);
     $response = $entity_resource->deleteRelationship($this->node, 'field_relationships', $parsed_field_list, new Request());
 
     // As a side effect, the node will also be saved.
@@ -822,6 +799,86 @@ class EntityResourceTest extends JsonapiKernelTestBase {
     $this->assertSame('field_relationships', $field_list->getName());
     $this->assertEquals($kept_rels, $field_list->getValue());
     $this->assertEquals(201, $response->getStatusCode());
+  }
+
+  /**
+   * @covers ::getRelated
+   */
+  public function testGetRelatedInternal() {
+    $internal_resource_type = new ResourceType('node', 'article', NULL, TRUE);
+    $resource = $this->buildEntityResource('node', 'article', [
+      'field_relationships' => [$internal_resource_type],
+    ]);
+
+    $this->setExpectedException(NotFoundHttpException::class);
+    $resource->getRelationship($this->node, 'field_relationships', new Request());
+  }
+
+  /**
+   * @covers ::getRelationship
+   */
+  public function testGetRelationshipInternal() {
+    $internal_resource_type = new ResourceType('node', 'article', NULL, TRUE);
+    $resource = $this->buildEntityResource('node', 'article', [
+      'field_relationships' => [$internal_resource_type],
+    ]);
+
+    $this->setExpectedException(NotFoundHttpException::class);
+    $resource->getRelationship($this->node, 'field_relationships', new Request());
+  }
+
+  /**
+   * @covers ::createRelationship
+   */
+  public function testCreateRelationshipInternal() {
+    $internal_resource_type = new ResourceType('node', 'article', NULL, TRUE);
+    $resource = $this->buildEntityResource('node', 'article', [
+      'field_relationships' => [$internal_resource_type],
+    ]);
+
+    Role::load(Role::ANONYMOUS_ID)->grantPermission('edit any article content')->save();
+
+    $field_type_manager = $this->container->get('plugin.manager.field.field_type');
+    $list = $field_type_manager->createFieldItemList($this->node, 'field_relationships');
+
+    $this->setExpectedException(NotFoundHttpException::class);
+    $resource->createRelationship($this->node, 'field_relationships', $list, new Request());
+  }
+
+  /**
+   * @covers ::patchRelationship
+   */
+  public function testPatchRelationshipInternal() {
+    $internal_resource_type = new ResourceType('node', 'article', NULL, TRUE);
+    $resource = $this->buildEntityResource('node', 'article', [
+      'field_relationships' => [$internal_resource_type],
+    ]);
+
+    Role::load(Role::ANONYMOUS_ID)->grantPermission('edit any article content')->save();
+
+    $field_type_manager = $this->container->get('plugin.manager.field.field_type');
+    $list = $field_type_manager->createFieldItemList($this->node, 'field_relationships');
+
+    $this->setExpectedException(NotFoundHttpException::class);
+    $resource->patchRelationship($this->node, 'field_relationships', $list, new Request());
+  }
+
+  /**
+   * @covers ::deleteRelationship
+   */
+  public function testDeleteRelationshipInternal() {
+    $internal_resource_type = new ResourceType('node', 'article', NULL, TRUE);
+    $resource = $this->buildEntityResource('node', 'article', [
+      'field_relationships' => [$internal_resource_type],
+    ]);
+
+    Role::load(Role::ANONYMOUS_ID)->grantPermission('edit any article content')->save();
+
+    $field_type_manager = $this->container->get('plugin.manager.field.field_type');
+    $list = $field_type_manager->createFieldItemList($this->node, 'field_relationships');
+
+    $this->setExpectedException(NotFoundHttpException::class);
+    $resource->deleteRelationship($this->node, 'field_relationships', $list, new Request());
   }
 
   /**
@@ -848,11 +905,15 @@ class EntityResourceTest extends JsonapiKernelTestBase {
    *   The entity type ID.
    * @param string $bundle
    *   The bundle.
+   * @param \Drupal\jsonapi\ResourceType\ResourceType[] $relatable_resource_types
+   *   An array of relatable resource types, keyed by field.
+   * @param bool $internal
+   *   Whether the primary resource type is internal.
    *
    * @return \Drupal\jsonapi\Controller\EntityResource
    *   The resource.
    */
-  protected function buildEntityResource($entity_type_id, $bundle) {
+  protected function buildEntityResource($entity_type_id, $bundle, array $relatable_resource_types = [], $internal = FALSE) {
     // The fake route.
     $route = new Route(NULL, [], [
       '_entity_type' => $entity_type_id,
@@ -863,18 +924,13 @@ class EntityResourceTest extends JsonapiKernelTestBase {
     $request_stack = new RequestStack();
     $request_stack->push($request);
     // Get the entity resource.
-    $current_context = new CurrentContext(
-      $this->container->get('jsonapi.resource_type.repository'),
-      $request_stack,
-      new CurrentRouteMatch($request_stack)
-    );
-    $this->container->set('jsonapi.current_context', $current_context);
+    $resource_type = new ResourceType($entity_type_id, $bundle, NULL, $internal);
+    $resource_type->setRelatableResourceTypes($relatable_resource_types);
 
     return new EntityResource(
-      new ResourceType($entity_type_id, $bundle, NULL),
+      $resource_type,
       $this->container->get('entity_type.manager'),
       $this->container->get('entity_field.manager'),
-      $current_context,
       $this->container->get('plugin.manager.field.field_type'),
       $this->container->get('jsonapi.link_manager'),
       $this->container->get('jsonapi.resource_type.repository')

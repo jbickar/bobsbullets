@@ -26,17 +26,20 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @see \Drupal\rest\EventSubscriber\ResourceResponseSubscriber
  * @internal
  *
- * This is 99% identical to \Drupal\rest\EventSubscriber\ResourceResponseSubscriber
+ * This is 99% identical to:
+ *
+ * \Drupal\rest\EventSubscriber\ResourceResponseSubscriber
+ *
  * but with a few differences:
- * 1. It has the @jsonapi.serializer service injected instead of @serializer
+ * 1. It has the @jsonapi.serializer_do_not_use_removal_imminent service
+ *    injected instead of @serializer
  * 2. It has the @current_route_match service no longer injected
  * 3. It hardcodes the format to 'api_json'
  * 4. In the call to the serializer, it passes in the request and cacheable
- *    metadata as serialization context.
+ *    metadata as serialization context. https://www.drupal.org/project/jsonapi/issues/2948666
+ *    will change this.
  * 5. It validates the final response according to the JSON API JSON schema
- * 6. It has a different priority, to ensure it runs before the Dynamic Page
- *    Cache event subscriber — but this should also be fixed in the original
- *    class, see issue
+ * 6. It flattens only to a cacheable response if the HTTP method is cacheable.
  */
 class ResourceResponseSubscriber implements EventSubscriberInterface {
 
@@ -66,7 +69,7 @@ class ResourceResponseSubscriber implements EventSubscriberInterface {
    *
    * This property will only be set if the validator library is available.
    *
-   * @var \JsonSchema\Validator|NULL
+   * @var \JsonSchema\Validator|null
    */
   protected $validator;
 
@@ -75,7 +78,7 @@ class ResourceResponseSubscriber implements EventSubscriberInterface {
    *
    * This property will only be set if the schemata module is installed.
    *
-   * @var \Drupal\schemata\SchemaFactory|NULL
+   * @var \Drupal\schemata\SchemaFactory|null
    */
   protected $schemaFactory;
 
@@ -117,10 +120,13 @@ class ResourceResponseSubscriber implements EventSubscriberInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @see \Drupal\rest\EventSubscriber\ResourceResponseSubscriber::getSubscribedEvents()
    */
   public static function getSubscribedEvents() {
-    // Run before \Drupal\dynamic_page_cache\EventSubscriber\DynamicPageCacheSubscriber.
-    $events[KernelEvents::RESPONSE][] = ['onResponse', 110];
+    // Run before \Drupal\dynamic_page_cache\EventSubscriber\DynamicPageCacheSubscriber
+    // (priority 100), so that Dynamic Page Cache can cache flattened responses.
+    $events[KernelEvents::RESPONSE][] = ['onResponse', 128];
     return $events;
   }
 
@@ -139,7 +145,8 @@ class ResourceResponseSubscriber implements EventSubscriberInterface {
   /**
    * Injects the schema factory.
    *
-   * @param \Drupal\schemata\SchemaFactory
+   * @param \Drupal\schemata\SchemaFactory $schema_factory
+   *   The schema factory service.
    */
   public function setSchemaFactory(SchemaFactory $schema_factory) {
     $this->schemaFactory = $schema_factory;
@@ -160,7 +167,7 @@ class ResourceResponseSubscriber implements EventSubscriberInterface {
     $request = $event->getRequest();
     $format = 'api_json';
     $this->renderResponseBody($request, $response, $this->serializer, $format);
-    $event->setResponse($this->flattenResponse($response));
+    $event->setResponse($this->flattenResponse($response, $request));
 
     $this->doValidateResponse($response, $request);
   }
@@ -209,9 +216,18 @@ class ResourceResponseSubscriber implements EventSubscriberInterface {
         // as serialization context. Normalizers called by the serializer then
         // refine this cacheability metadata, and thus they are effectively
         // updating the response object's cacheability.
+        // @todo In principle JSON API uses normalizer value objects to achieve
+        // this, and hence normalizers should not rely on this global context.
+        // https://www.drupal.org/project/jsonapi/issues/2940342 brought us a
+        // long way, but not yet 100%. We will go all the way in
+        // https://www.drupal.org/project/jsonapi/issues/2948666.
+        // Note that \Drupal\jsonapi\Controller\RequestHandler::handle() calls
+        // a method on EntityResource in a render context.
         return $serializer->serialize($data, $format, [
           'request' => $request,
           'cacheable_metadata' => $response->getCacheableMetadata(),
+          'resource_type' => $request->get('resource_type'),
+          'on_relationship' => (bool) $request->get('_on_relationship'),
         ]);
       };
       $output = $this->renderer->executeInRenderContext($context, $render_function);
@@ -235,12 +251,14 @@ class ResourceResponseSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\jsonapi\ResourceResponse $response
    *   A fully rendered resource response.
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request for which this response is generated.
    *
    * @return \Drupal\Core\Cache\CacheableResponse|\Symfony\Component\HttpFoundation\Response
    *   The flattened response.
    */
-  protected function flattenResponse(ResourceResponse $response) {
-    $final_response = ($response instanceof CacheableResponseInterface) ? new CacheableResponse() : new Response();
+  protected static function flattenResponse(ResourceResponse $response, Request $request) {
+    $final_response = ($response instanceof CacheableResponseInterface && $request->isMethodCacheable()) ? new CacheableResponse() : new Response();
     $final_response->setContent($response->getContent());
     $final_response->setStatusCode($response->getStatusCode());
     $final_response->setProtocolVersion($response->getProtocolVersion());
@@ -280,7 +298,7 @@ class ResourceResponseSubscriber implements EventSubscriberInterface {
       'file://%s/schema.json',
       implode('/', [
         $this->appRoot,
-        $this->moduleHandler->getModule('jsonapi')->getPath()
+        $this->moduleHandler->getModule('jsonapi')->getPath(),
       ])
     );
     $generic_jsonapi_schema = (object) ['$ref' => $schema_ref];

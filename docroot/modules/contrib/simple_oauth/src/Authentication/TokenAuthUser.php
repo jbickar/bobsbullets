@@ -4,6 +4,7 @@ namespace Drupal\simple_oauth\Authentication;
 
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\simple_oauth\Entity\Oauth2TokenInterface;
 use Drupal\user\Entity\User;
@@ -30,18 +31,38 @@ class TokenAuthUser implements TokenAuthUserInterface {
   protected $token;
 
   /**
+   * Whether the revision translation affected flag has been enforced.
+   *
+   * An array, keyed by the translation language code.
+   *
+   * @var bool[]
+   */
+  protected $enforceRevisionTranslationAffected = [];
+
+  /**
+   * Language code identifying the entity active language.
+   *
+   * This is the language field accessors will use to determine which field
+   * values manipulate.
+   *
+   * @var string
+   */
+  protected $activeLangcode = LanguageInterface::LANGCODE_DEFAULT;
+
+  /**
    * Constructs a TokenAuthUser object.
    *
    * @param \Drupal\simple_oauth\Entity\Oauth2TokenInterface $token
    *   The underlying token.
+   *
    * @throws \Exception
    *   When there is no user.
    */
   public function __construct(Oauth2TokenInterface $token) {
     if (!$this->subject = $token->get('auth_user_id')->entity) {
-      /** @var \Drupal\simple_oauth\Entity\Oauth2ClientInterface $client */
+      /** @var \Drupal\consumers\Entity\Consumer $client */
       if ($client = $token->get('client')->entity) {
-        $this->subject = $client->getDefaultUser();
+        $this->subject = $client->get('user_id')->entity;
       }
     }
     if (!$this->subject) {
@@ -67,7 +88,7 @@ class TokenAuthUser implements TokenAuthUserInterface {
   }
 
   /* ---------------------------------------------------------------------------
-     All the methods below are delegated to the decorated user.
+  All the methods below are delegated to the decorated user.
   --------------------------------------------------------------------------- */
 
   /**
@@ -281,14 +302,14 @@ class TokenAuthUser implements TokenAuthUserInterface {
   /**
    * {@inheritdoc}
    */
-  public function urlInfo($rel = 'canonical', array $options = array()) {
+  public function urlInfo($rel = 'canonical', array $options = []) {
     return $this->subject->urlInfo($rel, $options);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function url($rel = 'canonical', $options = array()) {
+  public function url($rel = 'canonical', $options = []) {
     return $this->subject->url($rel, $options);
   }
 
@@ -330,7 +351,7 @@ class TokenAuthUser implements TokenAuthUserInterface {
   /**
    * {@inheritdoc}
    */
-  public static function create(array $values = array()) {
+  public static function create(array $values = []) {
     return User::create($values);
   }
 
@@ -666,7 +687,7 @@ class TokenAuthUser implements TokenAuthUserInterface {
   /**
    * {@inheritdoc}
    */
-  public function addTranslation($langcode, array $values = array()) {
+  public function addTranslation($langcode, array $values = []) {
     return $this->subject->addTranslation($langcode, $values);
   }
 
@@ -820,7 +841,7 @@ class TokenAuthUser implements TokenAuthUserInterface {
   /**
    * {@inheritdoc}
    */
-  public function toUrl($rel = 'canonical', array $options = array()) {
+  public function toUrl($rel = 'canonical', array $options = []) {
     $this->subject->toUrl($rel, $options);
   }
 
@@ -853,6 +874,20 @@ class TokenAuthUser implements TokenAuthUserInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function isLatestRevision() {
+    return $this->subject->isLatestRevision();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLatestRevisionId() {
+    return $this->subject->getLatestRevisionId();
+  }
+
+  /**
    * Returns the role storage object.
    *
    * @return \Drupal\user\RoleStorageInterface
@@ -860,6 +895,42 @@ class TokenAuthUser implements TokenAuthUserInterface {
    */
   protected function getRoleStorage() {
     return \Drupal::entityTypeManager()->getStorage('user_role');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isLatestTranslationAffectedRevision() {
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setRevisionTranslationAffectedEnforced($enforced) {
+    $this->enforceRevisionTranslationAffected[$this->activeLangcode] = $enforced;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isRevisionTranslationAffectedEnforced() {
+    return !empty($this->enforceRevisionTranslationAffected[$this->activeLangcode]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function wasDefaultRevision() {
+    return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isDefaultTranslationAffectedOnly() {
+    return FALSE;
   }
 
 }

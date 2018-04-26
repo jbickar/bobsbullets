@@ -13,9 +13,8 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
-use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
-use Drupal\jsonapi\Context\CurrentContext;
 use Drupal\jsonapi\Exception\EntityAccessDeniedHttpException;
 use Drupal\jsonapi\Exception\UnprocessableHttpEntityException;
 use Drupal\jsonapi\Query\Filter;
@@ -31,9 +30,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
+ * Process all entity requests.
+ *
  * @see \Drupal\jsonapi\Controller\RequestHandler
  * @internal
  */
@@ -59,13 +61,6 @@ class EntityResource {
    * @var \Drupal\Core\Entity\EntityFieldManagerInterface
    */
   protected $fieldManager;
-
-  /**
-   * The current context service.
-   *
-   * @var \Drupal\jsonapi\Context\CurrentContext
-   */
-  protected $currentContext;
 
   /**
    * The current context service.
@@ -97,8 +92,6 @@ class EntityResource {
    *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $field_manager
    *   The entity type field manager.
-   * @param \Drupal\jsonapi\Context\CurrentContext $current_context
-   *   The current context.
    * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $plugin_manager
    *   The plugin manager for fields.
    * @param \Drupal\jsonapi\LinkManager\LinkManager $link_manager
@@ -106,11 +99,10 @@ class EntityResource {
    * @param \Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface $resource_type_repository
    *   The link manager service.
    */
-  public function __construct(ResourceType $resource_type, EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $field_manager, CurrentContext $current_context, FieldTypePluginManagerInterface $plugin_manager, LinkManager $link_manager, ResourceTypeRepositoryInterface $resource_type_repository) {
+  public function __construct(ResourceType $resource_type, EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $field_manager, FieldTypePluginManagerInterface $plugin_manager, LinkManager $link_manager, ResourceTypeRepositoryInterface $resource_type_repository) {
     $this->resourceType = $resource_type;
     $this->entityTypeManager = $entity_type_manager;
     $this->fieldManager = $field_manager;
-    $this->currentContext = $current_context;
     $this->pluginManager = $plugin_manager;
     $this->linkManager = $link_manager;
     $this->resourceTypeRepository = $resource_type_repository;
@@ -135,6 +127,7 @@ class EntityResource {
       throw new EntityAccessDeniedHttpException($entity, $entity_access, '/data', 'The current user is not allowed to GET the selected resource.');
     }
     $response = $this->buildWrappedResponse($entity, $response_code);
+    $response->addCacheableDependency($entity_access);
     return $response;
   }
 
@@ -146,6 +139,8 @@ class EntityResource {
    *
    * @throws \Drupal\jsonapi\Exception\EntityAccessDeniedHttpException
    *   If validation errors are found.
+   *
+   * @see \Drupal\rest\Plugin\rest\resource\EntityResourceValidationTrait::validate()
    */
   protected function validate(EntityInterface $entity) {
     if (!$entity instanceof FieldableEntityInterface) {
@@ -163,6 +158,7 @@ class EntityResource {
       // 422 Unprocessable Entity code from RFC 4918. That way clients can
       // distinguish between general syntax errors in bad serializations (code
       // 400) and semantic errors in well-formed requests (code 422).
+      // @see \Drupal\jsonapi\Normalizer\UnprocessableHttpEntityExceptionNormalizer
       $exception = new UnprocessableHttpEntityException();
       $exception->setViolations($violations);
       throw $exception;
@@ -182,13 +178,40 @@ class EntityResource {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    * @throws \Drupal\jsonapi\Exception\EntityAccessDeniedHttpException
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
   public function createIndividual(EntityInterface $entity, Request $request) {
     $entity_access = $entity->access('create', NULL, TRUE);
 
     if (!$entity_access->isAllowed()) {
-      throw new EntityAccessDeniedHttpException($entity, $entity_access, '/data', 'The current user is not allowed to POST the selected resource.');
+      throw new EntityAccessDeniedHttpException(NULL, $entity_access, '/data', 'The current user is not allowed to POST the selected resource.');
     }
+
+    // Only check 'edit' permissions for fields that were actually submitted by
+    // the user. Field access makes no difference between 'create' and 'update',
+    // so the 'edit' operation is used here.
+    $document = Json::decode($request->getContent());
+    if (isset($document['data']['attributes'])) {
+      $received_attributes = array_keys($document['data']['attributes']);
+      foreach ($received_attributes as $field_name) {
+        $internal_field_name = $this->resourceType->getInternalName($field_name);
+        $field_access = $entity->get($internal_field_name)->access('edit', NULL, TRUE);
+        if (!$field_access->isAllowed()) {
+          throw new EntityAccessDeniedHttpException(NULL, $field_access, '/data/attributes/' . $field_name, sprintf('The current user is not allowed to POST the selected field (%s).', $field_name));
+        }
+      }
+    }
+    if (isset($document['data']['relationships'])) {
+      $received_relationships = array_keys($document['data']['relationships']);
+      foreach ($received_relationships as $field_name) {
+        $internal_field_name = $this->resourceType->getInternalName($field_name);
+        $field_access = $entity->get($internal_field_name)->access('edit', NULL, TRUE);
+        if (!$field_access->isAllowed()) {
+          throw new EntityAccessDeniedHttpException(NULL, $field_access, '/data/relationships/' . $field_name, sprintf('The current user is not allowed to POST the selected field (%s).', $field_name));
+        }
+      }
+    }
+
     $this->validate($entity);
 
     // Return a 409 Conflict response in accordance with the JSON API spec. See
@@ -200,7 +223,7 @@ class EntityResource {
     $entity->save();
 
     // Build response object.
-    $response = $this->getIndividual($entity, $request, 201);
+    $response = $this->buildWrappedResponse($entity, 201);
 
     // According to JSON API specification, when a new entity was created
     // we should send "Location" header to the frontend.
@@ -255,7 +278,7 @@ class EntityResource {
 
     $this->validate($entity);
     $entity->save();
-    return $this->getIndividual($entity, $request);
+    return $this->buildWrappedResponse($entity);
   }
 
   /**
@@ -303,8 +326,8 @@ class EntityResource {
     $results = $query->execute();
 
     $storage = $this->entityTypeManager->getStorage($entity_type_id);
-    // We request N+1 items to find out if there is a next page for the pager. We may need to remove that extra item
-    // before loading the entities.
+    // We request N+1 items to find out if there is a next page for the pager.
+    // We may need to remove that extra item before loading the entities.
     $pager_size = $query->getMetaData('pager_size');
     if ($has_next_page = $pager_size < count($results)) {
       // Drop the last result.
@@ -353,6 +376,7 @@ class EntityResource {
    */
   public function getRelated(EntityInterface $entity, $related_field, Request $request) {
     $related_field = $this->resourceType->getInternalName($related_field);
+    $this->relationshipAccess($entity, 'view', $related_field);
     /* @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $field_list */
     $field_list = $entity->get($related_field);
     $this->validateReferencedResource($field_list, $related_field);
@@ -362,7 +386,7 @@ class EntityResource {
       ->getDataDefinition()
       ->getFieldStorageDefinition()
       ->isMultiple();
-    if (!$is_multiple) {
+    if (!$is_multiple && $field_list->entity) {
       $response = $this->getIndividual($field_list->entity, $request);
       // Add cacheable metadata for host entity to individual response.
       $response->addCacheableDependency($cacheable_metadata);
@@ -370,8 +394,8 @@ class EntityResource {
     }
     $collection_data = [];
     // Remove the entities pointing to a resource that may be disabled. Even
-    //though the normalizer skips disabled references, we can avoid unnecessary
-    //work by checking here too.
+    // though the normalizer skips disabled references, we can avoid unnecessary
+    // work by checking here too.
     /* @var \Drupal\Core\Entity\EntityInterface[] $referenced_entities */
     $referenced_entities = array_filter(
       $field_list->referencedEntities(),
@@ -417,6 +441,8 @@ class EntityResource {
    */
   public function getRelationship(EntityInterface $entity, $related_field, Request $request, $response_code = 200) {
     $related_field = $this->resourceType->getInternalName($related_field);
+    $this->relationshipAccess($entity, 'view', $related_field);
+    /* @var \Drupal\Core\Field\FieldItemListInterface $field_list */
     $field_list = $entity->get($related_field);
     $this->validateReferencedResource($field_list, $related_field);
     $response = $this->buildWrappedResponse($field_list, $response_code);
@@ -426,41 +452,25 @@ class EntityResource {
   /**
    * Validates that the referenced field points to an enabled resource.
    *
-   * @param \Drupal\Core\Field\EntityReferenceFieldItemListInterface $field_list
+   * @param \Drupal\Core\Field\EntityReferenceFieldItemListInterface|null $field_list
    *   The field list with the reference.
    * @param string $related_field
    *   The internal name of the related field.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    *   If the field is not a reference or the target resource is disabled.
+   * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+   *   If the $field_list is of the incorrect type.
    */
-  protected function validateReferencedResource(EntityReferenceFieldItemListInterface $field_list, $related_field) {
+  protected function validateReferencedResource($field_list, $related_field) {
+    if (
+      !is_null($field_list) &&
+      !$field_list instanceof EntityReferenceFieldItemListInterface
+    ) {
+      throw new HttpException(500, 'Invalid internal structure for relationship field list.');
+    }
     if (!$field_list || !$this->isRelationshipField($field_list)) {
       throw new NotFoundHttpException(sprintf('The relationship %s is not present in this resource.', $related_field));
-    }
-    // Make sure we return a 404 if the related resource is disabled for
-    // cardinality 1.
-    $is_multiple = $field_list
-      ->getDataDefinition()
-      ->getFieldStorageDefinition()
-      ->isMultiple();
-    // For multiple resource the normalizer will skip the disabled items.
-    if (!$is_multiple) {
-      /** @var \Drupal\Core\Entity\EntityInterface $referenced_entity */
-      $referenced_entity = $field_list->entity;
-      $referenced_resource_type = $this->resourceTypeRepository
-        ->get(
-          $referenced_entity->getEntityTypeId(),
-          $referenced_entity->bundle()
-        );
-      if (!$referenced_resource_type) {
-        throw new NotFoundHttpException(sprintf(
-          'Unable to find the resource for "%s:%s" on the related field "%s".',
-          $referenced_entity->getEntityTypeId(),
-          $referenced_entity->bundle(),
-          $related_field
-        ));
-      }
     }
   }
 
@@ -484,13 +494,13 @@ class EntityResource {
    */
   public function createRelationship(EntityInterface $entity, $related_field, $parsed_field_list, Request $request) {
     $related_field = $this->resourceType->getInternalName($related_field);
+    /* @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $parsed_field_list */
+    $this->relationshipAccess($entity, 'update', $related_field);
     if ($parsed_field_list instanceof Response) {
       // This usually means that there was an error, so there is no point on
       // processing further.
       return $parsed_field_list;
     }
-    /* @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $parsed_field_list */
-    $this->relationshipAccess($entity, $related_field);
     // According to the specification, you are only allowed to POST to a
     // relationship if it is a to-many relationship.
     /* @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $field_list */
@@ -540,7 +550,7 @@ class EntityResource {
       return $parsed_field_list;
     }
     /* @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $parsed_field_list */
-    $this->relationshipAccess($entity, $related_field);
+    $this->relationshipAccess($entity, 'update', $related_field);
     // According to the specification, PATCH works a little bit different if the
     // relationship is to-one or to-many.
     /* @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $field_list */
@@ -616,7 +626,7 @@ class EntityResource {
       throw new BadRequestHttpException(sprintf('You need to provide a body for DELETE operations on a relationship (%s).', $related_field));
     }
     /* @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $parsed_field_list */
-    $this->relationshipAccess($entity, $related_field);
+    $this->relationshipAccess($entity, 'update', $related_field);
 
     $field_name = $parsed_field_list->getName();
     $field_access = $parsed_field_list->access('edit', NULL, TRUE);
@@ -658,8 +668,10 @@ class EntityResource {
    *
    * @return \Drupal\Core\Entity\Query\QueryInterface
    *   A new query.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
-  protected function getCollectionQuery($entity_type_id, $params) {
+  protected function getCollectionQuery($entity_type_id, array $params) {
     $entity_type = $this->entityTypeManager->getDefinition($entity_type_id);
     $entity_storage = $this->entityTypeManager->getStorage($entity_type_id);
 
@@ -715,8 +727,10 @@ class EntityResource {
    *
    * @return \Drupal\Core\Entity\Query\QueryInterface
    *   A new query.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
-  protected function getCollectionCountQuery($entity_type_id, $params) {
+  protected function getCollectionCountQuery($entity_type_id, array $params) {
     // Reset the range to get all the available results.
     return $this->getCollectionQuery($entity_type_id, $params)->range()->count();
   }
@@ -741,7 +755,7 @@ class EntityResource {
   /**
    * Respond with an entity collection.
    *
-   * @param \Drupal\jsonapi\EntityCollection $entity_collection
+   * @param \Drupal\jsonapi\Resource\EntityCollection $entity_collection
    *   The collection of entites.
    * @param string $entity_type_id
    *   The entity type.
@@ -765,15 +779,21 @@ class EntityResource {
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity.
+   * @param string $operation
+   *   The operation to test.
    * @param string $related_field
    *   The name of the field to check.
+   *
+   * @see \Drupal\Core\Access\AccessibleInterface
    */
-  protected function relationshipAccess(EntityInterface $entity, $related_field) {
+  protected function relationshipAccess(EntityInterface $entity, $operation, $related_field) {
     /* @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $parsed_field_list */
-    $entity_access = $entity->access('update', NULL, TRUE);
-    if (!$entity_access->isAllowed()) {
+    $field_access = $entity->{$related_field}->access($operation, NULL, TRUE);
+    $entity_access = $entity->access($operation, NULL, TRUE);
+    $combined_access = $entity_access->andIf($field_access);
+    if (!$combined_access->isAllowed()) {
       // @todo Is this really the right path?
-      throw new EntityAccessDeniedHttpException($entity, $entity_access, $related_field, 'The current user is not allowed to update the selected resource.');
+      throw new EntityAccessDeniedHttpException($entity, $combined_access, $related_field, "The current user is not allowed to $operation this relationship.");
     }
     if (!($field_list = $entity->get($related_field)) || !$this->isRelationshipField($field_list)) {
       throw new NotFoundHttpException(sprintf('The relationship %s is not present in this resource.', $related_field));
@@ -803,12 +823,8 @@ class EntityResource {
       }
 
       $origin_field_list = $origin->get($field_name);
-      if ($destination_field_list->getValue() != $origin_field_list->getValue()) {
-        $field_access = $destination_field_list->access('edit', NULL, TRUE);
-        if (!$field_access->isAllowed()) {
-          throw new EntityAccessDeniedHttpException($destination, $field_access, '/data/attributes/' . $field_name, sprintf('The current user is not allowed to PATCH the selected field (%s).', $field_name));
-        }
-        $destination->{$field_name} = $origin->get($field_name);
+      if ($this->checkPatchFieldAccess($destination_field_list, $origin_field_list)) {
+        $destination->set($field_name, $origin_field_list->getValue());
       }
     }
     elseif ($origin instanceof ConfigEntityInterface && $destination instanceof ConfigEntityInterface) {
@@ -821,17 +837,68 @@ class EntityResource {
   }
 
   /**
-   * Checks if is a relationship field.
+   * Checks whether the given field should be PATCHed.
    *
-   * @param object $entity_field
-   *   Entity definition.
+   * @param \Drupal\Core\Field\FieldItemListInterface $original_field
+   *   The original (stored) value for the field.
+   * @param \Drupal\Core\Field\FieldItemListInterface $received_field
+   *   The received value for the field.
    *
    * @return bool
-   *   Returns TRUE, if entity field is EntityReferenceItem.
+   *   Whether the field should be PATCHed or not.
+   *
+   * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+   *   Thrown when the user sending the request is not allowed to update the
+   *   field. Only thrown when the user could not abuse this information to
+   *   determine the stored value.
+   *
+   * @internal
+   *
+   * @see \Drupal\rest\Plugin\rest\resource\EntityResource::checkPatchFieldAccess()
    */
-  protected function isRelationshipField($entity_field) {
-    $class = $this->pluginManager->getPluginClass($entity_field->getDataDefinition()->getType());
-    return ($class == EntityReferenceItem::class || is_subclass_of($class, EntityReferenceItem::class));
+  protected function checkPatchFieldAccess(FieldItemListInterface $original_field, FieldItemListInterface $received_field) {
+    // If the user is allowed to edit the field, it is always safe to set the
+    // received value. We may be setting an unchanged value, but that is ok.
+    $field_edit_access = $original_field->access('edit', NULL, TRUE);
+    if ($field_edit_access->isAllowed()) {
+      return TRUE;
+    }
+
+    // The user might not have access to edit the field, but still needs to
+    // submit the current field value as part of the PATCH request. For
+    // example, the entity keys required by denormalizers. Therefore, if the
+    // received value equals the stored value, return FALSE without throwing an
+    // exception. But only for fields that the user has access to view, because
+    // the user has no legitimate way of knowing the current value of fields
+    // that they are not allowed to view, and we must not make the presence or
+    // absence of a 403 response a way to find that out.
+    if ($original_field->access('view') && $original_field->equals($received_field)) {
+      return FALSE;
+    }
+
+    // It's helpful and safe to let the user know when they are not allowed to
+    // update a field.
+    $field_name = $received_field->getName();
+    throw new EntityAccessDeniedHttpException($original_field->getEntity(), $field_edit_access, '/data/attributes/' . $field_name, sprintf('The current user is not allowed to PATCH the selected field (%s).', $field_name));
+  }
+
+  /**
+   * Checks if is a relationship field.
+   *
+   * @param \Drupal\Core\Field\FieldItemListInterface $entity_field
+   *   Entity field.
+   *
+   * @return bool
+   *   Returns TRUE if entity field is a relationship field with non-internal
+   *   target resource types, FALSE otherwise.
+   */
+  protected function isRelationshipField(FieldItemListInterface $entity_field) {
+    $resource_types = $this->resourceType->getRelatableResourceTypesByField(
+      $this->resourceType->getInternalName($entity_field->getName())
+    );
+    return !empty($resource_types) && array_reduce($resource_types, function ($has_external, $resource_type) {
+      return $has_external ? TRUE : !$resource_type->isInternal();
+    }, FALSE);
   }
 
   /**
@@ -847,7 +914,7 @@ class EntityResource {
    *     - entity: the loaded entity or an access exception.
    *     - access: the access object.
    */
-  protected function loadEntitiesWithAccess(EntityStorageInterface $storage, $ids) {
+  protected function loadEntitiesWithAccess(EntityStorageInterface $storage, array $ids) {
     $output = [];
     foreach ($storage->loadMultiple($ids) as $entity) {
       $output[$entity->id()] = static::getEntityAndAccess($entity);
@@ -892,6 +959,8 @@ class EntityResource {
    *
    * @return bool
    *   Whether the entity already has been created.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
   protected function entityExists(EntityInterface $entity) {
     $entity_storage = $this->entityTypeManager->getStorage($entity->getEntityTypeId());

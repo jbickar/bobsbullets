@@ -13,7 +13,7 @@ use Drupal\user\RoleInterface;
 class ImplicitFunctionalTest extends TokenBearerFunctionalTestBase {
 
   /**
-   * @var \Drupal\Core\Url;
+   * @var \Drupal\Core\Url
    */
   protected $authorizeUrl;
 
@@ -23,13 +23,8 @@ class ImplicitFunctionalTest extends TokenBearerFunctionalTestBase {
   protected $redirectUri;
 
   public static $modules = [
-    'image',
-    'node',
-    'simple_oauth',
     'simple_oauth_extras',
     'simple_oauth_extras_test',
-    'serialization',
-    'text',
   ];
 
   /**
@@ -91,7 +86,7 @@ class ImplicitFunctionalTest extends TokenBearerFunctionalTestBase {
     ]);
     $assert_session = $this->assertSession();
     $assert_session->statusCodeEquals(200);
-    $assert_session->addressMatches('/\/oauth\/test#access_token=.*&token_type=bearer&expires_in=\d*/');
+    $assert_session->addressMatches('/\/oauth\/test#access_token=.*&token_type=Bearer&expires_in=\d*/');
   }
 
 }
