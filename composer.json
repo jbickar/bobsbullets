@@ -75,6 +75,10 @@
             "docroot/themes/contrib/{$name}": [
                 "type:drupal-theme"
             ],
+            "docroot/themes/custom/{$name}": [
+                "type:drupal-custom-theme",
+                "type:stanford-theme"
+            ],
             "drush/contrib/{$name}": [
                 "type:drupal-drush"
             ]
