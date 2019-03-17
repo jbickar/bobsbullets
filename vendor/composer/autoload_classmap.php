@@ -7,7 +7,9 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Acquia\\LightningExtension\\Context\\AwaitTrait' => $baseDir . '/docroot/modules/contrib/lightning_core/tests/contexts/AwaitTrait.inc',
+    'Acquia\\Lightning\\Commands\\ComposerConstraint' => $baseDir . '/docroot/modules/contrib/lightning_dev/Commands/ComposerConstraint.php',
     'Acquia\\Lightning\\Commands\\FileCommands' => $baseDir . '/docroot/modules/contrib/lightning_dev/Commands/FileCommands.php',
+    'Acquia\\Lightning\\Commands\\ReleaseHistoryClient' => $baseDir . '/docroot/modules/contrib/lightning_dev/Commands/ReleaseHistoryClient.php',
     'Acquia\\Lightning\\Commands\\RoboFile' => $baseDir . '/docroot/modules/contrib/lightning_dev/Commands/RoboFile.php',
     'ArithmeticError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
     'AssertionError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',

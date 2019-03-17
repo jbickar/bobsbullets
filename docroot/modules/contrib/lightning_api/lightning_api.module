@@ -10,16 +10,19 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
  */
 function lightning_api_modules_installed(array $modules) {
   // Don't change config during a sync.
-  if (\Drupal::isConfigSyncing()) {
+  if (Drupal::isConfigSyncing()) {
     return;
   }
 
   if (in_array('lightning_dev', $modules, TRUE)) {
-    \Drupal::configFactory()
+    Drupal::configFactory()
       ->getEditable('lightning_api.settings')
       ->set('entity_json', TRUE)
       ->set('bundle_docs', TRUE)
       ->save();
+
+    // Install the Page content type and Views UI for testing.
+    Drupal::service('module_installer')->install(['lightning_page', 'views_ui']);
   }
 }
 
@@ -89,9 +92,13 @@ function lightning_api_entity_operation(EntityInterface $entity) {
       $entity->label()
     ));
 
+    $route_parameters = [
+      'openapi_ui' => 'redoc',
+      'openapi_generator' => 'jsonapi',
+    ];
     $operations['api-documentation'] = [
       'title' => t('View API documentation'),
-      'url' => Url::fromRoute('openapi_redoc.jsonapi', [], ['fragment' => $fragment]),
+      'url' => Url::fromRoute('openapi.docs', $route_parameters, ['fragment' => $fragment]),
       'weight' => 51,
     ];
   }

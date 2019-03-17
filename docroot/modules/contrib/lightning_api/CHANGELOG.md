@@ -1,3 +1,20 @@
+## 2.9.0
+* Updated Lightning Core to 2.13 or 3.7, which security update Drupal core to
+  8.5.11 and 8.6.10, respectively.
+* Security update JSON:API to 1.25. (SA-CONTRIB-2019-019)
+
+## 2.8.0
+* Security updated JSON:API to 1.24.
+
+## 2.7.0
+* Fixed a persistent warning about openapi_redoc not being present in the
+  file system after updating to beta2. (Issue #2996108)
+
+## 2.6.0
+* Updated OpenAPI module to 1.0-beta2, which split out openapi_redoc and
+  openapi_swagger into separate modules (which are now brought in by
+  Composer). (#33)
+
 ## 2.5.0
 * Allow Lightning Core 3.x and Drupal core 8.6.x.
 

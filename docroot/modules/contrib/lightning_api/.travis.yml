@@ -13,9 +13,7 @@ php:
 
 env:
   - VERSION=HEAD
-  - VERSION=2.5.0
-  - VERSION=2.4.0
-  - VERSION=2.3.0
+  - VERSION=2.9.0
   # The final CI slot should be used to test the update path from the oldest
   # available database fixture.
   - VERSION=1.0.0-rc1
@@ -54,7 +52,7 @@ install:
   - composer install
   # Install on top of Standard for testing, then export config and reinstall
   # from that to ensure that the exported config is coherent.
-  - lightning install "mysql\://lightning:lightning@127.0.0.1/lightning" standard 'http://127.0.0.1:8080' --from-config
+  - lightning install "mysql\://lightning:lightning@127.0.0.1/lightning" minimal 'http://127.0.0.1:8080' --from-config
   # Restore database fixture from the version we're testing and run database and
   # and Lightning config updates.
   - lightning update $VERSION
@@ -66,7 +64,7 @@ before_script:
 script:
   - composer validate composer.json --no-check-all --ansi --no-interaction
   - phpunit --config docroot/core --group lightning_api
-  - behat --config .behat.yml --tags lightning_api
+  - behat --tags lightning_api
 
 after_failure:
   - cd docroot

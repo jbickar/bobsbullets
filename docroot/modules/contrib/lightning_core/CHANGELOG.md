@@ -1,4 +1,32 @@
+## 2.14.0
+* Updated Drupal core to 8.5.12.
+
+## 2.13.0
+* Security updated Drupal core to 8.5.11. (SA-CORE-2019-003)
+
+## 2.12.0
+* Security updated Drupal core to 8.5.9. (SA-CORE-2019-001, SA-CORE-2019-002)
+
+## 2.11.0
+* Security updated Drupal core to 8.5.8.
+
+## 2.10.0
+* Updated Drupal core to 8.5.7.
+* Remove core patch "Add support to migrate multilingual revisions" since it's
+  in 8.5.7. (#2921661)
+* Add schema_metatag as a dev dependency so that Metatag PHPUnit tests are
+  discoverable
+* Stop testing with exported config.
+
+## 2.9.0
+* Fixed a bug where administrative roles were shipped with null values for the
+  'is_admin' flag. (Issue #2882197)
+* The Basic Page content type now supports Pathauto out of the box. (#74)
+* Fixed a bug where the Basic Page content type would not work with workflows
+  out of the box. (Issue #2990048)
+
 ## 2.8.0
+* Security updated Drupal core to 8.5.6.
 * Fixed a bug where user 1 could not access Lightning's administrative screens.
   (Issue #2933520)
 * Lightning Page now enables moderation if Lightning Workflow is installed, not
@@ -35,7 +63,7 @@
 * Security updated Drupal core to 8.5.1. (SA-2018-002)
 * When renaming the configuration which stores extension's version numbers,
   Lightning Core will no longer assume configuration by the same name does not
-  already exist. (Issue #2955072) 
+  already exist. (Issue #2955072)
 
 ## 2.1.0
 * Behat contexts used for testing were moved into the
@@ -57,7 +85,7 @@
   Drush 9.
 * Component version numbers are now recorded on install (and via an update hook
   on existing installations) so that the `version` argument is no longer needed
-  with the `update:lightning` command. 
+  with the `update:lightning` command.
 
 ## 1.0.0-alpha3
 * Updated core to 8.4.4.
