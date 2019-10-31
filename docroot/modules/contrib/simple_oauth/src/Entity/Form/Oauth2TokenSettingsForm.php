@@ -7,18 +7,22 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
-use Drupal\simple_oauth\Service\Filesystem\FilesystemInterface;
+use Drupal\simple_oauth\Service\Filesystem\FileSystemChecker;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
+ * The settings form.
+ *
  * @internal
  */
 class Oauth2TokenSettingsForm extends ConfigFormBase {
 
   /**
-   * @var \Drupal\simple_oauth\Service\Filesystem\FilesystemInterface
+   * The file system checker.
+   *
+   * @var \Drupal\simple_oauth\Service\Filesystem\FileSystemChecker
    */
-  protected $fileSystem;
+  protected $fileSystemChecker;
 
   /**
    * The messenger service.
@@ -27,30 +31,35 @@ class Oauth2TokenSettingsForm extends ConfigFormBase {
    */
   protected $messenger;
 
-
   /**
    * Oauth2TokenSettingsForm constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The factory for configuration objects.
-   * @param \Drupal\simple_oauth\Service\Filesystem\FilesystemInterface $fileSystem
+   * @param \Drupal\simple_oauth\Service\Filesystem\FileSystemChecker $file_system_checker
    *   The simple_oauth.filesystem service.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
    */
-  public function __construct(ConfigFactoryInterface $configFactory, FilesystemInterface $fileSystem, MessengerInterface $messenger) {
+  public function __construct(ConfigFactoryInterface $configFactory, FileSystemChecker $file_system_checker, MessengerInterface $messenger) {
     parent::__construct($configFactory);
-    $this->fileSystem = $fileSystem;
+    $this->fileSystemChecker = $file_system_checker;
     $this->messenger = $messenger;
   }
 
   /**
+   * Creates the form.
    *
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   The container.
+   *
+   * @return \Drupal\simple_oauth\Entity\Form\Oauth2TokenSettingsForm
+   *   The form.
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('simple_oauth.filesystem'),
+      $container->get('simple_oauth.filesystem_checker'),
       $container->get('messenger')
     );
   }
@@ -84,6 +93,7 @@ class Oauth2TokenSettingsForm extends ConfigFormBase {
     $settings = $this->config('simple_oauth.settings');
     $settings->set('access_token_expiration', $form_state->getValue('access_token_expiration'));
     $settings->set('refresh_token_expiration', $form_state->getValue('refresh_token_expiration'));
+    $settings->set('token_cron_batch_size', $form_state->getValue('token_cron_batch_size'));
     $settings->set('public_key', $form_state->getValue('public_key'));
     $settings->set('private_key', $form_state->getValue('private_key'));
     $settings->set('remember_clients', $form_state->getValue('remember_clients'));
@@ -115,6 +125,12 @@ class Oauth2TokenSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Refresh token expiration time'),
       '#description' => $this->t('The default value, in seconds, to be used as expiration time when creating new tokens.'),
       '#default_value' => $config->get('refresh_token_expiration'),
+    ];
+    $form['token_cron_batch_size'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Token batch size.'),
+      '#description' => $this->t('The number of expired token to delete per batch during cron cron.'),
+      '#default_value' => $config->get('token_cron_batch_size') ?: 0,
     ];
     $form['public_key'] = [
       '#type' => 'textfield',
@@ -150,7 +166,7 @@ class Oauth2TokenSettingsForm extends ConfigFormBase {
     ];
 
     // Generate Key Modal Button if openssl extension is enabled.
-    if ($this->fileSystem->isExtensionEnabled('openssl')) {
+    if ($this->fileSystemChecker->isExtensionEnabled('openssl')) {
       // Generate Modal Button.
       $form['actions']['generate']['keys'] = [
         '#type' => 'link',
@@ -189,15 +205,15 @@ class Oauth2TokenSettingsForm extends ConfigFormBase {
    * @param array $complete_form
    *   The complete form structure.
    */
-  public function validateExistingFile(&$element, FormStateInterface $form_state, &$complete_form) {
+  public function validateExistingFile(array &$element, FormStateInterface $form_state, array &$complete_form) {
     if (!empty($element['#value'])) {
       $path = $element['#value'];
       // Does the file exist?
-      if (!$this->fileSystem->fileExist($path)) {
+      if (!$this->fileSystemChecker->fileExist($path)) {
         $form_state->setError($element, $this->t('The %field file does not exist.', ['%field' => $element['#title']]));
       }
       // Is the file readable?
-      if (!$this->fileSystem->isReadable($path)) {
+      if (!$this->fileSystemChecker->isReadable($path)) {
         $form_state->setError($element, $this->t('The %field file at the specified location is not readable.', ['%field' => $element['#title']]));
       }
     }

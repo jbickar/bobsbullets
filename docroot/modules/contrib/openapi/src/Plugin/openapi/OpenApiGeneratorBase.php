@@ -212,6 +212,15 @@ abstract class OpenApiGeneratorBase extends PluginBase implements OpenApiGenerat
       'produces' => $this->getProduces(),
       'paths' => $this->getPaths(),
     ];
+
+    // Strip any empty arrays which aren't required.
+    $required = ['swagger',  'info', 'paths'];
+    foreach ($spec as $key => $item) {
+      if (!in_array($key, $required) && is_array($item) && !count($item)) {
+        unset($spec[$key]);
+      }
+    }
+
     return $spec;
   }
 
@@ -249,46 +258,49 @@ abstract class OpenApiGeneratorBase extends PluginBase implements OpenApiGenerat
    * {@inheritdoc}
    */
   public function getSecurityDefinitions() {
+    $base_url = $this->request->getSchemeAndHttpHost() . '/' . $this->request->getBasePath();
     $auth_providers = $this->authenticationCollector->getSortedProviders();
     $security_definitions = [];
 
     foreach ($auth_providers as $provider => $info) {
-      $def = [
-        'type' => 'unknown',
-        'description' => 'Unknown Authentication Provider',
-      ];
-      $base_url = $this->request->getSchemeAndHttpHost() . '/' . $this->request->getBasePath();
+      $def = NULL;
       switch($provider) {
         case 'basic_auth':
           $def = [
             'type' => 'basic'
           ];
           break;
-        case 'cookie':
-          $def = [
-            'type' => 'cookie',
-            'in' => 'cookie',
-            'name' => 'JSESSIONID',
-          ];
-          break;
-        case 'oauth':
-          $def = [
-            'type' => 'oauth1',
-            'flow' => 'implicit',
-            'authorizationUrl' => $base_url . 'authenticate',
-            'tokenUrl' => $base_url . 'oauth/access_token',
-            'x-requestUrl' => $base_url . 'request_token',
-          ];
-          break;
         case 'oauth2':
           $def = [
             'type' => 'oauth2',
-            'flow' => 'password',
-            'tokenUrl' => $base_url . 'oauth/token',
+            'description' => 'For more information see https://developers.getbase.com/docs/rest/articles/oauth2/requests',
+            'flows' => [
+              'password' => [
+                'tokenUrl' => $base_url . 'oauth/token',
+                'refreshUrl' => $base_url . 'oauth/token',
+              ],
+              'authorizationCode' => [
+                'authorizationUrl' => $base_url . 'oauth/authorize',
+                'tokenUrl' => $base_url . 'oauth/token',
+                'refreshUrl' => $base_url . 'oauth/token',
+              ],
+              'implicit' => [
+                'authorizationUrl' => $base_url . 'oauth/authorize',
+                'refreshUrl' => $base_url . 'oauth/token',
+              ],
+              'clientCredentials' => [
+                'tokenUrl' => $base_url . 'oauth/token',
+                'refreshUrl' => $base_url . 'oauth/token',
+              ],
+            ],
           ];
           break;
+        default:
+          continue 2;
       }
-      $security_definitions[$provider] = $def;
+      if ($def !== NULL) {
+        $security_definitions[$provider] = $def;
+      }
     }
 
     // Core's CSRF token doesn't have an auth provider.
@@ -296,7 +308,7 @@ abstract class OpenApiGeneratorBase extends PluginBase implements OpenApiGenerat
       'type' => 'apiKey',
       'name' => 'X-CSRF-Token',
       'in' => 'header',
-      'tokenUrl' => $base_url . 'user/token',
+      'x-tokenUrl' => $base_url . 'user/token',
     ];
 
     return $security_definitions;

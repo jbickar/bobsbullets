@@ -6,8 +6,8 @@ description: 'Automatically manages user roles and permissions.'
 dependencies:
   - node
 
-# Information added by Drupal.org packaging script on 2019-03-13
-version: '8.x-2.14'
+# Information added by Drupal.org packaging script on 2019-04-17
+version: '8.x-2.16'
 core: '8.x'
 project: 'lightning_core'
-datestamp: 1552515829
+datestamp: 1555536281

@@ -21,15 +21,15 @@ Source: https://www.drupal.org/files/issues/2885441-2.patch
 Source: https://www.drupal.org/files/issues/2018-06-07/2815221-102.patch
 
 
-2945571 - Off canvas looks funky when using Seven theme
-Source: https://www.drupal.org/files/issues/2018-08-22/off-canvas-2945571-19.patch
-
-
 2877383 - Add action support to Media module
 Source: https://www.drupal.org/files/issues/2877383-56.patch
 
 
 2670730 - Provide a delete action for each content entity type
 Source: https://www.drupal.org/files/issues/2670730-81-89-8.5.0-rc1.patch
+
+
+2945571 - Off canvas looks funky when using Seven theme
+Source: https://www.drupal.org/files/issues/2018-08-22/off-canvas-2945571-19.patch
 
 

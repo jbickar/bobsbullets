@@ -64,7 +64,7 @@ Set to false to ignore invalid ssl certificates.
 
 ### socket_timeout
 
-Default: 5
+Default: 10
 
 Timeout in seconds before the HTTP or WebSocket connection to the chrome browser is considered dead.
 
@@ -73,6 +73,12 @@ Timeout in seconds before the HTTP or WebSocket connection to the chrome browser
 Default: falls back to browser configuration
 
 Set to 'allow' to allow downloads.
+
+### dom_wait_timeout
+
+Default: 3000
+
+How many milliseconds we should wait for DOM to be ready after each action/transition
 
 ### download_path
 
