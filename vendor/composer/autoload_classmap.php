@@ -7,6 +7,8 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Acquia\\LightningExtension\\Context\\AwaitTrait' => $baseDir . '/docroot/modules/contrib/lightning_core/tests/contexts/AwaitTrait.inc',
+    'Acquia\\LightningExtension\\Context\\PanelizerContext' => $baseDir . '/docroot/modules/contrib/lightning_layout/tests/contexts/PanelizerContext.behat.inc',
+    'Acquia\\LightningExtension\\Context\\PanelsIPEContext' => $baseDir . '/docroot/modules/contrib/lightning_layout/tests/contexts/PanelsIPEContext.behat.inc',
     'Acquia\\Lightning\\Commands\\ComposerConstraint' => $baseDir . '/docroot/modules/contrib/lightning_dev/Commands/ComposerConstraint.php',
     'Acquia\\Lightning\\Commands\\FileCommands' => $baseDir . '/docroot/modules/contrib/lightning_dev/Commands/FileCommands.php',
     'Acquia\\Lightning\\Commands\\ReleaseHistoryClient' => $baseDir . '/docroot/modules/contrib/lightning_dev/Commands/ReleaseHistoryClient.php',

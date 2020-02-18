@@ -1,3 +1,14 @@
+## 1.10.0
+There are no user-facing changes in this version.
+
+## 1.9.0
+* Fixed an incompatibility between Lightning Landing Page and Lightning
+  Workflow 3.14 and later.
+
+## 1.8.0
+* Changes to internal build and testing infrastructure, but nothing that should
+  affect users of Lightning Layout.
+
 ## 1.7.0
 * Lightning Layout now supports Lightning Core 4.x (Drupal core 8.7.x).
 * Added a description to an administrative link. (Issue #3034041)

@@ -13,6 +13,7 @@ class ComposerStaticInit98f8f71e27f7e8b2133dcfc6f3b84814
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -76,8 +77,10 @@ class ComposerStaticInit98f8f71e27f7e8b2133dcfc6f3b84814
         ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Util\\' => 22,
             'Symfony\\Polyfill\\Php72\\' => 23,
             'Symfony\\Polyfill\\Php70\\' => 23,
+            'Symfony\\Polyfill\\Php56\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Iconv\\' => 23,
             'Symfony\\Polyfill\\Ctype\\' => 23,
@@ -166,6 +169,7 @@ class ComposerStaticInit98f8f71e27f7e8b2133dcfc6f3b84814
             'Drupal\\Component\\' => 17,
             'DrupalComposer\\DrupalScaffold\\' => 30,
             'DrupalCodeGenerator\\' => 20,
+            'Doctrine\\Persistence\\' => 21,
             'Doctrine\\Instantiator\\' => 22,
             'Doctrine\\Common\\Lexer\\' => 22,
             'Doctrine\\Common\\Inflector\\' => 26,
@@ -193,8 +197,11 @@ class ComposerStaticInit98f8f71e27f7e8b2133dcfc6f3b84814
         'B' => 
         array (
             'Brumann\\Polyfill\\' => 17,
+            'Behat\\Transliterator\\' => 21,
+            'Behat\\Testwork\\' => 15,
             'Behat\\Mink\\Driver\\' => 18,
             'Behat\\Mink\\' => 11,
+            'Behat\\Behat\\' => 12,
         ),
         'A' => 
         array (
@@ -272,6 +279,10 @@ class ComposerStaticInit98f8f71e27f7e8b2133dcfc6f3b84814
         array (
             0 => __DIR__ . '/..' . '/typo3/phar-stream-wrapper/src',
         ),
+        'Symfony\\Polyfill\\Util\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-util',
+        ),
         'Symfony\\Polyfill\\Php72\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php72',
@@ -279,6 +290,10 @@ class ComposerStaticInit98f8f71e27f7e8b2133dcfc6f3b84814
         'Symfony\\Polyfill\\Php70\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php70',
+        ),
+        'Symfony\\Polyfill\\Php56\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php56',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
@@ -524,6 +539,10 @@ class ComposerStaticInit98f8f71e27f7e8b2133dcfc6f3b84814
         array (
             0 => __DIR__ . '/..' . '/chi-teck/drupal-code-generator/src',
         ),
+        'Doctrine\\Persistence\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/persistence/lib/Doctrine/Persistence',
+        ),
         'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
@@ -611,6 +630,14 @@ class ComposerStaticInit98f8f71e27f7e8b2133dcfc6f3b84814
         array (
             0 => __DIR__ . '/..' . '/brumann/polyfill-unserialize/src',
         ),
+        'Behat\\Transliterator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/behat/transliterator/src/Behat/Transliterator',
+        ),
+        'Behat\\Testwork\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/behat/behat/src/Behat/Testwork',
+        ),
         'Behat\\Mink\\Driver\\' => 
         array (
             0 => __DIR__ . '/..' . '/behat/mink-browserkit-driver/src',
@@ -620,6 +647,10 @@ class ComposerStaticInit98f8f71e27f7e8b2133dcfc6f3b84814
         'Behat\\Mink\\' => 
         array (
             0 => __DIR__ . '/..' . '/behat/mink/src',
+        ),
+        'Behat\\Behat\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/behat/behat/src/Behat/Behat',
         ),
         'Asm89\\Stack\\' => 
         array (
@@ -666,10 +697,6 @@ class ComposerStaticInit98f8f71e27f7e8b2133dcfc6f3b84814
             'Stack' => 
             array (
                 0 => __DIR__ . '/..' . '/stack/builder/src',
-            ),
-            'Solarium\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/solarium/solarium/library',
             ),
         ),
         'K' => 
@@ -741,14 +768,6 @@ class ComposerStaticInit98f8f71e27f7e8b2133dcfc6f3b84814
         ),
         'B' => 
         array (
-            'Behat\\Transliterator' => 
-            array (
-                0 => __DIR__ . '/..' . '/behat/transliterator/src',
-            ),
-            'Behat\\Testwork' => 
-            array (
-                0 => __DIR__ . '/..' . '/behat/behat/src',
-            ),
             'Behat\\MinkExtension' => 
             array (
                 0 => __DIR__ . '/..' . '/behat/mink-extension/src',
@@ -757,15 +776,13 @@ class ComposerStaticInit98f8f71e27f7e8b2133dcfc6f3b84814
             array (
                 0 => __DIR__ . '/..' . '/behat/gherkin/src',
             ),
-            'Behat\\Behat' => 
-            array (
-                0 => __DIR__ . '/..' . '/behat/behat/src',
-            ),
         ),
     );
 
     public static $classMap = array (
         'Acquia\\LightningExtension\\Context\\AwaitTrait' => __DIR__ . '/../..' . '/docroot/modules/contrib/lightning_core/tests/contexts/AwaitTrait.inc',
+        'Acquia\\LightningExtension\\Context\\PanelizerContext' => __DIR__ . '/../..' . '/docroot/modules/contrib/lightning_layout/tests/contexts/PanelizerContext.behat.inc',
+        'Acquia\\LightningExtension\\Context\\PanelsIPEContext' => __DIR__ . '/../..' . '/docroot/modules/contrib/lightning_layout/tests/contexts/PanelsIPEContext.behat.inc',
         'Acquia\\Lightning\\Commands\\ComposerConstraint' => __DIR__ . '/../..' . '/docroot/modules/contrib/lightning_dev/Commands/ComposerConstraint.php',
         'Acquia\\Lightning\\Commands\\FileCommands' => __DIR__ . '/../..' . '/docroot/modules/contrib/lightning_dev/Commands/FileCommands.php',
         'Acquia\\Lightning\\Commands\\ReleaseHistoryClient' => __DIR__ . '/../..' . '/docroot/modules/contrib/lightning_dev/Commands/ReleaseHistoryClient.php',
