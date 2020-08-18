@@ -6,7 +6,6 @@ use Drupal\block\Entity\Block;
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\block_content\Entity\BlockContentType;
 use Drupal\user\Entity\Role;
-use Drupal\user\RoleInterface;
 
 /**
  * Testing opening and saving block forms in the off-canvas dialog.
@@ -30,13 +29,12 @@ class OutsideInBlockFormTest extends OutsideInJavascriptTestBase {
     'toolbar',
     'contextual',
     'outside_in',
+    'quickedit',
     'search',
     'block_content',
     // Add test module to override CSS pointer-events properties because they
     // cause test failures.
     'outside_in_test_css',
-    'menu_link_content',
-    'menu_ui',
   ];
 
   /**
@@ -52,6 +50,7 @@ class OutsideInBlockFormTest extends OutsideInJavascriptTestBase {
       'access contextual links',
       'access toolbar',
       'administer nodes',
+      'access in-place editing',
       'search content',
     ]);
     $this->drupalLogin($user);
@@ -63,10 +62,7 @@ class OutsideInBlockFormTest extends OutsideInJavascriptTestBase {
    *
    * @dataProvider providerTestBlocks
    */
-  public function testBlocks($block_plugin, $new_page_text, $element_selector, $label_selector, $button_text, $toolbar_item, $permissions) {
-    if ($permissions) {
-      $this->grantPermissions(Role::load(Role::AUTHENTICATED_ID), $permissions);
-    }
+  public function testBlocks($block_plugin, $new_page_text, $element_selector, $label_selector, $button_text, $toolbar_item) {
     $web_assert = $this->assertSession();
     $page = $this->getSession()->getPage();
     foreach ($this->getTestThemes() as $theme) {
@@ -163,7 +159,6 @@ class OutsideInBlockFormTest extends OutsideInJavascriptTestBase {
         'label_selector' => 'h2',
         'button_text' => 'Save Powered by Drupal',
         'toolbar_item' => '#toolbar-item-user',
-        NULL,
       ],
       'block-branding' => [
         'block_plugin' => 'system_branding_block',
@@ -172,7 +167,6 @@ class OutsideInBlockFormTest extends OutsideInJavascriptTestBase {
         'label_selector' => "a[rel='home']:last-child",
         'button_text' => 'Save Site branding',
         'toolbar_item' => '#toolbar-item-administration',
-        ['administer site configuration'],
       ],
       'block-search' => [
         'block_plugin' => 'search_form_block',
@@ -181,7 +175,6 @@ class OutsideInBlockFormTest extends OutsideInJavascriptTestBase {
         'label_selector' => 'h2',
         'button_text' => 'Save Search form',
         'toolbar_item' => NULL,
-        NULL,
       ],
     ];
     return $blocks;
@@ -246,8 +239,6 @@ class OutsideInBlockFormTest extends OutsideInJavascriptTestBase {
    * Tests QuickEdit links behavior.
    */
   public function testQuickEditLinks() {
-    $this->container->get('module_installer')->install(['quickedit']);
-    $this->grantPermissions(Role::load(RoleInterface::AUTHENTICATED_ID), ['access in-place editing']);
     $quick_edit_selector = '#quickedit-entity-toolbar';
     $node_selector = '[data-quickedit-entity-id="node/1"]';
     $body_selector = '[data-quickedit-field-id="node/1/body/en/full"]';
@@ -470,8 +461,6 @@ class OutsideInBlockFormTest extends OutsideInJavascriptTestBase {
    * "Quick edit settings" is outside_in.module link.
    */
   public function testCustomBlockLinks() {
-    $this->container->get('module_installer')->install(['quickedit']);
-    $this->grantPermissions(Role::load(RoleInterface::AUTHENTICATED_ID), ['access in-place editing']);
     $this->drupalGet('user');
     $page = $this->getSession()->getPage();
     $links = $page->findAll('css', "#block-custom .contextual-links li a");
