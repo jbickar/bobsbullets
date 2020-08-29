@@ -2,12 +2,12 @@
 
 namespace Drupal\entity_block\Plugin\Block;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -31,14 +31,14 @@ class EntityBlock extends BlockBase implements ContainerFactoryPluginInterface {
   /**
    * The entity type manager.
    *
-   * @var EntityTypeManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   public $entityTypeManager;
 
   /**
    * The entity storage for our entity type.
    *
-   * @var \Drupal\Core\Entity\EntityStorageInterface;
+   * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $entityStorage;
 
@@ -80,7 +80,7 @@ class EntityBlock extends BlockBase implements ContainerFactoryPluginInterface {
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration, $plugin_id, $plugin_definition,
-      $container->get('entity.manager'),
+      $container->get('entity_type.manager'),
       $container->get('entity_display.repository')
     );
   }
@@ -142,48 +142,31 @@ class EntityBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
     $this->configuration['entity'] = $form_state->getValue('entity');
     $this->configuration['view_mode'] = $form_state->getValue('view_mode');
+
+    if ($entity = $this->entityStorage->load($this->configuration['entity'])) {
+      $plugin_definition = $this->getPluginDefinition();
+      $admin_label = $plugin_definition['admin_label'];
+      $this->configuration['label'] = new FormattableMarkup('@entity_label (@admin_label)', [
+        '@entity_label' => $entity->label(),
+        '@admin_label' => $admin_label,
+      ]);
+    }
   }
 
   /**
    * {@inheritdoc}
    */
   public function build() {
-    if ($entity = $this->getEntity()) {
-      $view_mode = isset($this->configuration['view_mode']) ? $this->configuration['view_mode'] : 'default';
-      return $this->entityViewBuilder->view($entity, $view_mode);
-    }
-    else {
-      return [];
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function blockAccess(AccountInterface $account) {
-    if ($entity = $this->getEntity()) {
-      return $this->entityTypeManager
-        ->getAccessControlHandler($this->entityTypeName)
-        ->access($entity, 'view', $account, TRUE);
-    }
-    else {
-      return parent::blockAccess($account);
-    }
-  }
-
-  /**
-   * Returns the entity to display.
-   *
-   * @return \Drupal\Core\Entity\EntityInterface|null
-   *   The entity to display, or NULL if none is configured.
-   */
-  protected function getEntity() {
     if ($entity_id = $this->configuration['entity']) {
-      return $this->entityStorage->load($entity_id);
+      if (($entity = $this->entityStorage->load($entity_id)) && $entity->access('view')) {
+        $render_controller = \Drupal::entityTypeManager()->getViewBuilder($entity->getEntityTypeId());
+        $view_mode = isset($this->configuration['view_mode']) ? $this->configuration['view_mode'] : 'default';
+
+        return $render_controller->view($entity, $view_mode);
+      }
     }
-    else {
-      return NULL;
-    }
+
+    return [];
   }
 
 }

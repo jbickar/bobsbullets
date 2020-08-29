@@ -20,17 +20,17 @@
       }
 
       .menu__item {
-        a:after {
+        .menu__link:after {
           content: '';
           display: none;
         }
 
         @if $arrows == true {
-          &.menu__item--expanded > span > a:after {
+          &.menu__item--expanded > span > .menu__link:after {
             content: $menu-arrow-down;
           }
 
-          &.menu__item--collapsed > span > a:after {
+          &.menu__item--collapsed > span > .menu__link:after {
             content: '';
           }
         }

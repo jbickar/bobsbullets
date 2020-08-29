@@ -2,21 +2,23 @@
 
 namespace Drupal\simple_oauth\Plugin;
 
+use Defuse\Crypto\Core;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
-use Drupal\Component\Utility\Random;
+use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Site\Settings;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
-use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
-use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 
 /**
  * Provides the OAuth2 Grant plugin manager.
@@ -44,6 +46,11 @@ class Oauth2GrantManager extends DefaultPluginManager implements Oauth2GrantMana
   protected $refreshTokenRepository;
 
   /**
+   * @var \League\OAuth2\Server\ResponseTypes\ResponseTypeInterface
+   */
+  protected $responseType;
+
+  /**
    * @var string
    */
   protected $privateKeyPath;
@@ -59,6 +66,11 @@ class Oauth2GrantManager extends DefaultPluginManager implements Oauth2GrantMana
   protected $expiration;
 
   /**
+   * @var \League\OAuth2\Server\AuthorizationServer
+   */
+  protected $server;
+
+  /**
    * Constructor for Oauth2GrantManager objects.
    *
    * @param \Traversable $namespaces
@@ -68,6 +80,20 @@ class Oauth2GrantManager extends DefaultPluginManager implements Oauth2GrantMana
    *   Cache backend instance to use.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler to invoke the alter hook with.
+   * @param \League\OAuth2\Server\Repositories\ClientRepositoryInterface $client_repository
+   *   The client repository.
+   * @param \League\OAuth2\Server\Repositories\ScopeRepositoryInterface $scope_repository
+   *   The scope repository.
+   * @param \League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface $access_token_repository
+   *   The access token repository.
+   * @param \League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface $refresh_token_repository
+   *   The refresh token repository.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
+   * @param \League\OAuth2\Server\ResponseTypes\ResponseTypeInterface $response_type
+   *   The authorization server response type.
+   *
+   * @throws \Exception
    */
   public function __construct(
     \Traversable $namespaces,
@@ -77,7 +103,8 @@ class Oauth2GrantManager extends DefaultPluginManager implements Oauth2GrantMana
     ScopeRepositoryInterface $scope_repository,
     AccessTokenRepositoryInterface $access_token_repository,
     RefreshTokenRepositoryInterface $refresh_token_repository,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    ResponseTypeInterface $response_type = NULL
   ) {
     parent::__construct('Plugin/Oauth2Grant', $namespaces, $module_handler, 'Drupal\simple_oauth\Plugin\Oauth2GrantInterface', 'Drupal\simple_oauth\Annotation\Oauth2Grant');
 
@@ -88,6 +115,7 @@ class Oauth2GrantManager extends DefaultPluginManager implements Oauth2GrantMana
     $this->scopeRepository = $scope_repository;
     $this->accessTokenRepository = $access_token_repository;
     $this->refreshTokenRepository = $refresh_token_repository;
+    $this->responseType = $response_type;
     $settings = $config_factory->get('simple_oauth.settings');
     $this->setKeyPaths($settings);
     $this->expiration = new \DateInterval(sprintf('PT%dS', $settings->get('access_token_expiration')));
@@ -96,7 +124,7 @@ class Oauth2GrantManager extends DefaultPluginManager implements Oauth2GrantMana
   /**
    * {@inheritdoc}
    */
-  public function getAuthorizationServer($grant_type) {
+  public function getAuthorizationServer($grant_type, Consumer $client = NULL) {
     try {
       /** @var \Drupal\simple_oauth\Plugin\Oauth2GrantInterface $plugin */
       $plugin = $this->createInstance($grant_type);
@@ -106,24 +134,36 @@ class Oauth2GrantManager extends DefaultPluginManager implements Oauth2GrantMana
     }
 
     $this->checkKeyPaths();
-    $server = new AuthorizationServer(
-      $this->clientRepository,
-      $this->accessTokenRepository,
-      $this->scopeRepository,
-      realpath($this->privateKeyPath),
-      realpath($this->publicKeyPath)
-    );
-    // Set a random encryption key to be used for future encryption/decryption.
-    // See: https://github.com/thephpleague/oauth2-server/commit/1af4012df459cf8382b9d184af59161fbe62f192
-    $random = new Random();
-    $server->setEncryptionKey($random->string(64, TRUE));
-    // Enable the password grant on the server with a token TTL of X hours.
-    $server->enableGrantType(
-      $plugin->getGrantType(),
-      $this->expiration
-    );
+    $salt = Settings::getHashSalt();
 
-    return $server;
+    // The hash salt must be at least 32 characters long.
+    if (Core::ourStrlen($salt) < 32) {
+      throw OAuthServerException::serverError('Hash salt must be at least 32 characters long.');
+    }
+
+    if (empty($this->server)) {
+      $this->server = new AuthorizationServer(
+        $this->clientRepository,
+        $this->accessTokenRepository,
+        $this->scopeRepository,
+        realpath($this->privateKeyPath),
+        Core::ourSubstr($salt, 0, 32),
+        $this->responseType
+      );
+    }
+    $grant = $plugin->getGrantType();
+    // Optionally enable PKCE.
+    if ($client && ($grant instanceof AuthCodeGrant)) {
+      $client_has_pkce_enabled = $client->hasField('pkce')
+        && $client->get('pkce')->first()->value;
+      if($client_has_pkce_enabled){
+        $grant->enableCodeExchangeProof();
+      }
+    }
+    // Enable the grant on the server with a token TTL of X hours.
+    $this->server->enableGrantType($grant, $this->expiration);
+
+    return $this->server;
   }
 
   /**

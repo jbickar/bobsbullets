@@ -27,11 +27,11 @@ interface EncoderInterface
      * @param string $format  Format name
      * @param array  $context Options that normalizers/encoders have access to
      *
-     * @return scalar
+     * @return string|int|float|bool
      *
      * @throws UnexpectedValueException
      */
-    public function encode($data, $format, array $context = array());
+    public function encode($data, $format, array $context = []);
 
     /**
      * Checks whether the serializer can encode to given format.

@@ -7,10 +7,11 @@
  * - content: holds layout regions.
  * - attributes: layout attributes.
 #}
-<{{ html_element }}{{ attributes }}>
+{%- set element = html_element|default('div') -%}
+<{{- element }}{{ attributes -}}>
   <div class="atl__lr">
     <div class="atl__lc lc-1">
       {{ content.col_1 }}
     </div>
   </div>
-</{{ html_element }}>
+</{{ element }}>

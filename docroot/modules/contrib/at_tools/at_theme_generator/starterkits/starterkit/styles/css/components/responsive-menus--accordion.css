@@ -5,11 +5,11 @@
   display: none;
 }
 
-.ms-accordion a:hover, .ms-accordion a:focus {
+.ms-accordion .menu__link:hover, .ms-accordion .menu__link:focus {
   outline: 0;
 }
 
-.ms-accordion .is-parent a {
+.ms-accordion .is-parent .menu__link {
   margin-left: 2.5rem;
 }
 

@@ -18,7 +18,7 @@
       opacity: 0;
       transition: $global-transition;
 
-      a {
+      .menu__link {
         @include output-rhythm(margin-bottom, 4px);
         @include output-rhythm(padding, $xx-small);
         position: relative;

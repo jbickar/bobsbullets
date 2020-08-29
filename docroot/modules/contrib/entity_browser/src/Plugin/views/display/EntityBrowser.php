@@ -3,6 +3,7 @@
 namespace Drupal\entity_browser\Plugin\views\display;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\views\Plugin\views\display\DisplayPluginBase;
 
 /**
@@ -23,7 +24,7 @@ use Drupal\views\Plugin\views\display\DisplayPluginBase;
  *   entity_browser_display = TRUE
  * )
  */
-class EntityBrowser extends DisplayPluginBase {
+class EntityBrowser extends DisplayPluginBase implements TrustedCallbackInterface {
 
   /**
    * {@inheritdoc}
@@ -42,6 +43,22 @@ class EntityBrowser extends DisplayPluginBase {
     // Force AJAX as this Display Plugin will almost always be embedded inside
     // EntityBrowserForm, which breaks normal exposed form submits.
     return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOption($option) {
+    // @todo remove upon resolution of https://www.drupal.org/node/2904798
+    // This overrides getOption() instead of ajaxEnabled() because
+    // \Drupal\views\Controller\ViewAjaxController::ajaxView() currently calls
+    // that directly.
+    if ($option == 'use_ajax') {
+      return TRUE;
+    }
+    else {
+      return parent::getOption($option);
+    }
   }
 
   /**
@@ -203,6 +220,13 @@ class EntityBrowser extends DisplayPluginBase {
     $content = str_replace($search, $replace, $content);
 
     return $content;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return ['postRender', 'elementPreRender'];
   }
 
 }

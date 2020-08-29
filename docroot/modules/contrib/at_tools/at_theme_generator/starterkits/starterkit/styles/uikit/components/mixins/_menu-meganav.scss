@@ -38,7 +38,7 @@
       .menu {
         padding: 0;
 
-        a {
+        .menu__link {
           @include output-rhythm(padding, $xx-small $medium);
 
           &:before,
@@ -75,11 +75,11 @@
             border-bottom: none;
           }
 
-          a {
+          .menu__link {
             float: #{$flow-from};
           }
 
-          > span > a {
+          > span > .menu__link  {
             width: $col-width;
           }
         }
@@ -97,7 +97,7 @@
           .menu__item {
             float: #{$flow-from};
 
-            a {
+            .menu__link {
               width: auto;
             }
           }

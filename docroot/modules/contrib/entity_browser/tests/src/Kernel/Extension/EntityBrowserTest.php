@@ -14,6 +14,7 @@ use Drupal\entity_browser\WidgetSelectorInterface;
 use Drupal\entity_browser\SelectionDisplayInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\views\Entity\View;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Tests the entity_browser config entity.
@@ -65,11 +66,11 @@ class EntityBrowserTest extends KernelTestBase {
     FileCacheFactory::setPrefix($this->randomString(4));
     parent::setUp();
 
-    $this->controller = $this->container->get('entity.manager')->getStorage('entity_browser');
+    $this->controller = $this->container->get('entity_type.manager')->getStorage('entity_browser');
     $this->widgetUUID = $this->container->get('uuid')->generate();
     $this->routeProvider = $this->container->get('router.route_provider');
 
-    $this->installSchema('system', ['router', 'key_value_expire', 'sequences']);
+    $this->installSchema('system', ['key_value_expire', 'sequences']);
     View::create(['id' => 'test_view'])->save();
   }
 
@@ -127,7 +128,7 @@ class EntityBrowserTest extends KernelTestBase {
         $this->fail('An entity browser without required ' . $plugin_type . ' created with no exception thrown.');
       }
       catch (PluginException $e) {
-        $this->assertEquals('The "" plugin does not exist.', $e->getMessage(), 'An exception was thrown when an entity_browser was created without a ' . $plugin_type . ' plugin.');
+        $this->assertStringContainsString('The "" plugin does not exist.', $e->getMessage(), 'An exception was thrown when an entity_browser was created without a ' . $plugin_type . ' plugin.');
       }
     }
 
@@ -193,7 +194,7 @@ class EntityBrowserTest extends KernelTestBase {
 
     // Ensure that rebuilding routes works.
     $route = $this->routeProvider->getRoutesByPattern('/test-browser-test');
-    $this->assertTrue($route, 'Route exists.');
+    $this->assertInstanceOf(RouteCollection::class, $route);
   }
 
   /**
@@ -207,7 +208,7 @@ class EntityBrowserTest extends KernelTestBase {
 
     // Verify several properties of the entity browser.
     $this->assertEquals($entity->label(), 'Testing entity browser instance');
-    $this->assertTrue($entity->uuid());
+    $this->assertNotEmpty($entity->uuid());
     $plugin = $entity->getDisplay();
     $this->assertTrue($plugin instanceof DisplayInterface, 'Testing display plugin.');
     $this->assertEquals($plugin->getPluginId(), 'standalone');
@@ -262,7 +263,7 @@ class EntityBrowserTest extends KernelTestBase {
       $registered_route = $this->routeProvider->getRouteByName('entity_browser.' . $entity->id());
     }
     catch (\Exception $e) {
-      $this->fail(t('Expected route not found: @message', array('@message' => $e->getMessage())));
+      $this->fail(t('Expected route not found: @message', ['@message' => $e->getMessage()]));
       return;
     }
 
@@ -465,6 +466,43 @@ class EntityBrowserTest extends KernelTestBase {
     $form_object->validateForm($form, $form_state);
 
     $this->assertEmpty($form_state->getErrors(), t('Validation succeeded where expected'));
+  }
+
+  /**
+   * Tests view widget access.
+   */
+  public function testViewWidgetAccess() {
+    $this->installConfig(['entity_browser_test']);
+    $this->installEntitySchema('user');
+    $this->installEntitySchema('user_role');
+
+    /** @var \Drupal\entity_browser\EntityBrowserInterface $entity */
+    $entity = $this->controller->load('test_entity_browser_file');
+
+    $this->assertFalse($entity->getWidget('774798f1-5ec5-4b63-84bd-124cd51ec07d')->access()->isAllowed());
+
+    // Create a user that has permission to access the view and try with it.
+    /** @var \Drupal\user\RoleInterface $role */
+    $role = $this->container->get('entity_type.manager')
+      ->getStorage('user_role')
+      ->create([
+        'name' => $this->randomString(),
+        'id' => $this->randomMachineName(),
+      ]);
+    $role->grantPermission('access content');
+    $role->save();
+
+    $user = $this->container->get('entity_type.manager')
+      ->getStorage('user')
+      ->create([
+        'name' => $this->randomString(),
+        'mail' => 'info@example.com',
+        'roles' => $role->id(),
+      ]);
+    $user->save();
+    \Drupal::currentUser()->setAccount($user);
+
+    $this->assertTrue($entity->getWidget('774798f1-5ec5-4b63-84bd-124cd51ec07d')->access()->isAllowed());
   }
 
 }

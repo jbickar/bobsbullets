@@ -1,13 +1,8 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\page_manager\Routing\RouteEnhancerCollectorTrait.
- */
-
 namespace Drupal\page_manager\Routing;
 
-use Symfony\Cmf\Component\Routing\Enhancer\RouteEnhancerInterface;
+use Drupal\Core\Routing\EnhancerInterface;
 
 /**
  * Provides a trait to make a service a collector of route enhancers.
@@ -17,16 +12,16 @@ use Symfony\Cmf\Component\Routing\Enhancer\RouteEnhancerInterface;
 trait RouteEnhancerCollectorTrait {
 
   /**
-   * @var \Symfony\Cmf\Component\Routing\Enhancer\RouteEnhancerInterface[]
+   * @var \Drupal\Core\Routing\EnhancerInterface[]
    */
-  protected $enhancers = array();
+  protected $enhancers = [];
 
   /**
-   * Cached sorted list of enhancers
+   * Cached sorted list of enhancers.
    *
-   * @var \Symfony\Cmf\Component\Routing\Enhancer\RouteEnhancerInterface[]
+   * @var \Drupal\Core\Routing\EnhancerInterface[]
    */
-  protected $sortedEnhancers = array();
+  protected $sortedEnhancers = [];
 
   /**
    * Add route enhancers to the router to let them generate information on
@@ -35,18 +30,18 @@ trait RouteEnhancerCollectorTrait {
    * The order of the enhancers is determined by the priority, the higher the
    * value, the earlier the enhancer is run.
    *
-   * @param \Symfony\Cmf\Component\Routing\Enhancer\RouteEnhancerInterface $enhancer
+   * @param \Drupal\Core\Routing\EnhancerInterface $enhancer
    * @param int $priority
    *
    * @return $this
    */
-  public function addRouteEnhancer(RouteEnhancerInterface $enhancer, $priority = 0) {
+  public function addRouteEnhancer(EnhancerInterface $enhancer, $priority = 0) {
     if (empty($this->enhancers[$priority])) {
-      $this->enhancers[$priority] = array();
+      $this->enhancers[$priority] = [];
     }
 
     $this->enhancers[$priority][] = $enhancer;
-    $this->sortedEnhancers = array();
+    $this->sortedEnhancers = [];
 
     return $this;
   }
@@ -54,7 +49,7 @@ trait RouteEnhancerCollectorTrait {
   /**
    * Sorts the enhancers and flattens them.
    *
-   * @return \Symfony\Cmf\Component\Routing\Enhancer\RouteEnhancerInterface[]
+   * @return \Drupal\Core\Routing\EnhancerInterface[]
    *   The enhancers ordered by priority.
    */
   protected function getRouteEnhancers() {
@@ -70,11 +65,11 @@ trait RouteEnhancerCollectorTrait {
    *
    * The highest priority number is the highest priority (reverse sorting).
    *
-   * @return \Symfony\Cmf\Component\Routing\Enhancer\RouteEnhancerInterface[]
+   * @return \Drupal\Core\Routing\EnhancerInterface[]
    *   The sorted enhancers.
    */
   protected function sortRouteEnhancers() {
-    $sortedEnhancers = array();
+    $sortedEnhancers = [];
     krsort($this->enhancers);
 
     foreach ($this->enhancers as $enhancers) {

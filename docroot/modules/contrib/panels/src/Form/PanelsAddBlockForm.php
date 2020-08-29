@@ -4,7 +4,7 @@ namespace Drupal\panels\Form;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\user\SharedTempStoreFactory;
+use Drupal\Core\TempStore\SharedTempStoreFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,7 +23,7 @@ class PanelsAddBlockForm extends PanelsBlockConfigureFormBase {
   /**
    * PanelsAddBlockForm constructor.
    *
-   * @param \Drupal\user\SharedTempStoreFactory $tempstore
+   * @param \Drupal\Core\TempStore\SharedTempStoreFactory $tempstore
    *   The tempstore factory.
    * @param \Drupal\Component\Plugin\PluginManagerInterface $block_manager
    *   The block plugin manager.
@@ -38,7 +38,7 @@ class PanelsAddBlockForm extends PanelsBlockConfigureFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('user.shared_tempstore'),
+      $container->get('tempstore.shared'),
       $container->get('plugin.manager.block')
     );
   }
@@ -62,7 +62,7 @@ class PanelsAddBlockForm extends PanelsBlockConfigureFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, Request $request = NULL, $tempstore_id = NULL, $machine_name = NULL, $block_id = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, $tempstore_id = NULL, $machine_name = NULL, $block_id = NULL, Request $request = NULL) {
     $form = parent::buildForm($form, $form_state, $tempstore_id, $machine_name, $block_id);
     $form['region']['#default_value'] = $request->query->get('region');
     return $form;

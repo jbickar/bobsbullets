@@ -22,12 +22,12 @@
   width: 100%;
 }
 
-.bp--at-core-simple-tablet .atl--grid-2x2 > .atl__cw > .atl__lc,
+.bp--at-core-simple-tablet-isolate .atl--grid-2x2 > .atl__cw > .atl__lc,
 .bp--at-core-simple-wide .atl--grid-2x2 > .atl__cw > .atl__lc {
   width: 50%;
 }
 
-.bp--at-core-simple-tablet .atl--grid-2x2 > .atl__cw > .lc-3:last-child,
+.bp--at-core-simple-tablet-isolate .atl--grid-2x2 > .atl__cw > .lc-3:last-child,
 .bp--at-core-simple-wide .atl--grid-2x2 > .atl__cw > .lc-3:last-child {
   -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;

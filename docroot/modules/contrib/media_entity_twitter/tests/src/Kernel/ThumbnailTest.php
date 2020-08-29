@@ -2,13 +2,13 @@
 
 namespace Drupal\Tests\media_entity_twitter\Kernel;
 
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\media_entity\Entity\Media;
-use Drupal\media_entity\Entity\MediaBundle;
-use Drupal\media_entity\MediaInterface;
-use Drupal\media_entity_twitter\Plugin\MediaEntity\Type\Twitter;
+use Drupal\media\Entity\Media;
+use Drupal\media\Entity\MediaType;
+use Drupal\media_entity_twitter\Plugin\media\Source\Twitter;
 use Drupal\media_entity_twitter\TweetFetcherInterface;
 
 /**
@@ -21,21 +21,21 @@ class ThumbnailTest extends KernelTestBase {
   /**
    * The mocked tweet fetcher.
    *
-   * @var TweetFetcherInterface
+   * @var \Drupal\media_entity_twitter\TweetFetcherInterface
    */
   protected $tweetFetcher;
 
   /**
    * The plugin under test.
    *
-   * @var Twitter
+   * @var \Drupal\media_entity_twitter\Plugin\media\Source\Twitter
    */
   protected $plugin;
 
   /**
    * A tweet media entity.
    *
-   * @var MediaInterface
+   * @var \Drupal\media\MediaInterface
    */
   protected $entity;
 
@@ -46,7 +46,7 @@ class ThumbnailTest extends KernelTestBase {
     'field',
     'file',
     'image',
-    'media_entity',
+    'media',
     'media_entity_twitter',
     'system',
     'text',
@@ -62,13 +62,13 @@ class ThumbnailTest extends KernelTestBase {
     $this->installEntitySchema('media');
     $this->installConfig(['media_entity_twitter', 'system']);
 
-    $this->tweetFetcher = $this->getMock(TweetFetcherInterface::class);
+    $this->tweetFetcher = $this->createMock(TweetFetcherInterface::class);
     $this->container->set('media_entity_twitter.tweet_fetcher', $this->tweetFetcher);
 
-    MediaBundle::create([
+    MediaType::create([
       'id' => 'tweet',
-      'type' => 'twitter',
-      'type_configuration' => [
+      'source' => 'twitter',
+      'source_configuration' => [
         'source_field' => 'tweet',
         'use_twitter_api' => TRUE,
         'consumer_key' => $this->randomString(),
@@ -97,9 +97,9 @@ class ThumbnailTest extends KernelTestBase {
 
     $this->plugin = Twitter::create(
       $this->container,
-      MediaBundle::load('tweet')->getTypeConfiguration(),
+      MediaType::load('tweet')->get('source_configuration'),
       'twitter',
-      []
+      MediaType::load('tweet')->getSource()->getPluginDefinition()
     );
 
     $dir = $this->container
@@ -107,7 +107,7 @@ class ThumbnailTest extends KernelTestBase {
       ->get('media_entity_twitter.settings')
       ->get('local_images');
 
-    file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+    \Drupal::service('file_system')->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY| FileSystemInterface::MODIFY_PERMISSIONS);
   }
 
   /**
@@ -128,7 +128,7 @@ class ThumbnailTest extends KernelTestBase {
 
     $uri = 'public://twitter-thumbnails/12345.ico';
     touch($uri);
-    $this->assertEquals($uri, $this->plugin->thumbnail($this->entity));
+    $this->assertEquals($uri, $this->plugin->getMetadata($this->entity, 'thumbnail_uri'));
   }
 
   /**
@@ -147,7 +147,7 @@ class ThumbnailTest extends KernelTestBase {
         ],
       ]);
 
-    $this->plugin->thumbnail($this->entity);
+    $this->plugin->getMetadata($this->entity, 'thumbnail_uri');
     $this->assertFileExists('public://twitter-thumbnails/12345.ico');
   }
 
@@ -156,8 +156,8 @@ class ThumbnailTest extends KernelTestBase {
    */
   public function testNoLocalImage() {
     $this->assertEquals(
-      $this->plugin->getDefaultThumbnail(),
-      $this->plugin->thumbnail($this->entity)
+      '/twitter.png',
+      $this->plugin->getMetadata($this->entity, 'thumbnail_uri')
     );
   }
 
@@ -169,7 +169,7 @@ class ThumbnailTest extends KernelTestBase {
     $configuration['generate_thumbnails'] = TRUE;
     $this->plugin->setConfiguration($configuration);
 
-    $uri = $this->plugin->thumbnail($this->entity);
+    $uri = $this->plugin->getMetadata($this->entity, 'thumbnail_uri');
     $this->assertFileExists($uri);
   }
 

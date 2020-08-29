@@ -26,6 +26,8 @@ class MetatagViewsEditForm extends FormBase {
   protected $metatagManager;
 
   /**
+   * The Views manager.
+   *
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $viewsManager;
@@ -47,9 +49,9 @@ class MetatagViewsEditForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(MetatagManagerInterface $metatag_manager, EntityTypeManagerInterface $entity_manager) {
+  public function __construct(MetatagManagerInterface $metatag_manager, EntityTypeManagerInterface $entity_type_manager) {
     $this->metatagManager = $metatag_manager;
-    $this->viewsManager = $entity_manager->getStorage('view');
+    $this->viewsManager = $entity_type_manager->getStorage('view');
   }
 
   /**
@@ -77,14 +79,14 @@ class MetatagViewsEditForm extends FormBase {
     $view_id = \Drupal::request()->get('view_id');
     $display_id = \Drupal::request()->get('display_id');
 
-    // Get metatags from the view entity.
+    // Get meta tags from the view entity.
     $metatags = [];
     if ($view_id && $display_id) {
       $metatags = metatag_get_view_tags($view_id, $display_id);
     }
 
     $form['metatags'] = $this->metatagManager->form($metatags, $form, ['view']);
-    $form['metatags']['#title'] = t('Metatags');
+    $form['metatags']['#title'] = $this->t('Metatags');
     $form['metatags']['#type'] = 'fieldset';
 
     // Need to create that AFTER the $form['metatags'] as the whole form is
@@ -99,7 +101,7 @@ class MetatagViewsEditForm extends FormBase {
 
     $form['actions']['submit'] = [
       '#type' => 'submit',
-      '#value' => t('Submit'),
+      '#value' => $this->t('Submit'),
     ];
 
     return $form;
@@ -165,7 +167,7 @@ class MetatagViewsEditForm extends FormBase {
     /** @var \Drupal\views\ViewEntityInterface $view */
     $view = $this->viewsManager->load($view_id);
 
-    // Store the metatags on the view.
+    // Store the meta tags on the view.
     $config_name = $view->getConfigDependencyName();
     $config_path = 'display.' . $display_id . '.display_options.display_extenders.metatag_display_extender.metatags';
 
@@ -183,7 +185,7 @@ class MetatagViewsEditForm extends FormBase {
     // Redirect back to the views list.
     $form_state->setRedirect('metatag_views.metatags.list');
 
-    drupal_set_message($this->t('Metatags for @view : @display have been saved.', [
+    $this->messenger()->addMessage($this->t('Metatags for @view : @display have been saved.', [
       '@view' => $view->label(),
       '@display' => $view->getDisplay($display_id)['display_title'],
     ]));

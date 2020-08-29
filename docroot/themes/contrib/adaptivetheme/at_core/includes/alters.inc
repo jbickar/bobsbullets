@@ -39,13 +39,7 @@ function at_core_page_attachments_alter(array &$page) {
   }
 
   // Generated files path.
-  $generated_files_path = NULL;
-  if (!empty($config['generated_files_path'])) {
-    $generated_files_path = $config['generated_files_path'];
-  }
-  else {
-    drupal_set_message(t('The path to generated CSS files is not saved in configuration, try saving your themes Appearance settings.'), 'error');
-  }
+  $generated_files_path = drupal_get_path('theme', $theme['provider']) . '/styles/css/generated';
 
   // Attach at.settings, we need the ajaxPageState theme name.
   $page['#attached']['library'][] = 'at_core/at.settings';
@@ -440,7 +434,7 @@ function at_core_page_attachments_alter(array &$page) {
     $page['#attached']['library'][] = $theme['provider'] . '/custom_css_file';
   }
 
-  // Finally we load our jquery.ui overides.
+  // Finally we load our jquery.ui overrides.
   if (file_exists($theme['path'] . '/styles/css/components/jquery-ui.css')) {
     $page['#attached']['library'][] = $theme['provider'] . '/jquery_ui';
   }
@@ -516,7 +510,8 @@ function at_core_js_settings_alter(array &$settings, \Drupal\Core\Asset\Attached
       }
       // Generated font & text styles.
       if (!empty($config['generated_files_path'])) {
-        $generated_files_path = $config['generated_files_path'];
+        // Get the generated files path or the theme provider.
+        $generated_files_path = $theme['path'] . '/styles/css/generated';
         if (isset($config['enable_extensions']) && $config['enable_extensions'] === 1) {
           // Google fonts.
           if (isset($config['font_use_google_fonts']) && $config['font_use_google_fonts'] === TRUE) {

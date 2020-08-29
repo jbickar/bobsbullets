@@ -7,7 +7,8 @@
  * - content: holds layout regions.
  * - attributes: layout attributes.
 #}
-<{{ html_element }}{{ attributes }}>
+{%- set element = html_element|default('div') -%}
+<{{- element }}{{ attributes -}}>
   <div class="atl__lr atl__cw">
     {# Row 1 #}
     {% if content.r1c1|render|trim is not empty %}
@@ -35,4 +36,4 @@
       </div>
     {% endif %}
   </div>
-</{{ html_element }}>
+</{{ element }}>

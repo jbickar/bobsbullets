@@ -11,7 +11,7 @@
     @include list-horizontal($flow-from, $margin: (t: $x-small, r: $medium, b: $x-small, l: 0), $list-item-selector: '.menu__item');
   }
 
-  .menu a:after {
+  .menu .menu__link:after {
     content: none;
     display: none;
   }

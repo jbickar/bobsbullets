@@ -93,7 +93,7 @@
 
           if (acd_def == true && acd_load == true) {
             $('.rm-block .menu-level-1').addClass('ms-accordion');
-            $.ready(copyButtons('.ms-accordion .is-parent__wrapper a'));
+            $.ready(copyButtons('.ms-accordion .is-parent__wrapper .menu__link'));
             $('.ms-accordion .rm-accordion-trigger', context).on('click', accordionClick);
           }
         },
@@ -108,7 +108,7 @@
                 if (acd_resp == true) {
                   if (acd_both == false) {
                     $('.rm-block .menu-level-1').addClass('ms-accordion');
-                    $.ready(copyButtons('.ms-accordion .is-parent__wrapper a'));
+                    $.ready(copyButtons('.ms-accordion .is-parent__wrapper .menu__link'));
                     $('.ms-accordion .rm-accordion-trigger', context).on('click', accordionClick);
                   }
                 } else {
@@ -134,7 +134,7 @@
             if (acd_def == true) {
               if (acd_both == false) {
                 $('.rm-block .menu-level-1').addClass('ms-accordion');
-                $.ready(copyButtons('.ms-accordion .is-parent__wrapper a'));
+                $.ready(copyButtons('.ms-accordion .is-parent__wrapper .menu__link'));
                 $('.ms-accordion .rm-accordion-trigger', context).on('click', accordionClick);
               }
             } else {

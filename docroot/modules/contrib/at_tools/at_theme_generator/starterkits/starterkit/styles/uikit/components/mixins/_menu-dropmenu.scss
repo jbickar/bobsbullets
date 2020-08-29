@@ -1,4 +1,4 @@
-// Drop menus
+// Drop Menus
 // Standard CSS drop menus that will expand any nesting level.
 
 @mixin dropmenu($dropmenu-item-width: 12em, $dropmenu-arrows: true) {
@@ -24,7 +24,7 @@
         position: relative;
       }
 
-      a {
+      .menu__link {
         position: relative;
         display: block;
         @include output-rhythm(padding, $xx-small $large);
@@ -57,15 +57,15 @@
           }
         }
 
-        a:after {
+        .menu__link:after {
           content: '';
           display: none;
         }
 
         @if $dropmenu-arrows == true {
           .fa-loaded & {
-            .menu__item--collapsed.is-parent > span > a,
-            .menu__item--expanded.is-parent > span > a {
+            .menu__item--collapsed.is-parent > span > .menu__link,
+            .menu__item--expanded.is-parent > span > .menu__link {
               @include output-rhythm(padding-#{$flow-to}, $medium * 2.5);
 
               &:after {
@@ -73,11 +73,11 @@
               }
             }
 
-            .menu__item--expanded.is-parent > span > a:after {
+            .menu__item--expanded.is-parent > span > .menu__link:after {
               content: $menu-arrow-down;
             }
 
-            .menu__item--collapsed.is-parent > span > a:after {
+            .menu__item--collapsed.is-parent > span > .menu__link:after {
               content: '';
             }
           }
@@ -115,7 +115,7 @@
         @if $dropmenu-arrows == true {
           // FontAwesome loaded.
           .fa-loaded & {
-            .menu__item--expanded.is-parent > span > a:after {
+            .menu__item--expanded.is-parent > span > .menu__link:after {
               content: $menu-arrow-right;
 
               [dir="rtl"] & {

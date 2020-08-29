@@ -1,0 +1,115 @@
+{
+    "name": "drupal/lightning_media",
+    "type": "drupal-module",
+    "description": "Slick media handling for Lightning. So cool you'll make the A/C jealous.",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "bower-asset/cropper": "^2.3",
+        "bower-asset/dropzone": "^5.1",
+        "bower-asset/slick-carousel": "^1.8",
+        "drupal/core": "^8.8.8 || ^9.0.1",
+        "drupal/crop": "^2.0.0-rc1",
+        "drupal/dropzonejs": "^2.1",
+        "drupal/embed": "^1.0",
+        "drupal/entity_browser": "^2.3",
+        "drupal/entity_embed": "^1.0",
+        "drupal/image_widget_crop": "^2.1",
+        "drupal/inline_entity_form": "^1.0-rc7",
+        "drupal/lightning_core": "5.*",
+        "drupal/media_entity_instagram": "^2.0",
+        "drupal/media_entity_twitter": "^2.1",
+        "drupal/slick_entityreference": "^2.0",
+        "drupal/video_embed_field": "^2.0",
+        "drupal/views_infinite_scroll": "^1.6",
+        "oomphinc/composer-installers-extender": "^1.1",
+        "vardot/blazy": "^1.8"
+    },
+    "require-dev": {
+        "drupal/core-composer-scaffold": "*",
+        "drupal/core-dev": "*",
+        "drush/drush": ">=9.7",
+        "symfony/options-resolver": ">=4",
+        "vijaycs85/drupal-quality-checker": "^1.0"
+    },
+    "config": {
+        "preferred-install": {
+            "drupal/core": "dist"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-8.x-4.x": "4.x-dev"
+        },
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "docroot/"
+            },
+            "file-mapping": {
+                "[project-root]/.gitattributes": false,
+                "[project-root]/.editorconfig": false,
+                "[web-root]/example.gitignore": false,
+                "[web-root]/.csslintrc": false,
+                "[web-root]/modules/README.txt": false,
+                "[web-root]/profiles/README.txt": false,
+                "[web-root]/sites/README.txt": false,
+                "[web-root]/themes/README.txt": false,
+                "[web-root]/INSTALL.txt": false,
+                "[web-root]/robots.txt": false,
+                "[web-root]/web.config": false
+            }
+        },
+        "enable-patching": true,
+        "installer-paths": {
+            "docroot/core": [
+                "type:drupal-core"
+            ],
+            "docroot/libraries/{$name}": [
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
+            ],
+            "docroot/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "docroot/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "docroot/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ]
+        },
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ]
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-install-cmd": [
+            "@push"
+        ],
+        "post-update-cmd": [
+            "@push"
+        ],
+        "nuke": "rm -r -f docroot vendor",
+        "pull": "cp -R -f ./docroot/modules/contrib/lightning_media/* .",
+        "push": [
+            "rm -r -f ./docroot/modules/contrib/lightning_media",
+            "mkdir -p ./docroot/modules/contrib/lightning_media",
+            "@composer archive --file lightning_media",
+            "tar -x -f lightning_media.tar -C ./docroot/modules/contrib/lightning_media",
+            "rm lightning_media.tar"
+        ]
+    }
+}

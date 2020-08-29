@@ -20,6 +20,7 @@
  * @see template_preprocess_toolbar()
  */
 #}
+{{- attach_library(theme.name ~ '/toolbar') -}}
 <div{{ attributes.addClass('toolbar') }}>
   <nav{{ toolbar_attributes.addClass('toolbar-bar', 'clearfix') }}>
     <h2 class="visually-hidden">{{ toolbar_heading }}</h2>

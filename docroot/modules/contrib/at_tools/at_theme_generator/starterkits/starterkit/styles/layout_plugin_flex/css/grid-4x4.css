@@ -22,14 +22,14 @@
   width: 100%;
 }
 
-.bp--at-core-simple-tablet .atl--grid-4x4 > .atl__cw > .atl__lc {
+.bp--at-core-simple-tablet-isolate .atl--grid-4x4 > .atl__cw > .atl__lc {
   -webkit-flex: 0 0 auto;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
   width: 50%;
 }
 
-.bp--at-core-simple-tablet .atl--grid-4x4 > .atl__cw > .atl__lc:nth-of-type(odd):last-child {
+.bp--at-core-simple-tablet-isolate .atl--grid-4x4 > .atl__cw > .atl__lc:nth-of-type(odd):last-child {
   -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;

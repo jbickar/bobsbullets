@@ -10,13 +10,14 @@ use Drupal\metatag\Plugin\metatag\Tag\MetaPropertyBase;
  * @MetatagTag(
  *   id = "og_url",
  *   label = @Translation("Page URL"),
- *   description = @Translation("Preferred page location or URL to help eliminate duplicate content for search engines, e.g., <em>http://www.imdb.com/title/tt0117500/</em>."),
+ *   description = @Translation("Preferred page location or URL to help eliminate duplicate content for search engines, e.g., <em>https://www.imdb.com/title/tt0117500/</em>."),
  *   name = "og:url",
  *   group = "open_graph",
  *   weight = 3,
  *   type = "uri",
  *   secure = FALSE,
- *   multiple = FALSE
+ *   multiple = FALSE,
+ *   absolute_url = TRUE
  * )
  */
 class OgUrl extends MetaPropertyBase {

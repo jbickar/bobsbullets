@@ -21,6 +21,16 @@ function at_core_preprocess(&$variables) {
     $theme = $data->getConfig();
   }
   $variables['theme'] = $theme;
+
+  // Set global is_front.
+  try {
+    $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+  }
+  catch (Exception $e) {
+    $variables['is_front'] = FALSE;
+  }
+  // Ensure the cache varies correctly (new in Drupal 8.3).
+  $variables['#cache']['contexts'][] = 'url.path.is_front';
 }
 
 /**
@@ -69,11 +79,6 @@ function at_core_preprocess_html(&$variables) {
   $path_args = explode('/', $path);
   if (count($path_args) >= 3) {
     $variables['path_info']['args'] = Html::cleanCssIdentifier(ltrim($path, '/'));
-  }
-
-  // Bring back our beloved D7 is_front.
-  if (\Drupal::service('path.matcher')->isFrontPage() === TRUE) {
-    $variables['is_front'] = TRUE;
   }
 
   // Extensions

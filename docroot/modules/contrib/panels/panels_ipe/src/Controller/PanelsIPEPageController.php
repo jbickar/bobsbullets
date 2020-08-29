@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Drupal\user\SharedTempStoreFactory;
+use Drupal\Core\TempStore\SharedTempStoreFactory;
 
 /**
  * Contains all JSON endpoints required for Panels IPE + Page Manager.
@@ -52,7 +52,9 @@ class PanelsIPEPageController extends ControllerBase {
   protected $panelsStorage;
 
   /**
-   * @var \Drupal\user\SharedTempStore
+   * Stores the tempstore factory.
+   *
+   * @var \Drupal\Core\TempStore\SharedTempStore
    */
   protected $tempStore;
 
@@ -73,7 +75,7 @@ class PanelsIPEPageController extends ControllerBase {
    * @param \Drupal\Core\Render\RendererInterface $renderer
    * @param \Drupal\Core\Layout\LayoutPluginManagerInterface $layout_plugin_manager
    * @param \Drupal\panels\Storage\PanelsStorageManagerInterface $panels_storage_manager
-   * @param \Drupal\user\SharedTempStoreFactory $temp_store_factory
+   * @param \Drupal\Core\TempStore\SharedTempStore $temp_store_factory
    * @param \Drupal\Core\Plugin\Context\ContextHandlerInterface $context_handler
    */
   public function __construct(BlockManagerInterface $block_manager, RendererInterface $renderer, LayoutPluginManagerInterface $layout_plugin_manager, PanelsStorageManagerInterface $panels_storage_manager, SharedTempStoreFactory $temp_store_factory, ContextHandlerInterface $context_handler) {
@@ -96,7 +98,7 @@ class PanelsIPEPageController extends ControllerBase {
       $container->get('renderer'),
       $container->get('plugin.manager.core.layout'),
       $container->get('panels.storage_manager'),
-      $container->get('user.shared_tempstore'),
+      $container->get('tempstore.shared'),
       $container->get('context.handler')
     );
   }
@@ -134,7 +136,7 @@ class PanelsIPEPageController extends ControllerBase {
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *
-   * @throws \Drupal\user\TempStoreException
+   * @throws \Drupal\Core\TempStore\SharedTempStore
    */
   public function cancel($panels_storage_type, $panels_storage_id) {
     $panels_display = $this->loadPanelsDisplay($panels_storage_type, $panels_storage_id);
@@ -179,6 +181,14 @@ class PanelsIPEPageController extends ControllerBase {
         'category' => $layout->getCategory(),
       ];
     }
+
+    // Trigger hook_panels_ipe_layouts_alter(). Allows other modules to change
+    // the list of layouts that are visible.
+    \Drupal::moduleHandler()->alter('panels_ipe_layouts', $data, $panels_display);
+
+    // Reindex the blocks after they were altered in case one of them was
+    // removed.
+    $data = array_values($data);
 
     return $data;
   }
@@ -331,7 +341,7 @@ class PanelsIPEPageController extends ControllerBase {
 
     // Trigger hook_panels_ipe_blocks_alter(). Allows other modules to change
     // the list of blocks that are visible.
-    \Drupal::moduleHandler()->alter('panels_ipe_blocks', $blocks);
+    \Drupal::moduleHandler()->alter('panels_ipe_blocks', $blocks, $panels_display);
     // We need to re-index our return value, in case a hook unset a block.
     $blocks = array_values($blocks);
 

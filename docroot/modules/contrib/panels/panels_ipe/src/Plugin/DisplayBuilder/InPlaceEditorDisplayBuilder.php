@@ -5,12 +5,13 @@ namespace Drupal\panels_ipe\Plugin\DisplayBuilder;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Layout\LayoutInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\Context\ContextHandlerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\panels\Plugin\DisplayBuilder\StandardDisplayBuilder;
 use Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant;
 use Drupal\panels\Storage\PanelsStorageManagerInterface;
-use Drupal\user\SharedTempStoreFactory;
+use Drupal\Core\TempStore\SharedTempStoreFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,7 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class InPlaceEditorDisplayBuilder extends StandardDisplayBuilder {
 
   /**
-   * @var \Drupal\user\SharedTempStore
+   * @var \Drupal\Core\TempStore\SharedTempStoreFactory
    */
   protected $tempStore;
 
@@ -47,13 +48,13 @@ class InPlaceEditorDisplayBuilder extends StandardDisplayBuilder {
    *   The context handler.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The current user.
-   * @param \Drupal\user\SharedTempStoreFactory $temp_store_factory
+   * @param \Drupal\Core\TempStore\SharedTempStoreFactory $temp_store_factory
    *   The factory for the temp store object.
    * @param \Drupal\panels\Storage\PanelsStorageManagerInterface
    *   The Panels storage manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ContextHandlerInterface $context_handler, AccountInterface $account, SharedTempStoreFactory $temp_store_factory, PanelsStorageManagerInterface $panels_storage) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $context_handler, $account);
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ContextHandlerInterface $context_handler, AccountInterface $account, ModuleHandlerInterface $module_handler, SharedTempStoreFactory $temp_store_factory, PanelsStorageManagerInterface $panels_storage) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $context_handler, $account, $module_handler);
     $this->tempStore = $temp_store_factory->get('panels_ipe');
     $this->panelsStorage = $panels_storage;
   }
@@ -68,7 +69,8 @@ class InPlaceEditorDisplayBuilder extends StandardDisplayBuilder {
       $plugin_definition,
       $container->get('context.handler'),
       $container->get('current_user'),
-      $container->get('user.shared_tempstore'),
+      $container->get('module_handler'),
+      $container->get('tempstore.shared'),
       $container->get('panels.storage_manager')
     );
   }

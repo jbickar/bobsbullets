@@ -105,22 +105,22 @@
   font-size: 1rem;
 }
 
-.rm-block__content__item:first-child a {
+.rm-block__content__item:first-child .menu__link {
   border-top: 0;
 }
 
-.rm-block__content a {
+.rm-block__content .menu__link {
   transition: all, 225ms, ease-in-out;
   font-weight: 300;
   margin: 0;
   border: 0;
 }
 
-.rm-block__content a:hover, .rm-block__content a:focus {
+.rm-block__content .menu__link:hover, .rm-block__content .menu__link:focus {
   text-decoration: none;
 }
 
-.no-js .rm-block a {
+.no-js .rm-block .menu__link {
   padding: 0.5rem;
   margin: 0.0625rem 0;
 }

@@ -27,7 +27,7 @@ function panelizer_post_update_rename_layout_machine_names(&$sandbox) {
   $results = [];
   // Update overridden panelizer entities.
   foreach ($panelizer_manager->getDefinitions() as $entity_type => $definition) {
-    if (db_table_exists($entity_type . '__panelizer')) {
+    if (\Drupal::database()->schema()->tableExists($entity_type . '__panelizer')) {
       $storage = \Drupal::entityTypeManager()->getStorage($entity_type);
       $ids = $storage->getQuery()
         ->condition('panelizer', serialize([]), '<>')
@@ -69,6 +69,7 @@ function panelizer_post_update_rename_layout_machine_names(&$sandbox) {
           }
         }
       }
+      $entity->search_api_skip_tracking = TRUE;
       $entity->save();
     }
     // Update our progress information.

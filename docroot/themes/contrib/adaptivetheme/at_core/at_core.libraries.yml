@@ -230,28 +230,6 @@ at.enquire:
     - core/jquery
     - core/matchmedia
 
-# Fastclick
-at.fastclick:
-  remote: https://github.com/ftlabs/fastclick
-  version: "1.0.6"
-  license:
-    name: MIT
-    url: https://github.com/ftlabs/fastclick/blob/master/LICENSE
-    gpl-compatible: true
-  js:
-    https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js: { type: external, minified: true }
-  dependencies:
-    - core/jquery
-
-# Fastclick initialize
-at.fastclick_initialize:
-  version: VERSION
-  js:
-    scripts/min/at.fastclickInitialize.min.js: { minified: true }
-    #scripts/at.fastclickInitialize.js: {}
-  dependencies:
-    - at_core/at.fastclick
-
 # Fontfaceobserver
 at.fontfaceobserver:
   remote: https://github.com/bramstein/fontfaceobserver

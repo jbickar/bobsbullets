@@ -21,7 +21,7 @@ at_core.simple.mobile:
   group: at_core.simple
 
 at_core.simple.tablet-isolate:
-  label: Tablet
+  label: Tablet-isolate
   mediaQuery: 'all and (min-width: 45.0625em) and (max-width: 60em)'
   weight: 1
   multipliers:

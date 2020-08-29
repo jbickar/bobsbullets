@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\page_manager\Kernel;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 use Drupal\page_manager\Entity\Page;
@@ -19,13 +20,19 @@ class PageManagerRoutingTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['page_manager', 'page_manager_routing_test'];
+  public static $modules = ['page_manager', 'page_manager_routing_test', 'path_alias'];
 
   /**
    * {@inheritdoc}
    */
   protected function setUp() {
     parent::setUp();
+
+    // If we are on Drupal 8.8 or later, we need to install the path_alias
+    // module in order to properly resolve the routes.
+    if (version_compare(\Drupal::VERSION, '8.8.0', '>=')) {
+      $this->installEntitySchema('path_alias');
+    }
 
     $this->container->get('current_user')->setAccount($this->createUser([], ['view test entity']));
     EntityTest::create()->save();
@@ -102,6 +109,14 @@ class PageManagerRoutingTest extends EntityKernelTestBase {
    */
   public function testRouteFilter($path, $expected) {
     $request = Request::create($path);
+    // \Drupal\Core\StackMiddleware\NegotiationMiddleware usually handles query
+    // parameter based formats, but middlewares do not run during kernel tests
+    // so set it directly.
+    $query = UrlHelper::parse($path)['query'];
+    if (isset($query['_format'])) {
+      $request->setRequestFormat($query['_format']);
+    }
+
     try {
       $parameters = $this->container->get('router')->matchRequest($request);
     }

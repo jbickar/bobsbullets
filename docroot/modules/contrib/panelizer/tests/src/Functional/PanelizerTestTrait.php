@@ -93,7 +93,7 @@ trait PanelizerTestTrait {
     $this->drupalPostForm(NULL, $edit, t('Save'));
     $this->assertResponse(200);
 
-    entity_get_form_display('node', $content_type, 'default')
+    \Drupal::service('entity_display.repository')->getFormDisplay('node', $content_type, 'default')
       ->setComponent('panelizer', [
         'type' => 'panelizer',
       ])
@@ -123,7 +123,7 @@ trait PanelizerTestTrait {
     $this->drupalPostForm(NULL, $edit, t('Save'));
     $this->assertResponse(200);
 
-    entity_get_form_display('node', $content_type, 'default')
+    \Drupal::service('entity_display.repository')->getFormDisplay('node', $content_type, 'default')
       ->removeComponent('panelizer')
       ->save();
   }
@@ -144,8 +144,11 @@ trait PanelizerTestTrait {
         'js' => 'nojs',
       ],
     ];
-
-    $this->drupalGet("admin/structure/types/manage/{$content_type}/display");
+    $path = "admin/structure/types/manage/{$content_type}/display";
+    if (!empty($display)) {
+      $path .= '/' . $display;
+    }
+    $this->drupalGet($path);
     $this->assertResponse(200);
     $this->clickLink('Add a new Panelizer default display');
 
@@ -167,7 +170,16 @@ trait PanelizerTestTrait {
     $this->drupalPostForm(NULL, [], t('Next'));
     $this->assertResponse(200);
 
-    // Step 4: Select content.
+    // Step 4: If the layout has settings (new since Drupal 8.8), accept the
+    // defaults.
+    $layout_settings_form = $this->getSession()
+      ->getPage()
+      ->find('css', '#panels-layout-settings-form');
+    if ($layout_settings_form) {
+      $layout_settings_form->pressButton('Next');
+    }
+
+    // Step 5: Select content.
     $this->assertUrl("admin/structure/panelizer/add/{$default_id}/content", $options);
     $this->drupalPostForm(NULL, [], t('Finish'));
     $this->assertResponse(200);
@@ -205,7 +217,7 @@ trait PanelizerTestTrait {
    *   (optional) The default ID.
    */
   protected function assertDefaultExists($content_type = 'page', $display = 'default', $id = 'default') {
-    $settings = entity_get_display('node', $content_type, $display)
+    $settings = \Drupal::service('entity_display.repository')->getViewDisplay('node', $content_type, $display)
       ->getThirdPartySettings('panelizer');
 
     $display_exists = isset($settings['displays'][$id]);
@@ -224,7 +236,7 @@ trait PanelizerTestTrait {
    *   The default ID.
    */
   protected function assertDefaultNotExists($content_type = 'page', $display = 'default', $id = 'default') {
-    $settings = entity_get_display('node', $content_type, $display)
+    $settings = \Drupal::service('entity_display.repository')->getViewDisplay('node', $content_type, $display)
       ->getThirdPartySettings('panelizer');
 
     $display_exists = isset($settings['displays'][$id]);

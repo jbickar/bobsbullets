@@ -200,6 +200,7 @@ class GeneratorForm extends FormBase {
     ];
 
     // Color module
+    $color_module = \Drupal::moduleHandler()->moduleExists('color');
     $form['generate']['options']['generate_color'] = [
       '#type' => 'checkbox',
       '#title' => t('Color Module'),
@@ -213,6 +214,10 @@ class GeneratorForm extends FormBase {
         ],
       ],
     ];
+    if ($color_module == FALSE) {
+      $form['generate']['options']['generate_color']['#default_value'] = 0;
+      $form['generate']['options']['generate_color']['#description'] = t('Provides basic Color module support so you can modify the color of your theme in theme settings. NOTE: The Color module is not currently installed. You can still select this option, however no color settings will appear until you install the Color module.');
+    }
 
     // Block config
     $form['generate']['options']['generate_block_config'] = [

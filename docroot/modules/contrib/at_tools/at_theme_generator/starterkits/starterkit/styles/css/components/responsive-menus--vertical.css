@@ -12,14 +12,14 @@
   margin-top: 0.25rem;
 }
 
-.ms-vertical .rm-block__content a {
+.ms-vertical .rm-block__content .menu__link {
   margin-bottom: 0.25rem;
   padding: 0.5rem;
   position: relative;
   display: block;
 }
 
-.ms-vertical .rm-block__content a:after {
+.ms-vertical .rm-block__content .menu__link:after {
   content: none;
   display: none;
 }

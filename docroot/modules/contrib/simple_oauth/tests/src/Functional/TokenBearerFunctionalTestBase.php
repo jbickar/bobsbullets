@@ -1,63 +1,84 @@
 <?php
 
-
 namespace Drupal\Tests\simple_oauth\Functional;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Url;
-use Drupal\simple_oauth\Entity\Oauth2Client;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class TokenBearerFunctionalTestBase.
+ *
+ * Base class that handles common logic and config for the token tests.
+ *
+ * @package Drupal\Tests\simple_oauth\Functional
+ */
 abstract class TokenBearerFunctionalTestBase extends BrowserTestBase {
 
   use RequestHelperTrait;
+  use SimpleOauthTestTrait;
 
   /**
+   * {@inheritdoc}
+   */
+  public static $modules = [
+    'image',
+    'node',
+    'serialization',
+    'simple_oauth',
+    'text',
+    'user',
+  ];
+
+  /**
+   * The URL.
+   *
    * @var \Drupal\Core\Url
    */
   protected $url;
 
   /**
-   * @var \Drupal\simple_oauth\Entity\Oauth2ClientInterface
+   * The client.
+   *
+   * @var \Drupal\consumers\Entity\Consumer
    */
   protected $client;
 
   /**
+   * The user.
+   *
    * @var \Drupal\user\UserInterface
    */
   protected $user;
 
   /**
+   * The client secret.
+   *
    * @var string
    */
   protected $clientSecret;
 
   /**
+   * The HTTP client to make requests.
+   *
    * @var \GuzzleHttp\ClientInterface
    */
   protected $httpClient;
 
   /**
+   * Additional roles used during tests.
+   *
    * @var \Drupal\user\RoleInterface[]
    */
   protected $additionalRoles;
 
   /**
-   * @var string
-   */
-  protected $privateKeyPath;
-
-  /**
-   * @var string
-   */
-  protected $publicKeyPath;
-
-  /**
+   * The request scope.
+   *
    * @var string
    */
   protected $scope;
@@ -65,10 +86,13 @@ abstract class TokenBearerFunctionalTestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp() {
     parent::setUp();
-
-    $this->htmlOutputEnabled = FALSE;
 
     $this->url = Url::fromRoute('oauth2_token.token');
 
@@ -96,11 +120,12 @@ abstract class TokenBearerFunctionalTestBase extends BrowserTestBase {
 
     $this->clientSecret = $this->getRandomGenerator()->string();
 
-    $this->client = Oauth2Client::create([
+    $this->client = Consumer::create([
       'owner_id' => '',
       'label' => $this->getRandomGenerator()->name(),
       'secret' => $this->clientSecret,
       'confidential' => TRUE,
+      'third_party' => TRUE,
       'roles' => [['target_id' => $client_role->id()]],
     ]);
     $this->client->save();
@@ -108,19 +133,14 @@ abstract class TokenBearerFunctionalTestBase extends BrowserTestBase {
     $this->user = $this->drupalCreateUser();
     $this->grantPermissions(Role::load(RoleInterface::ANONYMOUS_ID), [
       'access content',
+      'debug simple_oauth tokens',
     ]);
     $this->grantPermissions(Role::load(RoleInterface::AUTHENTICATED_ID), [
       'access content',
+      'debug simple_oauth tokens',
     ]);
 
-    // Use the public and private keys.
-    $path = $this->container->get('module_handler')->getModule('simple_oauth')->getPath();
-    $this->publicKeyPath = DRUPAL_ROOT . '/' . $path . '/tests/certificates/public.key';
-    $this->privateKeyPath = DRUPAL_ROOT . '/' . $path . '/tests/certificates/private.key';
-    $settings = $this->config('simple_oauth.settings');
-    $settings->set('public_key', $this->publicKeyPath);
-    $settings->set('private_key', $this->privateKeyPath);
-    $settings->save();
+    $this->setUpKeys();
 
     $num_roles = mt_rand(1, count($this->additionalRoles));
     $requested_roles = array_slice($this->additionalRoles, 0, $num_roles);
@@ -139,12 +159,16 @@ abstract class TokenBearerFunctionalTestBase extends BrowserTestBase {
    *   The response object.
    * @param bool $has_refresh
    *   TRUE if the response should return a refresh token. FALSE otherwise.
+   *
+   * @return array
+   *   An array representing the response of "/oauth/token".
    */
   protected function assertValidTokenResponse(ResponseInterface $response, $has_refresh = FALSE) {
     $this->assertEquals(200, $response->getStatusCode());
-    $parsed_response = Json::decode($response->getBody()->getContents());
+    $parsed_response = Json::decode((string) $response->getBody());
     $this->assertSame('Bearer', $parsed_response['token_type']);
-    $expiration = $this->config('simple_oauth.settings')->get('access_token_expiration');
+    $expiration = $this->config('simple_oauth.settings')
+      ->get('access_token_expiration');
     $this->assertLessThanOrEqual($expiration, $parsed_response['expires_in']);
     $this->assertGreaterThanOrEqual($expiration - 10, $parsed_response['expires_in']);
     $this->assertNotEmpty($parsed_response['access_token']);
@@ -152,8 +176,10 @@ abstract class TokenBearerFunctionalTestBase extends BrowserTestBase {
       $this->assertNotEmpty($parsed_response['refresh_token']);
     }
     else {
-      $this->assertTrue(empty($parsed_response['refresh_token']));
+      $this->assertFalse(isset($parsed_response['refresh_token']));
     }
+
+    return $parsed_response;
   }
 
 }

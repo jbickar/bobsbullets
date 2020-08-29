@@ -8,6 +8,8 @@ use Drupal\Tests\BrowserTestBase;
  * Class AssetInjectorJsTest.
  *
  * @package Drupal\Tests\asset_injector\Functional
+ *
+ * @group asset_injector
  */
 class AssetInjectorJsTest extends BrowserTestBase {
 
@@ -30,12 +32,16 @@ class AssetInjectorJsTest extends BrowserTestBase {
    */
   public function setUp() {
     parent::setUp();
+
     $this->drupalPlaceBlock('local_tasks_block');
     $this->drupalPlaceBlock('page_title_block');
+    $this->drupalPlaceBlock('system_messages_block');
   }
 
   /**
    * Tests a user without permissions gets access denied.
+   *
+   * @throws \Exception
    */
   public function testJsPermissionDenied() {
     $account = $this->drupalCreateUser();
@@ -46,6 +52,8 @@ class AssetInjectorJsTest extends BrowserTestBase {
 
   /**
    * Tests a user WITH permission has access.
+   *
+   * @throws \Exception
    */
   public function testJsPermissionGranted() {
     $account = $this->drupalCreateUser(['administer js assets injector']);
@@ -70,10 +78,7 @@ class AssetInjectorJsTest extends BrowserTestBase {
       'code' => '.block {border:1px solid black;}',
     ], t('Save'));
 
-    $html = $this->getSession()->getPage()->getHtml();
-    if (strpos($html, 'asset_injector/js/blocks') === FALSE) {
-      throw new \Exception(t('Js not applied to page.'));
-    }
+    $this->getSession()->getPage()->hasContent('asset_injector/js/blocks');
 
     /** @var \Drupal\asset_injector\Entity\AssetInjectorJs $asset */
     foreach (asset_injector_get_assets(NULL, ['asset_injector_js']) as $asset) {
@@ -83,6 +88,27 @@ class AssetInjectorJsTest extends BrowserTestBase {
       $this->drupalGet($path);
       $this->assertSession()->statusCodeEquals(200);
     }
+  }
+
+  /**
+   * Tests if the save and continue button works accurately.
+   *
+   * @throws \Exception
+   */
+  public function testSaveContinue() {
+    $page = $this->getSession()->getPage();
+    $this->testJsPermissionGranted();
+    $this->drupalGet('admin/config/development/asset-injector/js/add');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->pageTextContains(t('Code'));
+    $page->fillField('Label', 'test save continue');
+    $page->fillField('Machine-readable name', 'test_save_continue');
+    $page->fillField('Code', 'var a;');
+    $page->pressButton('Save and Continue Editing');
+    $this->assertSession()
+      ->pageTextContains('Created the test save continue Asset Injector');
+    $this->assertSession()
+      ->addressEquals('admin/config/development/asset-injector/js/test_save_continue');
   }
 
 }

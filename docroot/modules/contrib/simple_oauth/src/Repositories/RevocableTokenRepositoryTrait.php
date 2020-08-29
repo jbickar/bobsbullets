@@ -1,22 +1,34 @@
 <?php
 
-
 namespace Drupal\simple_oauth\Repositories;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Symfony\Component\Serializer\Serializer;
+use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Common methods for token repositories on different grants.
+ */
 trait RevocableTokenRepositoryTrait {
 
-  protected static $entity_type_id = 'oauth2_token';
+  /**
+   * The entity type ID.
+   *
+   * @var string
+   */
+  protected static $entityTypeId = 'oauth2_token';
 
   /**
+   * The entity type manager.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
   /**
-   * @var \Symfony\Component\Serializer\Serializer
+   * The serializer.
+   *
+   * @var \Symfony\Component\Serializer\SerializerInterface
    */
   protected $serializer;
 
@@ -24,9 +36,11 @@ trait RevocableTokenRepositoryTrait {
    * Construct a revocable token.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   * @param \Drupal\simple_oauth\Normalizer\TokenEntityNormalizerInterface $normalizer
+   *   The entity type manager.
+   * @param \Symfony\Component\Serializer\SerializerInterface $serializer
+   *   The normalizer for tokens.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, Serializer $serializer) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, SerializerInterface $serializer) {
     $this->entityTypeManager = $entity_type_manager;
     $this->serializer = $serializer;
   }
@@ -35,12 +49,20 @@ trait RevocableTokenRepositoryTrait {
    * {@inheritdoc}
    */
   public function persistNew($token_entity) {
-    if (!is_a($token_entity, static::$entity_interface)){
-      throw new \InvalidArgumentException(sprintf('%s does not implement %s.', get_class($token_entity), static::$entity_interface));
+    if (!is_a($token_entity, static::$entityInterface)) {
+      throw new \InvalidArgumentException(sprintf('%s does not implement %s.', get_class($token_entity), static::$entityInterface));
     }
     $values = $this->serializer->normalize($token_entity);
-    $values['bundle'] = static::$bundle_id;
-    $new_token = $this->entityTypeManager->getStorage(static::$entity_type_id)->create($values);
+    $values['bundle'] = static::$bundleId;
+    $new_token = $this->entityTypeManager->getStorage(static::$entityTypeId)->create($values);
+
+    if ($token_entity instanceof RefreshTokenEntityInterface) {
+      $access_token = $token_entity->getAccessToken();
+      if (!empty($access_token->getUserIdentifier())) {
+        $new_token->set('auth_user_id', $access_token->getUserIdentifier());
+      }
+    }
+
     $new_token->save();
   }
 
@@ -50,7 +72,7 @@ trait RevocableTokenRepositoryTrait {
   public function revoke($token_id) {
     if (!$tokens = $this
       ->entityTypeManager
-      ->getStorage(static::$entity_type_id)
+      ->getStorage(static::$entityTypeId)
       ->loadByProperties(['value' => $token_id])) {
       return;
     }
@@ -66,7 +88,7 @@ trait RevocableTokenRepositoryTrait {
   public function isRevoked($token_id) {
     if (!$tokens = $this
       ->entityTypeManager
-      ->getStorage(static::$entity_type_id)
+      ->getStorage(static::$entityTypeId)
       ->loadByProperties(['value' => $token_id])) {
       return TRUE;
     }
@@ -80,7 +102,7 @@ trait RevocableTokenRepositoryTrait {
    * {@inheritdoc}
    */
   public function getNew() {
-    $class = static::$entity_class;
+    $class = static::$entityClass;
     return new $class();
   }
 

@@ -23,6 +23,6 @@
 }
 
 .bp--at-core-simple-wide .atl--twocol-6-6.l-arc--2 > .atl__cw > .atl__lc,
-.bp--at-core-simple-tablet .atl--twocol-6-6.l-arc--2 > .atl__cw > .atl__lc {
+.bp--at-core-simple-tablet-isolate .atl--twocol-6-6.l-arc--2 > .atl__cw > .atl__lc {
   width: 50%;
 }

@@ -6,6 +6,8 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\ctools\Context\AutomaticContext;
 use Drupal\panelizer\Exception\PanelizerException;
@@ -56,6 +58,13 @@ class PanelizerFieldPanelsStorageTest extends UnitTestCase {
 
     $this->panelizer = $this->prophesize(Panelizer::class);
 
+    /** @var \Drupal\Core\Language\LanguageInterface|\Prophecy\Prophecy\ProphecyInterface $language */
+    $language = $this->prophesize(LanguageInterface::class);
+    $language->getId()->willReturn('en');
+    /** @var \Drupal\Core\Language\LanguageManagerInterface|\Prophecy\Prophecy\ProphecyInterface $language_manager */
+    $language_manager = $this->prophesize(LanguageManager::class);
+    $language_manager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->willReturn($language);
+
     $this->panelsStorage = $this->getMockBuilder(PanelizerFieldPanelsStorage::class)
       ->setConstructorArgs([
         [],
@@ -63,6 +72,7 @@ class PanelizerFieldPanelsStorageTest extends UnitTestCase {
         [],
         $this->entityTypeManager->reveal(),
         $this->panelizer->reveal(),
+        $language_manager->reveal(),
       ])
       ->setMethods(['getEntityContext'])
       ->getMock();
@@ -162,9 +172,6 @@ class PanelizerFieldPanelsStorageTest extends UnitTestCase {
 
   /**
    * @covers ::save
-   *
-   * @expectedException \Exception
-   * @expectedExceptionMessage Couldn't find entity to store Panels display on
    */
   public function testSaveNoEntity() {
     $panels_display = $this->prophesize(PanelsDisplayVariant::class);
@@ -174,14 +181,13 @@ class PanelizerFieldPanelsStorageTest extends UnitTestCase {
 
     $this->storage->load('123')->willReturn(NULL)->shouldBeCalled();
 
+    $this->expectException('Exception');
+    $this->expectExceptionMessage("Couldn't find entity to store Panels display on");
     $this->panelsStorage->save($panels_display->reveal());
   }
 
   /**
    * @covers ::save
-   *
-   * @expectedException \Exception
-   * @expectedExceptionMessage Save failed
    */
   public function testSaveFailed() {
     $panels_display = $this->prophesize(PanelsDisplayVariant::class);
@@ -194,6 +200,8 @@ class PanelizerFieldPanelsStorageTest extends UnitTestCase {
 
     $this->storage->load('123')->willReturn($entity->reveal())->shouldBeCalled();
 
+    $this->expectException('Exception');
+    $this->expectExceptionMessage('Save failed');
     $this->panelsStorage->save($panels_display->reveal());
   }
 

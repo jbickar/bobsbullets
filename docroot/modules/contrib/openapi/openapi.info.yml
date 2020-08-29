@@ -1,14 +1,13 @@
 name: OpenAPI
 type: module
 description: Connects Drupal to the OpenAPI Javascript Library
-# core: 8.x
+core: 8.x
+core_version_requirement: '^8 || ^9'
 package: OpenAPI
 dependencies:
-  - schemata:schemata
-  - schemata:schemata_json_schema
+  - drupal:serialization
 
-# Information added by Drupal.org packaging script on 2017-06-28
-version: '8.x-1.0-alpha1'
-core: '8.x'
+# Information added by Drupal.org packaging script on 2020-04-25
+version: '8.x-2.0-rc3'
 project: 'openapi'
-datestamp: 1498658626
+datestamp: 1587845668

@@ -11,6 +11,11 @@ use Drupal\Core\Extension\ExtensionDiscovery;
 class ComponentDiscovery {
 
   /**
+   * Prefix that Lightning components are expected to start with.
+   */
+  const COMPONENT_PREFIX = 'lightning_';
+
+  /**
    * The extension discovery iterator.
    *
    * @var \Drupal\Core\Extension\ExtensionDiscovery
@@ -20,14 +25,14 @@ class ComponentDiscovery {
   /**
    * The Lightning profile extension object.
    *
-   * @var Extension
+   * @var \Drupal\Core\Extension\Extension
    */
   protected $profile;
 
   /**
    * Cache of all discovered components.
    *
-   * @var Extension[]
+   * @var \Drupal\Core\Extension\Extension[]
    */
   protected $components;
 
@@ -63,27 +68,17 @@ class ComponentDiscovery {
   }
 
   /**
-   * Returns the base path for all Lightning components.
-   *
-   * @return string
-   *   The base path for all Lightning components.
-   */
-  protected function getBaseComponentPath() {
-    return $this->getProfile()->getPath() . '/modules/lightning_features';
-  }
-
-  /**
    * Returns extension objects for all Lightning components.
    *
-   * @return Extension[]
+   * @return \Drupal\Core\Extension\Extension[]
    *   Array of extension objects for all Lightning components.
    */
   public function getAll() {
     if (is_null($this->components)) {
-      $base_path = $this->getBaseComponentPath();
+      $identifier = self::COMPONENT_PREFIX;
 
-      $filter = function (Extension $module) use ($base_path) {
-        return strpos($module->getPath(), $base_path) === 0;
+      $filter = function (Extension $module) use ($identifier) {
+        return strpos($module->getName(), $identifier) === 0;
       };
 
       $this->components = array_filter($this->discovery->scan('module'), $filter);
@@ -94,14 +89,21 @@ class ComponentDiscovery {
   /**
    * Returns extension objects for all main Lightning components.
    *
-   * @return Extension[]
+   * @return \Drupal\Core\Extension\Extension[]
    *   Array of extension objects for top-level Lightning components.
    */
   public function getMainComponents() {
-    $base_path = $this->getBaseComponentPath();
+    $identifier = self::COMPONENT_PREFIX;
 
-    $filter = function (Extension $module) use ($base_path) {
-      return dirname($module->getPath()) == $base_path;
+    $filter = function (Extension $module) use ($identifier) {
+      // Assumes that:
+      // 1. Lightning sub-components are always in a sub-directory within the
+      //    main component.
+      // 2. The main component's directory starts with "lightning_".
+      // E.g.: "/lightning_core/modules/lightning_search".
+      $path = explode(DIRECTORY_SEPARATOR, $module->getPath());
+      $parent = $path[count($path) - 3];
+      return strpos($parent, $identifier) !== 0;
     };
 
     return array_filter($this->getAll(), $filter);
@@ -110,17 +112,11 @@ class ComponentDiscovery {
   /**
    * Returns extension object for all Lightning sub-components.
    *
-   * @return Extension[]
+   * @return \Drupal\Core\Extension\Extension[]
    *   Array of extension objects for Lightning sub-components.
    */
   public function getSubComponents() {
-    $base_path = $this->getBaseComponentPath();
-
-    $filter = function (Extension $module) use ($base_path) {
-      return strlen(dirname($module->getPath())) > strlen($base_path);
-    };
-
-    return array_filter($this->getAll(), $filter);
+    return array_diff_key($this->getAll(), $this->getMainComponents());
   }
 
 }

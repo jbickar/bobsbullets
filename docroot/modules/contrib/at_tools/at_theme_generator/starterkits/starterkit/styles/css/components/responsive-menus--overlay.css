@@ -87,13 +87,13 @@
   background-color: transparent;
 }
 
-.ms-overlay.rm-is-open .rm-block__content .menu a {
+.ms-overlay.rm-is-open .rm-block__content .menu .menu__link {
   padding: 0.625rem;
   margin-bottom: 0.25rem;
   display: block;
 }
 
-.ms-overlay.rm-is-open .rm-block__content .menu a:after {
+.ms-overlay.rm-is-open .rm-block__content .menu .menu__link:after {
   content: none;
   display: none;
 }

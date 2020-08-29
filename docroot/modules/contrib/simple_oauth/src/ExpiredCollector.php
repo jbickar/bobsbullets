@@ -4,8 +4,9 @@ namespace Drupal\simple_oauth;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Query\QueryException;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\simple_oauth\Entity\Oauth2ClientInterface;
+use Drupal\consumers\Entity\Consumer;
 
 /**
  * Service in charge of deleting or expiring tokens that cannot be used anymore.
@@ -13,16 +14,22 @@ use Drupal\simple_oauth\Entity\Oauth2ClientInterface;
 class ExpiredCollector {
 
   /**
+   * The token storage.
+   *
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $tokenStorage;
 
   /**
+   * The client storage.
+   *
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $clientStorage;
 
   /**
+   * The date time to collect tokens.
+   *
    * @var \Drupal\Component\Datetime\TimeInterface
    */
   protected $dateTime;
@@ -34,9 +41,11 @@ class ExpiredCollector {
    *   The entity type manager.
    * @param \Drupal\Component\Datetime\TimeInterface $date_time
    *   The date time service.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, TimeInterface $date_time) {
-    $this->clientStorage = $entity_type_manager->getStorage('oauth2_client');
+    $this->clientStorage = $entity_type_manager->getStorage('consumer');
     $this->tokenStorage = $entity_type_manager->getStorage('oauth2_token');
     $this->dateTime = $date_time;
   }
@@ -44,12 +53,19 @@ class ExpiredCollector {
   /**
    * Collect all expired token ids.
    *
+   * @param int $limit
+   *   Number of tokens to fetch.
+   *
    * @return \Drupal\simple_oauth\Entity\Oauth2TokenInterface[]
    *   The expired tokens.
    */
-  public function collect() {
+  public function collect($limit = 0) {
     $query = $this->tokenStorage->getQuery();
     $query->condition('expire', $this->dateTime->getRequestTime(), '<');
+    // If limit available.
+    if (!empty($limit)) {
+      $query->range(0, $limit);
+    }
     if (!$results = $query->execute()) {
       return [];
     }
@@ -68,15 +84,21 @@ class ExpiredCollector {
   public function collectForAccount(AccountInterface $account) {
     $query = $this->tokenStorage->getQuery();
     $query->condition('auth_user_id', $account->id());
+    $query->condition('bundle', 'refresh_token', '!=');
     $entity_ids = $query->execute();
     $output = $entity_ids
       ? array_values($this->tokenStorage->loadMultiple(array_values($entity_ids)))
       : [];
     // Also collect the tokens of the clients that have this account as the
     // default user.
-    $clients = array_values($this->clientStorage->loadByProperties([
-      'user_id' => $account->id(),
-    ]));
+    try {
+      $clients = array_values($this->clientStorage->loadByProperties([
+        'user_id' => $account->id(),
+      ]));
+    }
+    catch (QueryException $exception) {
+      return $output;
+    }
     // Append all the tokens for each of the clients having this account as the
     // default.
     $tokens = array_reduce($clients, function ($carry, $client) {
@@ -93,13 +115,13 @@ class ExpiredCollector {
   /**
    * Collect all the tokens associated a particular client.
    *
-   * @param \Drupal\simple_oauth\Entity\Oauth2ClientInterface $client
+   * @param \Drupal\consumers\Entity\Consumer $client
    *   The account.
    *
    * @return \Drupal\simple_oauth\Entity\Oauth2TokenInterface[]
    *   The tokens.
    */
-  public function collectForClient(Oauth2ClientInterface $client) {
+  public function collectForClient(Consumer $client) {
     $query = $this->tokenStorage->getQuery();
     $query->condition('client', $client->id());
     if (!$entity_ids = $query->execute()) {

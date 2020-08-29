@@ -5,13 +5,14 @@ namespace Drupal\metatag_hreflang\Plugin\Derivative;
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Language\Language;
 use Drupal\Core\Language\LanguageInterface;
-use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Create a new hreflang tag plugin for each enabled language.
  */
 class HreflangDeriver extends DeriverBase {
+
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -33,7 +34,7 @@ class HreflangDeriver extends DeriverBase {
       }
 
       // The base definition includes the annotations defined in the plugin,
-      // i.e. HreflangPerLanguage. Each one may be overridden
+      // i.e. HreflangPerLanguage. Each one may be overridden.
       $derivative = $base_plugin_definition;
 
       // Here we fill in any missing keys on the layout annotation.
@@ -42,7 +43,7 @@ class HreflangDeriver extends DeriverBase {
       // The 'name' value is used as the value of the 'hreflang' attribute on
       // the HTML tag.
       $derivative['name'] = $langcode;
-      $derivative['label'] = t("URL for a version of this page in %langcode", ['%langcode' => $language->getName()]);
+      $derivative['label'] = $this->t("URL for a version of this page in %langcode", ['%langcode' => $language->getName()]);
       $derivative['description'] = '';
 
       // Reference derivatives based on their UUID instead of the record ID.

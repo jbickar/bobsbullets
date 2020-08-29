@@ -23,11 +23,11 @@
 }
 
 .bp--at-core-simple-wide .atl--twocol-10-2.l-arc--2 > .atl__cw > .atl__lc,
-.bp--at-core-simple-tablet .atl--twocol-10-2.l-arc--2 > .atl__cw > .atl__lc {
+.bp--at-core-simple-tablet-isolate .atl--twocol-10-2.l-arc--2 > .atl__cw > .atl__lc {
   width: 83.33333%;
 }
 
 .bp--at-core-simple-wide .atl--twocol-10-2.l-arc--2 > .atl__cw > .atl__lc:last-child,
-.bp--at-core-simple-tablet .atl--twocol-10-2.l-arc--2 > .atl__cw > .atl__lc:last-child {
+.bp--at-core-simple-tablet-isolate .atl--twocol-10-2.l-arc--2 > .atl__cw > .atl__lc:last-child {
   width: 16.66667%;
 }
