@@ -8,9 +8,15 @@
 #/docroot/themes/contrib
 docroot/sites/default/files
 docroot/sites/default/settings.php
+docroot/sites/default/settings.local.php
 
 # Ignore Composer-managed dependencies.
 #vendor/
 
 # Ignore backups
 backup*
+
+# Config files and DB dumps.
+.lando.yml
+.env
+*.sql
