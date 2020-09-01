@@ -9,6 +9,7 @@
 docroot/sites/default/files
 docroot/sites/default/settings.php
 docroot/sites/default/settings.local.php
+docroot/sites/default/settings.dreamhost.php
 
 # Ignore Composer-managed dependencies.
 #vendor/

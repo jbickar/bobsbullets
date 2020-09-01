@@ -92,15 +92,6 @@ class ExtensionDiscovery {
   protected $sitePath;
 
   /**
-   * The profile handler.
-   *
-   * Used to determine the directories in which we want to scan for modules.
-   *
-   * @var \Drupal\Core\Extension\ProfileHandlerInterface|null
-   */
-  protected $profileHandler;
-
-  /**
    * Constructs a new ExtensionDiscovery object.
    *
    * @param string $root
@@ -111,27 +102,12 @@ class ExtensionDiscovery {
    *   The available profile directories
    * @param string $site_path
    *   The path to the site.
-   * @param \Drupal\Core\Extension\ProfileHandlerInterface $profile_handler
-   *   (optional) The profile handler.
    */
-  public function __construct($root, $use_file_cache = TRUE, $profile_directories = NULL, $site_path = NULL, ProfileHandlerInterface $profile_handler = NULL) {
+  public function __construct($root, $use_file_cache = TRUE, $profile_directories = NULL, $site_path = NULL) {
     $this->root = $root;
     $this->fileCache = $use_file_cache ? FileCacheFactory::get('extension_discovery') : NULL;
     $this->profileDirectories = $profile_directories;
     $this->sitePath = $site_path;
-
-    // ExtensionDiscovery can be used without a service container
-    // (@drupalKernel::moduleData), so create a fallback profile handler if the
-    // profile_handler service is unavailable.
-    if ($profile_handler) {
-      $this->profileHandler = $profile_handler;
-    }
-    elseif (\Drupal::hasService('profile_handler')) {
-      $this->profileHandler = \Drupal::service('profile_handler');
-    }
-    else {
-      $this->profileHandler = new FallbackProfileHandler($root);
-    }
   }
 
   /**
@@ -252,24 +228,8 @@ class ExtensionDiscovery {
    */
   public function setProfileDirectoriesFromSettings() {
     $this->profileDirectories = [];
-    $profile = drupal_get_profile();
-    // For SimpleTest to be able to test modules packaged together with a
-    // distribution we need to include the profile of the parent site (in
-    // which test runs are triggered).
-    if (drupal_valid_test_ua() && !drupal_installation_attempted()) {
-      $testing_profile = \Drupal::config('simpletest.settings')->get('parent_profile');
-      if ($testing_profile && $testing_profile != $profile) {
-        $this->profileDirectories[] = drupal_get_path('profile', $testing_profile);
-      }
-    }
-    // In case both profile directories contain the same extension, the actual
-    // profile always has precedence.
-    if ($profile) {
-      $profiles = $this->profileHandler->getProfileInheritance($profile);
-      $profile_directories = array_map(function($extension) {
-        return $extension->getPath();
-      }, $profiles);
-      $this->profileDirectories = array_unique(array_merge($profile_directories, $this->profileDirectories));
+    if ($profile = \Drupal::installProfile()) {
+      $this->profileDirectories[] = drupal_get_path('profile', $profile);
     }
     return $this;
   }
@@ -409,7 +369,7 @@ class ExtensionDiscovery {
   }
 
   /**
-   * Recursively scans a base directory for the requested extension type.
+   * Recursively scans a base directory for the extensions it contains.
    *
    * @param string $dir
    *   A relative base directory path to scan, without trailing slash.
