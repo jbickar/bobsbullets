@@ -22,7 +22,8 @@
         "drupal/google_analytics": "2.2",
         "drupal/at_tools": "2.0",
         "drupal/adaptivetheme": "2.0",
-        "drupal/pixture_reloaded": "1.0-rc1"
+        "drupal/pixture_reloaded": "1.0-rc1",
+        "drupal/admin_toolbar": "^2.3"
     },
     "repositories": [
         {
