@@ -4,9 +4,8 @@
 // Don't write any actual styles here, it's just for configuration and imports.
 // ---------------------------------------------------------------------------
 
-// Requirements
-@import "susy";
-
+// Requirements - import susy from bower components.
+@import "../../../bower_components/susy/sass/susy";
 
 // Susy default settings override
 // http://susy.readthedocs.org/en/latest/settings/#global-defaults
@@ -51,3 +50,4 @@ $container-8: (
 $flow-direction: susy-get(flow, $susy) !global;
 $flow-to: to($flow-direction);
 $flow-from: from($flow-direction);
+

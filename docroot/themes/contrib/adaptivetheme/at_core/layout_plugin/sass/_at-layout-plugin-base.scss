@@ -3,19 +3,25 @@
 // ---------------------------------------------------------------------------
 
 // Imports.
-@import "susy";
+//@import "susy";
+
+// Requirements - import susy from bower components.
+@import "../../../node_modules/susy/sass/susy";
 
 // Susy default settings override.
 $susy: (
-  columns: 12,
+  columns: susy-repeat(12),
   gutters: 0,
   box-sizing: border-box
 );
 
+//@each $key, $value in susy-settings() {
+//  /* #{$key}: #{$value} */
+//}
+
 // Flow Direction
-$flow-direction: susy-get(flow, $susy) !global;
-$flow-to: to($flow-direction);
-$flow-from: from($flow-direction);
+$flow-to: right;
+$flow-from: left;
 
 // Set the row direction.
 $row-direction: if($flow-from == left, row, row-reverse);
@@ -35,3 +41,4 @@ $row-direction-reverse: if($flow-from == left, row-reverse, row);
   padding: 0 0.625em;
   width: 100%;
 }
+

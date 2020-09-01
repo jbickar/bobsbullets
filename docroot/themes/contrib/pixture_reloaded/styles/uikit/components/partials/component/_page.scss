@@ -1,6 +1,6 @@
 /**
  * Page
- *  - for page.html.twig and region markup.
+ *  - for html/page.html.twig and region markup.
  ============================================================================ */
 
 // Page wrapper
@@ -46,8 +46,6 @@
   }
 
   .block-search {
-    float: #{$flow-to};
-
     .block__content {
       @include output-rhythm(padding-top, $x-small);
     }
@@ -63,6 +61,12 @@
   &__rw {}
   &__header-first {}
   &__header-second {}
+
+  @media #{$mobile} {
+    .block {
+      @include output-rhythm(margin, $x-small 0);
+    }
+  }
 }
 
 
@@ -77,7 +81,12 @@
     }
   }
 
-  &__rw {}
+  &__rw {
+    @media #{$wide} {
+      padding: 0;
+    }
+  }
+
   &__navbar {}
 }
 
@@ -171,34 +180,6 @@
   &__rw {}
   &__footer {}
 }
-
-
-// .l-pr is a layout class on each page row outer wrapper.
-.l-pr {
-  // You can set padding here to avoid browser chrome collisions, if required.
-  // The viewport width (vw) unit is useful here, but not all browsers support it.
-  //padding: 0 2%;
-  //padding: 0 2vw;
-}
-
-
-// Regions wrappers
-//  - .l-rw is the main layout wrapper selector for all regions within a row.
-//    The layout system uses this wrapper and selector extensively.
-//  - .region is a theme component class for adding styles like backgrounds etc.
-.l-rw {
-  @include output-rhythm(padding, 0 $medium);
-}
-
-
-// Region
-//  - .l-r is the global selector for all regions, each region also includes
-//    a region-name selector, e.g. .l-r__sidebar-first {}
-.l-r {
-  @include clearfix-micro;
-  transition: $global-transition;
-}
-
 
 
 

@@ -3,17 +3,26 @@
  ============================================================================ */
 
 // Region or row specific menu overrides
-.pr-leaderboard__leaderboard {
+.pr-leaderboard {
 
   .block-menu {
-    @include clearfix;
     margin: 0;
+
+    .menu-level-1 {
+      @include list-horizontal($flow-from, $margin: (t: $xxx-small, r: $medium, b: $xxx-small, l: 0), $list-item-selector: '.menu__item');
+    }
   }
 
-  @include list-horizontal($flow-from, $margin: (t: $x-small, r: $medium, b: $x-small, l: 0), $list-item-selector: '.menu__item');
+  &.rm-row {
+    .block-menu {
+      float: #{$flow-to};
+    }
+  }
 
-  .menu__link:after {
+  .menu a:after {
+    content: none;
     display: none;
   }
 }
+
 

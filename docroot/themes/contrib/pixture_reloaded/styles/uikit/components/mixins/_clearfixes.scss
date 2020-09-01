@@ -1,7 +1,7 @@
 // Markup free clearing
 
 @mixin cf {
-  overflow: hidden;  // New formatting context in better browsers
+  overflow: hidden;  // New formatting context in better browsers.
 }
 
 // Micro clearfix.
@@ -27,4 +27,9 @@
   &:after {
     clear: both;
   }
+}
+
+// Alias for clearfix-micro.
+@mixin cfm {
+  @include clearfix-micro;
 }

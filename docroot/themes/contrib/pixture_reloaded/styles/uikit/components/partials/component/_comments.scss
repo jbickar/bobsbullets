@@ -5,12 +5,28 @@
  ============================================================================ */
 
 .comment {
-  @include clearfix-micro;
+  @include cfm;
   @include output-rhythm(padding-top, $medium);
   border-top: $border-width $border-style;
 
   // Title and New
-  &__title {}
+  &__title {
+    &--visually-hidden {
+      margin: 0;
+      padding: 0;
+      @include adjust-font-size-to($medium);
+
+      .permalink {
+        @include visually-hidden;
+      }
+
+      .marker {
+        float: $flow-to;
+        @include output-rhythm(margin-#{$flow-from}, 4px);
+      }
+    }
+  }
+
   &__new {}
 
   p:last-of-type {
@@ -26,7 +42,6 @@
     .comment.has-title & {
       @include output-rhythm(margin, $medium 0);
     }
-
 
     .comment__author {
       &:after {
@@ -102,34 +117,14 @@
 
   // Comment links.
   &__links {
-    @include clearfix-micro;
     clear: both;
 
     @media #{$mobile} {
-      .inline {
-        float: none;
-        display: block;
-
-        li {
-          display: list-item;
-
-          [dir="rtl"] & {}
-        }
-      }
+      .inline {}
     }
 
     @media #{$wide} {
-      .inline {
-        float: right;
-
-        li {
-          margin: 0 0 0 $medium;
-
-          [dir="rtl"] & {
-            margin: 0 $medium 0 0;
-          }
-        }
-      }
+      .inline {}
     }
   }
 }
@@ -147,7 +142,7 @@
 // .field-comment--comment {}
 .field-type-comment {
   @include output-rhythm(margin, $large 0 0);
-  @include clearfix-micro;
+  @include cfm;
   clear: both;
 
   .indented {
@@ -168,9 +163,5 @@
 .comment-form-wrapper {}
 .comment-form__title {}
 .comment-form {}
-
-
-
-
 
 

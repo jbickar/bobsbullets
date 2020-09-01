@@ -7,7 +7,7 @@
 // Third region  : 2 grid columns.
 // -----------------------------------------------------------------------------
 
-.bp--at-core-simple-tablet,
+.bp--at-core-simple-tablet-isolate,
 .bp--at-core-simple-wide {
   .atl--threecol-2-8-2 {
     // Region first and second are active.
@@ -46,7 +46,7 @@
 }
 
 // All regions active.
-.bp--at-core-simple-tablet {
+.bp--at-core-simple-tablet-isolate {
   .atl--threecol-2-8-2 {
     &.l-arc--3 {
       > .atl__cw > .atl__lc {

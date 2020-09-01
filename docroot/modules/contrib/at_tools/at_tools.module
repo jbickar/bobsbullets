@@ -71,13 +71,3 @@ function at_tools_library_info_alter(&$libraries, $extension) {
     }
   }
 }
-
-/**
- * Implements hook_menu_link_content_presave().
- * Idea to set main menu links to expanded by default.
- */
-//function mymodule_menu_link_content_presave(EntityInterface $entity) {
-//  if ($entity->menu_name->value == 'menumachinename') {
-//    $entity->expanded = 1;
-//  }
-//}

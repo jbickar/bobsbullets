@@ -42,6 +42,7 @@ class ThemeGeneratorTypes extends ThemeGenerator {
     }
 
     // Generated CSS files.
+    $this->rewritePageLayoutCSS();
     $this->renameGeneratedCssFiles();
 
     // Templates.
@@ -57,7 +58,7 @@ class ThemeGeneratorTypes extends ThemeGenerator {
 
     // Remove/rename page layouts & layout_plugin.
     $this->removeUnusedLayout();
-    $this->renameLayoutPlugin();
+    $this->renameLayouts();
 
     // Remove SCSS.
     if ($this->scss === 0) {

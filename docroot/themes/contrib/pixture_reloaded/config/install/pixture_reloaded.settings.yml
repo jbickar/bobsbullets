@@ -106,6 +106,7 @@ settings:
   breadcrumb_label: 0
   breadcrumb_home: 0
   breadcrumb_separator: ''
+  breadcrumb_item_length: '32'
   search_block_hide_submit: 0
   search_block_placeholder_text: ''
   login_block_placeholder_labels: 0
@@ -175,6 +176,11 @@ settings:
   font_websafe_buttons: '0'
   font_size_buttons: ''
   font_smoothing_buttons: 0
+  font_breadcrumbs: none
+  font_websafe_breadcrumbs: '0'
+  font_google_breadcrumbs: ''
+  font_size_breadcrumbs: ''
+  font_smoothing_breadcrumbs: 0
   font_tabs: none
   font_websafe_tabs: '0'
   font_size_tabs: ''
@@ -299,6 +305,10 @@ settings:
   mobile_blocks_breakpoint: 'all and (max-width: 45em)'
   responsive_menu_horizontal_position: none
   responsive_menu_vertical_position: none
+  mimic_compatible: 1
+  enable_ckeditor: 1
+  mimic_enabled: 1
+  click_menus_enabled: 1
 features:
   logo: 1
   node_user_picture: 1

@@ -28,7 +28,8 @@
 
 .ms-overlay .rm-toggle__link {
   border: 0;
-  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
   padding: 0.5rem 1rem;
 }
 
@@ -58,6 +59,8 @@
   position: absolute;
   visibility: hidden;
   opacity: 0;
+  -webkit-transition: all, 225ms, ease-in-out;
+  -o-transition: all, 225ms, ease-in-out;
   transition: all, 225ms, ease-in-out;
 }
 
@@ -87,13 +90,13 @@
   background-color: transparent;
 }
 
-.ms-overlay.rm-is-open .rm-block__content .menu a {
+.ms-overlay.rm-is-open .rm-block__content .menu .menu__link {
   padding: 0.625rem;
   margin-bottom: 0.25rem;
   display: block;
 }
 
-.ms-overlay.rm-is-open .rm-block__content .menu a:after {
+.ms-overlay.rm-is-open .rm-block__content .menu .menu__link:after {
   content: none;
   display: none;
 }

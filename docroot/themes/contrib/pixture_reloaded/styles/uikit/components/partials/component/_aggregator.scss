@@ -10,7 +10,7 @@
 }
 
 .aggregator-item {
-  @include clearfix-micro;
+  @include cfm;
 
   //border: $node-teaser-border-color $node-teaser-border-width;
 

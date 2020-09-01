@@ -8,26 +8,24 @@
 @include establish-baseline;
 
 
+body {
+  font-family: $base-font-family;
+  padding: 0;
+  margin: 0;
+  -webkit-font-smoothing: subpixel-antialiased;
+
+  [dir="rtl"] & {
+    text-align: right;
+  }
+}
+
+
 html,
 body {
   height: 100%;
 }
 
 
-html {
-  font-family: $base-font-family;
-  @include adjust-leading-to(4);
-}
-
-
-body {
-  @include adjust-font-size-to($medium);
-  padding: 0;
-  margin: 0;
-}
-
-
-// Use border-box globally.
 * {
   box-sizing: border-box;
 }
@@ -67,23 +65,26 @@ fieldset {
 
 
 // Headings.
-#{headings(all)} {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   @include output-rhythm(margin, 0 0 $medium);
 }
 
-
-#{headings(1,4)} {}
-
-
-#{headings(1,3)} {
+h1,
+h2,
+h3 {
   font-weight: $font-weight-normal;
 }
 
-
-#{headings(4,6)} {
+h4,
+h5,
+h6 {
   font-weight: $font-weight-semibold;
 }
-
 
 h1, .h1 {@include adjust-font-size-to($xxx-large)}
 h2, .h2 {@include adjust-font-size-to($xx-large)}
@@ -91,7 +92,6 @@ h3, .h3 {@include adjust-font-size-to($x-large)}
 h4, .h4 {@include adjust-font-size-to($large)}
 h5, .h5 {@include adjust-font-size-to($medium)}
 h6, .h6 {@include adjust-font-size-to($small)}
-
 
 // Using the small element to control font size, an idea lifted from Bootstrap.
 h1 small, .h1 small {@include adjust-font-size-to($x-large)}
@@ -262,7 +262,7 @@ blockquote {
 
   small {
     display: block;
-    @include adjust-font-size-to($small);
+    @include adjust-font-size-to($medium * 0.875);
 
     &:before {
       content: '\2014 \00A0'; // EM DASH, NBSP
@@ -300,6 +300,25 @@ hr {
   border-top: $border-width $border-style;
   padding: 0;
   box-sizing: border-box;
+}
+
+
+// Del is strike-through text and supported by the CKEditor.
+del {}
+
+
+// Code related elements.
+code,
+pre,
+var,
+kbd,
+samp {
+  font-family: $monospace;
+  overflow-x: auto;
+}
+
+pre {
+  @include output-rhythm(padding, $medium);
 }
 
 

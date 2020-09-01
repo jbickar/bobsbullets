@@ -102,15 +102,15 @@
     position: relative;
     @include output-rhythm(font-size, $medium); // explicitly set the font-size since the container may be font-size 0
 
-    &--active-trail > a {}
+    &--active-trail > .menu__link {}
 
     // Strip border top from nested items.
-    &:first-child a {
+    &:first-child .menu__link {
       border-top: 0;
     }
   }
 
-  a {
+  .menu__link {
     transition: $global-transition;
     font-weight: $font-weight-light;
     margin: 0;
@@ -140,7 +140,7 @@
 // No JS?
 .no-js {
   .rm-block {
-    a {
+    .menu__link {
       @include output-rhythm(padding, $xx-small);
       @include output-rhythm(margin, 1px 0);
     }
@@ -159,6 +159,5 @@
 
 // Responsive menu in the header-second region.
 .pr-header__header-second {
-  .rm-block {
-  }
+  .rm-block {}
 }

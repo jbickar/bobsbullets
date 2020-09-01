@@ -1,9 +1,10 @@
 name: 'Pixture Reloaded'
 type: theme
 'base theme': at_core
+'base theme original': git-dev
 'subtheme type': adaptive_subtheme
-layout: site-builder
-description: 'Recolorable theme with many regions and theme settings. (base theme: at_core).<br /> Generated: Wed 25th, May - 19:46'
+layout: flex-builder
+description: 'Recolorable theme with many regions and theme settings. (base theme: at_core).'
 'alt text': 'Screenshot for Pixture Reloaded'
 tags: sub-theme
 # core: 8.x
@@ -34,23 +35,18 @@ features:
   - node_user_picture
   - comment_user_picture
   - comment_user_verification
-ckeditor_stylesheets:
-  - styles/css/components/base.css
 stylesheets-remove:
   - '@stable/css/node/node.preview.css'
+  - '@stable/css/node/node.module.css'
+  - '@stable/css/views/views.module.css'
   - '@stable/css/system/components/tablesort.module.css'
+  - '@classy/css/components/file.css'
 libraries-extend:
   quickedit/quickedit:
     - pixture_reloaded/quickedit
-libraries-override:
-  ckeditor/drupal.ckeditor:
-    css:
-      state:
-        /core/themes/stable/css/ckeditor/ckeditor.css: styles/css/components/ckeditor.css
-# version: 8.x-1.x
 
-# Information added by Drupal.org packaging script on 2016-05-25
-version: '8.x-1.0-rc1'
+# Information added by Drupal.org packaging script on 2017-11-23
+version: '8.x-3.0'
 core: '8.x'
 project: 'pixture_reloaded'
-datestamp: 1464181813
+datestamp: 1511474614

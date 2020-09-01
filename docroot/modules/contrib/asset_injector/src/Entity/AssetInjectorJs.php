@@ -30,11 +30,24 @@ namespace Drupal\asset_injector\Entity;
  *   },
  *   links = {
  *     "canonical" = "/admin/config/development/asset-injector/js/{asset_injector_js}",
- *     "edit-form" = "/admin/config/development/asset-injector/js/{asset_injector_js}/edit",
+ *     "edit-form" = "/admin/config/development/asset-injector/js/{asset_injector_js}",
  *     "delete-form" = "/admin/config/development/asset-injector/js/{asset_injector_js}/delete",
  *     "enable" = "/admin/config/development/asset-injector/js/{asset_injector_js}/enable",
  *     "disable" = "/admin/config/development/asset-injector/js/{asset_injector_js}/disable",
  *     "collection" = "/admin/structure/conditions_group"
+ *   },
+ *   config_export = {
+ *     "id",
+ *     "label",
+ *     "code",
+ *     "conditions_require_all",
+ *     "conditions",
+ *     "contexts",
+ *     "header",
+ *     "preprocess",
+ *     "jquery",
+ *     "noscript",
+ *     "noscriptRegion"
  *   }
  * )
  */
@@ -73,7 +86,7 @@ class AssetInjectorJs extends AssetInjectorBase {
    *
    * @var array
    */
-  public $noscriptRegion;
+  public $noscriptRegion = [];
 
   /**
    * Gets the file extension of the asset.

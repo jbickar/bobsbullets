@@ -89,6 +89,22 @@ function at_core_form_system_theme_settings_alter(&$form, FormStateInterface $fo
   // Entity types.
   $entity_types = $ext_get->getEntityTypes();
 
+  // Set easy access variables for entity types.
+  if (!empty($entity_types)) {
+    if (isset($entity_types['node'])) {
+      $node_types = $entity_types['node'];
+    }
+    if (isset($entity_types['comment'])) {
+      $comment_types = $entity_types['comment'];
+    }
+    if (isset($entity_types['block_content'])) {
+      $block_content_types = $entity_types['block_content'];
+    }
+    if (isset($entity_types['paragraphs'])) {
+      $paragraph_types = $entity_types['paragraphs'];
+    }
+  }
+
   // View modes.
   $view_modes = $ext_get->getViewModes();
 
@@ -137,6 +153,9 @@ function at_core_form_system_theme_settings_alter(&$form, FormStateInterface $fo
         '#type' => 'hidden',
         '#value' => $generated_files_path,
       ];
+
+      // theme info block
+      require_once($at_core_path . '/forms/theme_info.php');
 
       // Check for breakpoint module, a lot of errors without it, this is brutal.
       if ($breakpoint_module === TRUE) {

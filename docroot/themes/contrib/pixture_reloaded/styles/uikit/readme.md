@@ -1,16 +1,27 @@
 Getting started...
 
-You need bundler, nodejs and grunt installed.
+ATD8 uses grunt-sass (Libsass), Susy, Modular Scale, a customized
+bower package of Compass mixins (vertical rhythem only), PostCSS (for 
+browser extensions and SourceMaps), and various others.
 
-http://bundler.io/ for Ruby Gems
+You need bower, nodejs and grunt installed to grab all the packages and
+run the task runners.
+
 https://nodejs.org/ for node package manager (npm) for node modules https://www.npmjs.com/
-http://gruntjs.com/ our task runner
+http://bower.io/ for bower and git packages.
+http://gruntjs.com/ our task runner + installing grunt packages.
 
 Get all that installed then fire off some commands from the theme root...
 
-bundle install
+bower install
 npm install
-grunt
+grunt watch (watches the UIKit).
+
+For page layout files:
+grunt watch:layout 
+
+For DS/Paragraphs Layout Plugin layouts.
+grunt watch:layout_plugin 
 
 
 Now edit some SCSS files in the UIKit, and remember to turn off CSS aggregation in Drupal.

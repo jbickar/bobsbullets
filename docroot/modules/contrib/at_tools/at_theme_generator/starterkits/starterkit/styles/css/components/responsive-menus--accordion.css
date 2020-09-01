@@ -5,11 +5,11 @@
   display: none;
 }
 
-.ms-accordion a:hover, .ms-accordion a:focus {
+.ms-accordion .menu__link:hover, .ms-accordion .menu__link:focus {
   outline: 0;
 }
 
-.ms-accordion .is-parent a {
+.ms-accordion .is-parent .menu__link {
   margin-left: 2.5rem;
 }
 
@@ -19,13 +19,13 @@
 }
 
 .ms-accordion .rm-accordion-trigger {
-  display: -webkit-flex;
+  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: center;
+  -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-align-items: center;
+  -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   position: absolute;
@@ -46,6 +46,8 @@
   -webkit-transform: rotate(45deg);
       -ms-transform: rotate(45deg);
           transform: rotate(45deg);
+  -webkit-transition: all, 225ms, ease-in-out;
+  -o-transition: all, 225ms, ease-in-out;
   transition: all, 225ms, ease-in-out;
 }
 

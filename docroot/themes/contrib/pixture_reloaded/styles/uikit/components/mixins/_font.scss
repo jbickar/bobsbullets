@@ -15,10 +15,16 @@
 // e.g. p {@include fontSize(12px);}
 // https://github.com/stubbornella/oocss/blob/master/oocss/src/components/utils/_fontSize.scss
 @function calculateRem($size) {
-  $remSize: $size / 16px;
+  $remSize: $size / $base-font-size; // rem = size / Modular scale base size
   //Default font size on html element is 100%, equivalent to 16px;
   @return #{$remSize}rem;
 }
+
+// Return rem value from px value.
+@mixin px-to-rem($size) {
+  font-size: calculateRem($size);
+}
+
 // Mixin that will include the fall back px declaration as well as the
 // calculated rem value.
 @mixin font-size($size) {
@@ -26,6 +32,12 @@
   font-size: calculateRem($size);
 }
 
+// Mixin that will include the fall back px declaration as well as the
+// calculated rem value.
+@mixin line-height($size) {
+  line-height: $size;
+  line-height: calculateRem($size);
+}
 
 @mixin font-icon-before($font, $char, $color: '', $size: '') {
   font-family: $font;

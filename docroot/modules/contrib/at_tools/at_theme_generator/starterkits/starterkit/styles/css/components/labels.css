@@ -15,6 +15,10 @@
   text-align: right;
 }
 
+.filter-help a {
+  display: block;
+}
+
 .filter-help a:after {
   position: static;
   top: auto;

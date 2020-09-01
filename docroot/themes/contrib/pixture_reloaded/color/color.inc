@@ -8,6 +8,11 @@
  * unspecified colors shift relative to the new base.
  */
 
+use Drupal\at_core\Ext\ExtGet;
+$theme_name = \Drupal::service('theme.manager')->getActiveTheme()->getName();
+$file_path = drupal_get_path('theme', $theme_name) . '/styles/uikit/components/partials/_variables.scss';
+$sass_variables = (new ExtGet)->getSassVariables($file_path);
+
 $info = array(
   // Available colors and color labels used in theme.
   'fields' => array(
@@ -18,19 +23,21 @@ $info = array(
     'headerstop'  => t('Header bottom'),
     'headercolor' => t('Header text'),
     'navbar'      => t('Navbar'),
+    'navbarhover' => t('Navbar hover'),
   ),
   // Pre-defined color schemes.
   'schemes' => array(
     'default' => array(
       'title' => t('Ocean Water'),
       'colors' => array(
-        'base'        => '#000000',
-        'text'        => '#404040',
-        'link'        => '#056fcb',
-        'headerstart' => '#0461b2',
-        'headerstop'  => '#58bdf5',
-        'headercolor' => '#fcfcfc',
-        'navbar'      => '#035399',
+        'base'        => $sass_variables['base-color'],
+        'text'        => $sass_variables['text-color'],
+        'link'        => $sass_variables['link-color'],
+        'headerstart' => $sass_variables['page-header-background-color-start'],
+        'headerstop'  => $sass_variables['page-header-background-color-stop'],
+        'headercolor' => $sass_variables['page-header-color'],
+        'navbar'      => $sass_variables['page-navbar-background-color'],
+        'navbarhover' => $sass_variables['page-navbar-hover-background-color'],
       ),
     ),
     'forestgreen' => array(
@@ -43,6 +50,7 @@ $info = array(
         'headerstop'  => '#1d7e17',
         'headercolor' => '#fcfcfc',
         'navbar'      => '#092707',
+        'navbarhover' => '#213c1f',
       ),
     ),
     'redcarpet' => array(
@@ -55,6 +63,7 @@ $info = array(
         'headerstop'  => '#b61c0c',
         'headercolor' => '#fcfcfc',
         'navbar'      => '#6e1107',
+        'navbarhover' => '#7c281f',
       ),
     ),
     'silver' => array(
@@ -67,6 +76,7 @@ $info = array(
         'headerstop'  => '#a7aab3',
         'headercolor' => '#fcfcfc',
         'navbar'      => '#717683',
+        'navbarhover' => '#7f838f',
       ),
     ),
   ),
@@ -74,6 +84,7 @@ $info = array(
   // CSS files (excluding @import) to rewrite with new color scheme.
   'css' => array(
     'styles/css/components/color.css',
+    'styles/css/components/tabs.css',
   ),
 
   // Files to copy.

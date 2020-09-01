@@ -2,26 +2,29 @@
  * Color
  ============================================================================ */
 /**
- * base.elements
+ * Base
  ============================================================================ */
-html,
-body {
+html {
   background-color: #333333;
 }
 
 body {
+  background-color: transparent;
   color: #404040;
 }
 
 a {
   color: #056fcb;
 }
+
 a:visited {
   color: #056fcb;
 }
+
 a:active, a.active {
   color: #056fcb;
 }
+
 a:hover, a:focus {
   color: #056fcb;
 }
@@ -29,18 +32,33 @@ a:hover, a:focus {
 blockquote {
   border-color: #cccccc;
 }
+
 blockquote p:first-child:before {
   color: #cccccc;
 }
+
 blockquote small {
-  color: #4d4d4d;
+  color: #5c5c5c;
 }
+
 blockquote.pull-right {
   border-right-color: #cccccc;
 }
 
 hr {
   border-color: #cccccc;
+}
+
+del {
+  color: #5c5c5c;
+}
+
+code,
+pre,
+var,
+kbd,
+samp {
+  background: #f2f2f2;
 }
 
 /**
@@ -57,13 +75,69 @@ hr {
 }
 
 /**
+ * Web fonts
+ ============================================================================ */
+/* Override Font Awesome classes. */
+.fa-border {
+  border-color: #cccccc;
+}
+
+/*  Extra classes for Font Awesome. */
+.fa-text-color {
+  color: #404040;
+}
+
+.fa-text-color-light {
+  color: #808080;
+}
+
+.fa-text-color-medium {
+  color: #5c5c5c;
+}
+
+.fa-match-border {
+  color: #cccccc;
+}
+
+.fa-match-border-light {
+  color: #dcdcdc;
+}
+
+.fa-match-link {
+  color: #056fcb;
+}
+
+.fa-trans-white-25 {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.fa-trans-white-50 {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.fa-trans-white-75 {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.fa-trans-black-25 {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+.fa-trans-black-50 {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+.fa-trans-black-75 {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+/**
  * Page
  *  - mainly for markup that is printed directly in page.html.twig and
  *    .l-r {}
  ============================================================================ */
 .page {
   background-color: #efefef;
-  background-image: -webkit-linear-gradient(#efefef 0%, #fafafa 100%);
   background-image: linear-gradient(#efefef 0%, #fafafa 100%);
 }
 
@@ -75,74 +149,72 @@ hr {
   color: #fcfcfc;
   background-color: #0461b2;
 }
-.pr-leaderboard a,
-.pr-leaderboard .menu__link {
+
+.pr-leaderboard .block__content a {
   color: inherit;
 }
-.pr-leaderboard a.active, .pr-leaderboard a:hover, .pr-leaderboard a:focus,
-.pr-leaderboard .menu__link.active,
-.pr-leaderboard .menu__link:hover,
-.pr-leaderboard .menu__link:focus {
+
+.pr-leaderboard .block__content a.active, .pr-leaderboard .block__content a:hover, .pr-leaderboard .block__content a:focus {
   color: inherit;
 }
 
 .pr-header__rw {
   color: #fcfcfc;
-  background-image: -webkit-linear-gradient(#0461b2 0%, #58bdf5 100%);
+  background-color: #0461b2;
   background-image: linear-gradient(#0461b2 0%, #58bdf5 100%);
 }
-.pr-header a,
-.pr-header .menu__link {
+
+.pr-header .block__content a {
   color: inherit;
 }
-.pr-header a.active, .pr-header a:hover, .pr-header a:focus,
-.pr-header .menu__link.active,
-.pr-header .menu__link:hover,
-.pr-header .menu__link:focus {
+
+.pr-header .block__content a.active, .pr-header .block__content a:hover, .pr-header .block__content a:focus {
   color: inherit;
 }
 
 .pr-navbar {
   color: #fcfcfc;
 }
+
 .pr-navbar .regions {
   background-color: #035399;
 }
-.pr-navbar a,
-.pr-navbar .menu__link {
+
+.pr-navbar .block__content a,
+.pr-navbar .menu a {
   color: inherit;
 }
-.pr-navbar a.active, .pr-navbar a:hover, .pr-navbar a:focus,
-.pr-navbar .menu__link.active,
-.pr-navbar .menu__link:hover,
-.pr-navbar .menu__link:focus {
+
+.pr-navbar .block__content a.active, .pr-navbar .block__content a:hover, .pr-navbar .block__content a:focus,
+.pr-navbar .menu a.active,
+.pr-navbar .menu a:hover,
+.pr-navbar .menu a:focus {
   color: inherit;
 }
 
 .pr-main__sidebar-first .block, .pr-main__sidebar-second .block {
   background-color: #f7f7f7;
 }
+
 .pr-main__sidebar-first .block__title, .pr-main__sidebar-second .block__title {
   color: #fcfcfc;
   background-color: #035399;
 }
+
 .pr-main__sidebar-first .block-search .block__content, .pr-main__sidebar-second .block-search .block__content {
   background-color: transparent;
 }
 
 .pr-footer__rw {
   color: #fcfcfc;
-  background-image: -webkit-linear-gradient(#171717 0%, #363636 100%);
   background-image: linear-gradient(#171717 0%, #363636 100%);
 }
-.pr-footer a,
-.pr-footer .menu__link {
+
+.pr-footer .block__content a {
   color: inherit;
 }
-.pr-footer a.active, .pr-footer a:hover, .pr-footer a:focus,
-.pr-footer .menu__link.active,
-.pr-footer .menu__link:hover,
-.pr-footer .menu__link:focus {
+
+.pr-footer .block__content a.active, .pr-footer .block__content a:hover, .pr-footer .block__content a:focus {
   color: inherit;
 }
 
@@ -154,6 +226,7 @@ hr {
 .attribution .l-rw {
   background-color: transparent;
 }
+
 .attribution .attribution__link {
   color: #404040;
 }
@@ -187,19 +260,21 @@ hr {
  *  - for the drop menu and other responsive menus see the mixins and the
  *    _navbar.scss partial.
  ============================================================================ */
-.menu__item:first-child .menu__link {
+.menu .menu__link {
+  color: #056fcb;
   border-color: #cccccc;
 }
 
-.menu__link {
+.menu .menu__link:hover, .menu .menu__link:focus {
   color: #056fcb;
+}
+
+.menu .menu__link.active {
+  color: #056fcb;
+}
+
+.menu__item:first-child .menu__link {
   border-color: #cccccc;
-}
-.menu__link:hover, .menu__link:focus {
-  color: #056fcb;
-}
-.menu__link.active {
-  color: #056fcb;
 }
 
 /**
@@ -230,78 +305,225 @@ hr {
  *  2. jQuery: responsive-menus.js in AT Core libraries which adds/toggles classes.
  *  3. Theme settings as set in your themes Advanced extention settings.
  ============================================================================ */
-.rm-region,
-.rm-block,
-.rm-block * {
-  background-color: inherit;
-  color: inherit;
+.rm-toggle__link, .rm-toggle__link:hover, .rm-toggle__link:focus, .rm-toggle__link:active {
+  color: #fcfcfc;
+  background-color: #035399;
 }
 
-.rm-toggle__link, .rm-toggle__link:hover, .rm-toggle__link:focus, .rm-toggle__link:active {
-  color: #ffffff;
-  background-color: #056fcb;
-}
 .rm-toggle__icon {
-  fill: white;
+  fill: #fcfcfc;
 }
+
 .rm-toggle span {
   background-color: transparent;
 }
 
-.rm-block__content .menu__item--active-trail > a {
-  color: #fcfcfc;
-  background-color: rgba(255, 255, 255, 0.08);
-}
-.rm-block__content .menu__link {
+.ms-offcanvas .rm-block__content .menu .menu__link,
+.ms-offcanvas .rm-block__content .menu .rm-accordion-trigger,
+.ms-vertical .rm-block__content .menu .menu__link,
+.ms-vertical .rm-block__content .menu .rm-accordion-trigger,
+.ms-slidedown .rm-block__content .menu .menu__link,
+.ms-slidedown .rm-block__content .menu .rm-accordion-trigger,
+.ms-tiles .rm-block__content .menu .menu__link,
+.ms-tiles .rm-block__content .menu .rm-accordion-trigger {
   color: #fcfcfc;
   background-color: #035399;
 }
-.rm-block__content .menu__link:after, .rm-block__content .menu__link:before {
-  color: #fcfcfc !important;
-}
-.rm-block__content .menu__link:active {
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
-  opacity: 0.9;
-}
-.rm-block__content .menu__link:hover, .rm-block__content .menu__link:focus {
+
+.ms-offcanvas .rm-block__content .menu .menu__link:hover, .ms-offcanvas .rm-block__content .menu .menu__link:focus,
+.ms-offcanvas .rm-block__content .menu .rm-accordion-trigger:hover,
+.ms-offcanvas .rm-block__content .menu .rm-accordion-trigger:focus,
+.ms-vertical .rm-block__content .menu .menu__link:hover,
+.ms-vertical .rm-block__content .menu .menu__link:focus,
+.ms-vertical .rm-block__content .menu .rm-accordion-trigger:hover,
+.ms-vertical .rm-block__content .menu .rm-accordion-trigger:focus,
+.ms-slidedown .rm-block__content .menu .menu__link:hover,
+.ms-slidedown .rm-block__content .menu .menu__link:focus,
+.ms-slidedown .rm-block__content .menu .rm-accordion-trigger:hover,
+.ms-slidedown .rm-block__content .menu .rm-accordion-trigger:focus,
+.ms-tiles .rm-block__content .menu .menu__link:hover,
+.ms-tiles .rm-block__content .menu .menu__link:focus,
+.ms-tiles .rm-block__content .menu .rm-accordion-trigger:hover,
+.ms-tiles .rm-block__content .menu .rm-accordion-trigger:focus {
   color: #fcfcfc;
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: #1c64a3;
 }
-.rm-block__content .menu__link.active {
+
+.ms-offcanvas .rm-block__content .menu .menu__link.is-active,
+.ms-vertical .rm-block__content .menu .menu__link.is-active,
+.ms-slidedown .rm-block__content .menu .menu__link.is-active,
+.ms-tiles .rm-block__content .menu .menu__link.is-active {
   color: #fcfcfc;
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: #1c64a3;
 }
-.rm-block__content .menu__link.active[href="/"] {
+
+.ms-offcanvas .rm-block__content .menu .menu__link.is-active[href="/"],
+.ms-vertical .rm-block__content .menu .menu__link.is-active[href="/"],
+.ms-slidedown .rm-block__content .menu .menu__link.is-active[href="/"],
+.ms-tiles .rm-block__content .menu .menu__link.is-active[href="/"] {
+  color: #fcfcfc;
+  background-color: #035399;
+}
+
+.ms-offcanvas .rm-block__content .menu .menu__link.is-active[href="/"]:hover, .ms-offcanvas .rm-block__content .menu .menu__link.is-active[href="/"]:focus,
+.ms-vertical .rm-block__content .menu .menu__link.is-active[href="/"]:hover,
+.ms-vertical .rm-block__content .menu .menu__link.is-active[href="/"]:focus,
+.ms-slidedown .rm-block__content .menu .menu__link.is-active[href="/"]:hover,
+.ms-slidedown .rm-block__content .menu .menu__link.is-active[href="/"]:focus,
+.ms-tiles .rm-block__content .menu .menu__link.is-active[href="/"]:hover,
+.ms-tiles .rm-block__content .menu .menu__link.is-active[href="/"]:focus {
+  color: #fcfcfc;
+  background-color: #1c64a3;
+}
+
+.ms-offcanvas .rm-block__content .rm-accordion-trigger__icon,
+.ms-vertical .rm-block__content .rm-accordion-trigger__icon,
+.ms-slidedown .rm-block__content .rm-accordion-trigger__icon,
+.ms-tiles .rm-block__content .rm-accordion-trigger__icon {
+  background-color: transparent !important;
+  fill: #fcfcfc;
+}
+
+.ms-slidedown .rm-row,
+.ms-slidedown .rm-region {
+  background-color: #58bdf5;
+}
+
+.ms-dropmenu .rm-block__content .menu-level-1 > li > span > .menu__link,
+.ms-horizontal .rm-block__content .menu-level-1 > li > span > .menu__link {
+  color: inherit;
   background-color: transparent;
 }
-.rm-block__content .menu__link.active[href="/"]:hover, .rm-block__content .menu__link.active[href="/"]:focus {
+
+.ms-dropmenu .rm-block__content .menu-level-1 > li > span > .menu__link:hover, .ms-dropmenu .rm-block__content .menu-level-1 > li > span > .menu__link:focus,
+.ms-horizontal .rm-block__content .menu-level-1 > li > span > .menu__link:hover,
+.ms-horizontal .rm-block__content .menu-level-1 > li > span > .menu__link:focus {
   color: #fcfcfc;
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: #1c64a3;
 }
 
-.ms-slidedown .rm-block__content .menu__link, .ms-slidedown .rm-block__content .menu__link.active[href="/"] {
+.ms-dropmenu .rm-block__content .menu-level-1 > li > span > .menu__link.is-active,
+.ms-horizontal .rm-block__content .menu-level-1 > li > span > .menu__link.is-active {
   color: #fcfcfc;
-  background-color: rgba(255, 255, 255, 0.08);
-}
-.ms-slidedown .pr-header__header-second .rm-block__content .menu__link, .ms-slidedown .pr-header__header-second .rm-block__content .menu__link.active[href="/"] {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: #1c64a3;
 }
 
-.ms-offcanvas .rm-block__content {
-  opacity: .001;
-  background-color: #333333;
-  color: #ffffff;
+.ms-dropmenu .rm-block__content .menu-level-1 > li > span > .menu__link.is-active[href="/"],
+.ms-horizontal .rm-block__content .menu-level-1 > li > span > .menu__link.is-active[href="/"] {
+  color: inherit;
+  background-color: transparent;
 }
 
-.ms-tiles .rm-block__content .menu-level-1 > .menu__item {
-  background-color: rgba(255, 255, 255, 0.08);
+.ms-dropmenu .rm-block__content .menu-level-1 > li > span > .menu__link.is-active[href="/"]:hover, .ms-dropmenu .rm-block__content .menu-level-1 > li > span > .menu__link.is-active[href="/"]:focus,
+.ms-horizontal .rm-block__content .menu-level-1 > li > span > .menu__link.is-active[href="/"]:hover,
+.ms-horizontal .rm-block__content .menu-level-1 > li > span > .menu__link.is-active[href="/"]:focus {
+  color: #fcfcfc;
+  background-color: #1c64a3;
+}
+
+.ms-dropmenu .rm-block__content .menu-level-2 .menu__link,
+.ms-horizontal .rm-block__content .menu-level-2 .menu__link {
+  color: #fcfcfc;
+  background-color: #035399;
+}
+
+.ms-dropmenu .rm-block__content .menu-level-2 .menu__link:hover, .ms-dropmenu .rm-block__content .menu-level-2 .menu__link:focus,
+.ms-horizontal .rm-block__content .menu-level-2 .menu__link:hover,
+.ms-horizontal .rm-block__content .menu-level-2 .menu__link:focus {
+  color: #fcfcfc;
+  background-color: #1c64a3;
+}
+
+.ms-dropmenu .rm-block__content .menu-level-2 .menu__link.is-active,
+.ms-horizontal .rm-block__content .menu-level-2 .menu__link.is-active {
+  color: #fcfcfc;
+  background-color: #1c64a3;
+}
+
+.ms-overlay .rm-toggle {
+  background-color: rgba(0, 0, 0, 0.875);
+}
+
+.ms-overlay .rm-toggle:hover, .ms-overlay .rm-toggle:focus {
+  background-color: rgba(0, 0, 0, 0.95);
+}
+
+.ms-overlay .rm-toggle__link, .ms-overlay .rm-toggle__icon {
+  background-color: transparent;
+}
+
+.ms-overlay .rm-toggle__link:hover, .ms-overlay .rm-toggle__link:focus, .ms-overlay .rm-toggle__icon:hover, .ms-overlay .rm-toggle__icon:focus {
+  background-color: transparent;
+}
+
+.ms-overlay.rm-is-open .rm-toggle {
+  opacity: 1;
+  background-color: white;
+}
+
+.ms-overlay.rm-is-open .rm-toggle__icon {
+  fill: black;
+}
+
+.ms-overlay .rm-block__content {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.ms-overlay .rm-block__content .menu {
+  background-color: transparent;
+}
+
+.ms-overlay .rm-block__content .menu .menu__link {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.95);
+}
+
+.ms-overlay .rm-block__content .menu .menu__link:hover, .ms-overlay .rm-block__content .menu .menu__link:focus, .ms-overlay .rm-block__content .menu .menu__link.is-active {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.ms-overlay .rm-block__content .menu .menu__link.is-active[href="/"] {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.ms-overlay .rm-block__content .menu .menu__link.is-active[href="/"]:hover, .ms-overlay .rm-block__content .menu .menu__link.is-active[href="/"]:focus {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.ms-overlay .rm-block__content .menu .rm-accordion-trigger {
+  background-color: rgba(0, 0, 0, 0.95);
+}
+
+.ms-overlay .rm-block__content .menu .rm-accordion-trigger:hover, .ms-overlay .rm-block__content .menu .rm-accordion-trigger:focus {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.ms-overlay .rm-block__content .menu .rm-accordion-trigger__icon {
+  fill: white;
+}
+
+.ms-meganav .rm-block__content .menu .menu__link {
+  color: inherit;
+  background-color: transparent;
+}
+
+.ms-meganav .rm-block__content .menu .menu__link:hover, .ms-meganav .rm-block__content .menu .menu__link:focus {
+  color: #fcfcfc;
+  background-color: #1c64a3;
 }
 
 .ms-meganav.rm-is-open .rm-block__content .menu-level-1 > .menu__item {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid #cccccc;
 }
-.ms-meganav.rm-is-open .rm-block__content .menu-level-1 > .menu__item > .menu__link {
-  background-color: rgba(255, 255, 255, 0.3);
+
+.ms-meganav.rm-is-open .rm-block__content .menu-level-1 > .menu__item > span > .menu__link {
+  color: #fcfcfc;
+  background-color: #035399;
+}
+
+.ms-meganav.rm-is-open .rm-block__content .menu-level-1 > .menu__item > span > .menu__link:hover, .ms-meganav.rm-is-open .rm-block__content .menu-level-1 > .menu__item > span > .menu__link:focus {
+  color: #fcfcfc;
+  background-color: #1c64a3;
 }
 
 /**
@@ -310,6 +532,7 @@ hr {
 .breadcrumb li:before {
   color: #cccccc;
 }
+
 .breadcrumb a {
   color: #056fcb;
   text-decoration: none;
@@ -323,9 +546,11 @@ hr {
 .pager__link {
   border-color: #cccccc;
 }
+
 .pager__link:focus, .pager__link:hover {
   background-color: rgba(255, 255, 255, 0.75);
 }
+
 .pager__link:active {
   box-shadow: inset 0 0 3px 0 rgba(0, 0, 0, 0.75);
   opacity: 0.9;
@@ -334,6 +559,7 @@ hr {
 .pager__link--is-active {
   background-color: rgba(255, 255, 255, 0.75);
 }
+
 .pager--mini .pager__link--is-active {
   background-color: transparent;
   opacity: 0.65;
@@ -343,9 +569,13 @@ hr {
  * Table Theme
  * Style Drupal selectors for tables.
  ============================================================================ */
+tr:hover {
+  background-color: #ededed;
+}
+
 thead tr {
   color: #404040;
-  background-color: #ededed;
+  background-color: #e8e8e8;
 }
 
 tr,
@@ -378,10 +608,11 @@ input[type="text"],
 input[type="time"],
 input[type="url"],
 input[type="week"] {
-  color: #5a5a5a;
-  border-color: #dcdcdc;
+  color: #404040;
+  border-color: #cccccc;
   background-color: #ffffff;
 }
+
 textarea:focus,
 select:focus,
 input[type="date"]:focus,
@@ -397,9 +628,10 @@ input[type="text"]:focus,
 input[type="time"]:focus,
 input[type="url"]:focus,
 input[type="week"]:focus {
-  border-color: #dcdcdc;
+  border-color: #cccccc;
   color: #404040;
 }
+
 textarea:hover, textarea:focus,
 select:hover,
 select:focus,
@@ -429,8 +661,9 @@ input[type="url"]:hover,
 input[type="url"]:focus,
 input[type="week"]:hover,
 input[type="week"]:focus {
-  background-color: white;
+  background-color: #ffffff;
 }
+
 textarea[disabled]:hover, textarea[disabled]:focus,
 select[disabled]:hover,
 select[disabled]:focus,
@@ -470,7 +703,7 @@ input[type="week"][disabled]:focus {
  * @thanks http://nicolasgallagher.com/css-background-image-hacks/
  */
 details {
-  border-color: #dcdcdc;
+  border-color: #cccccc;
   background-color: #ffffff;
 }
 
@@ -494,17 +727,17 @@ a.button_disabled {
 
 input::-webkit-input-placeholder,
 textarea::-webkit-input-placeholder {
-  color: #5a5a5a;
+  color: #404040;
 }
 
 input:-moz-placeholder,
 textarea:-moz-placeholder {
-  color: #5a5a5a;
+  color: #404040;
 }
 
 input.placeholder_text,
 textarea.placeholder_text {
-  color: #5a5a5a;
+  color: #404040;
 }
 
 /**
@@ -512,25 +745,61 @@ textarea.placeholder_text {
  ============================================================================ */
 .form-type-radio label.option,
 .form-type-checkbox label.option {
-  border-color: #dcdcdc;
+  border-color: #cccccc;
   background-color: #ffffff;
 }
+
 .form-type-radio label.option:focus, .form-type-radio label.option:hover,
 .form-type-checkbox label.option:focus,
 .form-type-checkbox label.option:hover {
   background-color: rgba(255, 255, 255, 0.75);
 }
 
+.ui-dialog .form-text {
+  background-color: inherit !important;
+  color: black !important;
+  border-color: silver !important;
+}
+
+.ui-dialog .form-text::-webkit-input-placeholder {
+  color: silver;
+}
+
+.ui-dialog .form-text::-moz-placeholder {
+  color: silver;
+}
+
+.ui-dialog .form-text:-ms-input-placeholder {
+  color: silver;
+}
+
+.ui-dialog .form-text::placeholder {
+  color: silver;
+}
+
+.ui-dialog .form-type-radio label.option,
+.ui-dialog .form-type-checkbox label.option {
+  border-color: transparent;
+  background-color: inherit;
+}
+
+.ui-dialog .form-type-radio label.option:focus, .ui-dialog .form-type-radio label.option:hover,
+.ui-dialog .form-type-checkbox label.option:focus,
+.ui-dialog .form-type-checkbox label.option:hover {
+  color: inherit;
+  background-color: inherit;
+}
+
 .filter-wrapper {
-  border-color: #dcdcdc;
+  border-color: #cccccc;
 }
 
 .tips {
-  color: #5a5a5a;
+  color: #404040;
 }
 
 .description {
-  color: #5a5a5a;
+  color: #404040;
 }
 
 form .marker {
@@ -545,6 +814,36 @@ form .marker {
 .form-item textarea.error,
 .form-item select.error {
   border-color: #f9c9bf;
+}
+
+/**
+ * Vertical tabs.
+ ============================================================================ */
+.vertical-tabs {
+  background-color: #ededed;
+  border-color: #cccccc;
+}
+
+.vertical-tabs__menu {
+  background-color: #ffffff;
+  border-top-color: #cccccc;
+}
+
+.vertical-tabs__menu-item {
+  background: #ffffff;
+  border-color: #cccccc;
+}
+
+.vertical-tabs__menu-item.is-selected {
+  background-color: #ededed;
+}
+
+.vertical-tabs__menu-item.is-selected .vertical-tabs__menu-item-title {
+  color: #404040;
+}
+
+.vertical-tabs__pane {
+  background-color: #ededed;
 }
 
 /**
@@ -566,6 +865,7 @@ button,
   opacity: 0.9;
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
 }
+
 button:hover, button:focus,
 .button:hover,
 .button:focus {
@@ -573,11 +873,13 @@ button:hover, button:focus,
   color: #ffffff;
   background-color: #056fcb;
 }
+
 button:visited,
 .button:visited {
   color: #ffffff;
   background-color: #056fcb;
 }
+
 button[disabled]:hover,
 .button[disabled]:hover {
   opacity: 1;
@@ -586,35 +888,36 @@ button[disabled]:hover,
 .button--primary {
   color: #ffffff;
   background-color: #056fcb;
-  opacity: 0.9;
+  border: 1px #056fcb solid;
 }
+
 .button--primary:link, .button--primary:visited {
   color: #ffffff;
   background-color: #056fcb;
-  border-color: #ccc;
+  border-color: #056fcb;
 }
+
 .button--primary:hover, .button--primary:focus, .button--primary:active, .button--primary.active {
   color: #ffffff;
   background-color: #056fcb;
-  border-color: #ccc;
-  opacity: 1;
+  border-color: #056fcb;
 }
 
 .button--danger {
   color: #a51b00;
   background-color: transparent;
-  opacity: 0.9;
 }
+
 .button--danger:link, .button--danger:visited {
   color: #a51b00;
   background-color: transparent;
-  border-color: #ccc;
+  border-color: transparent;
 }
+
 .button--danger:hover, .button--danger:focus, .button--danger:active, .button--danger.active {
   color: #a51b00;
   background-color: transparent;
-  border-color: #ccc;
-  opacity: 1;
+  border-color: transparent;
 }
 
 .button-action {
@@ -630,6 +933,7 @@ button.link-edit-summary {
   background-color: inherit;
   color: #404040;
 }
+
 button.link-edit-summary:hover, button.link-edit-summary:focus {
   background-color: inherit;
   color: #404040;
@@ -640,6 +944,7 @@ button.link-edit-summary:hover, button.link-edit-summary:focus {
   background-color: #ffffff;
   border-color: #056fcb;
 }
+
 .dropbutton-widget:hover, .dropbutton-widget:focus {
   border-color: #056fcb;
 }
@@ -647,26 +952,29 @@ button.link-edit-summary:hover, button.link-edit-summary:focus {
 .dropbutton .dropbutton-action .button {
   color: #ffffff;
   background-color: #056fcb;
-  opacity: 0.9;
 }
+
 .dropbutton .dropbutton-action .button:link, .dropbutton .dropbutton-action .button:visited {
   color: #ffffff;
   background-color: #056fcb;
   border-color: #ccc;
 }
+
 .dropbutton .dropbutton-action .button:hover, .dropbutton .dropbutton-action .button:focus, .dropbutton .dropbutton-action .button:active, .dropbutton .dropbutton-action .button.active {
   color: #ffffff;
   background-color: #056fcb;
   border-color: #ccc;
-  opacity: 1;
 }
+
 .dropbutton .secondary-action {
   border-top-color: #056fcb;
 }
+
 .dropbutton .secondary-action .button {
   background-color: #ffffff;
   color: #056fcb;
 }
+
 .dropbutton .dropbutton-toggle button:hover {
   background-color: transparent;
 }
@@ -674,9 +982,11 @@ button.link-edit-summary:hover, button.link-edit-summary:focus {
 .dropbutton-multiple .dropbutton {
   border-right-color: #056fcb;
 }
+
 [dir="rtl"] .dropbutton-multiple .dropbutton {
   border-left-color: #056fcb;
 }
+
 .dropbutton-multiple.open .dropbutton-action .button {
   border-radius: 3px 0 0 0;
 }
@@ -686,71 +996,92 @@ button.link-edit-summary:hover, button.link-edit-summary:focus {
 }
 
 /**
- * Tabs (local tasks)
- * TODO: fix selectors when https://www.drupal.org/node/507488 lands. This will
- * mean the tabs are now a block, and we probably need some template revisions
- * also.
+ * Modal dialogs.
+ *  -  override jQuery UI styles.
  ============================================================================ */
-.pr-temporary-tabs ul.tabs--primary {
-  border-bottom-color: #dcdcdc;
+.ui-widget-overlay {
+  background: rgba(0, 0, 0, 0.95);
+  opacity: 0.3;
 }
-.pr-temporary-tabs ul.tabs--primary li a {
+
+.ui-dialog .form-text {
+  background-color: inherit !important;
+  color: black !important;
+  border-color: silver !important;
+}
+
+.ui-dialog .form-text::-webkit-input-placeholder {
+  color: silver;
+}
+
+.ui-dialog .form-text::-moz-placeholder {
+  color: silver;
+}
+
+.ui-dialog .form-text:-ms-input-placeholder {
+  color: silver;
+}
+
+.ui-dialog .form-text::placeholder {
+  color: silver;
+}
+
+.ui-dialog .form-type-radio label.option,
+.ui-dialog .form-type-checkbox label.option {
+  border-color: transparent;
+  background-color: inherit;
+}
+
+.ui-dialog .form-type-radio label.option:focus, .ui-dialog .form-type-radio label.option:hover,
+.ui-dialog .form-type-checkbox label.option:focus,
+.ui-dialog .form-type-checkbox label.option:hover {
+  color: inherit;
+  background-color: inherit;
+}
+
+.ui-dialog .ui-dialog-titlebar {
   color: #404040;
-  background-color: #fafafa;
+}
+
+.ui-dialog .ui-dialog-buttonpane button {
+  color: #ffffff;
+  background: #056fcb;
+  border-color: #056fcb;
   opacity: 0.9;
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
 }
-.pr-temporary-tabs ul.tabs--primary li a:link, .pr-temporary-tabs ul.tabs--primary li a:visited {
-  color: #404040;
-  background-color: #fafafa;
-  border-color: #ccc;
+
+.ui-dialog .ui-dialog-buttonpane button:hover, .ui-dialog .ui-dialog-buttonpane button:focus {
+  opacity: 1;
+  color: #ffffff;
+  background: #056fcb;
 }
-.pr-temporary-tabs ul.tabs--primary li a:hover, .pr-temporary-tabs ul.tabs--primary li a:focus, .pr-temporary-tabs ul.tabs--primary li a:active, .pr-temporary-tabs ul.tabs--primary li a.active {
-  color: #404040;
-  background-color: #fafafa;
-  border-color: #ccc;
+
+.ui-dialog .ui-dialog-buttonpane button:visited {
+  color: #ffffff;
+  background: #056fcb;
+}
+
+.ui-dialog .ui-dialog-buttonpane button[disabled]:hover {
   opacity: 1;
 }
-.pr-temporary-tabs ul.tabs--primary li a:hover, .pr-temporary-tabs ul.tabs--primary li a:focus {
-  color: #404040;
-  background-color: #ededed;
+
+.ui-dialog .ui-dialog-buttonpane .button--primary {
+  color: #ffffff;
+  background-color: #056fcb;
+  border: 1px #056fcb solid;
 }
-.pr-temporary-tabs ul.tabs--primary li a:active {
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+
+.ui-dialog .ui-dialog-buttonpane .button--primary:link, .ui-dialog .ui-dialog-buttonpane .button--primary:visited {
+  color: #ffffff;
+  background-color: #056fcb;
+  border-color: #056fcb;
 }
-.pr-temporary-tabs ul.tabs--primary li a.active {
-  color: #404040;
-  background-color: transparent;
-}
-@media all and (min-width: 60.063em) {
-  .pr-temporary-tabs ul.tabs--primary li a.active {
-    border-bottom-color: #ffffff;
-  }
-}
-@media all and (max-width: 60em) {
-  .pr-temporary-tabs ul.tabs--primary li a.active {
-    border-bottom-color: #dcdcdc;
-  }
-}
-.pr-temporary-tabs ul.tabs--primary li a.active:hover, .pr-temporary-tabs ul.tabs--primary li a.active:focus {
-  color: #404040;
-  background-color: transparent;
-}
-.pr-temporary-tabs ul.tabs--secondary li a {
-  color: #404040;
-  border-color: #cccccc;
-  border-bottom-color: transparent;
-}
-.pr-temporary-tabs ul.tabs--secondary li a:hover, .pr-temporary-tabs ul.tabs--secondary li a:focus {
-  text-decoration: none;
-  color: #404040;
-  border-color: #cccccc;
-}
-.pr-temporary-tabs ul.tabs--secondary li a.active {
-  border-color: #cccccc;
-}
-.pr-temporary-tabs ul.tabs--secondary li a.active:hover, .pr-temporary-tabs ul.tabs--secondary li a.active:focus {
-  color: #404040;
+
+.ui-dialog .ui-dialog-buttonpane .button--primary:hover, .ui-dialog .ui-dialog-buttonpane .button--primary:focus, .ui-dialog .ui-dialog-buttonpane .button--primary:active, .ui-dialog .ui-dialog-buttonpane .button--primary.active {
+  color: #ffffff;
+  background-color: #056fcb;
+  border-color: #056fcb;
 }
 
 /**
@@ -759,13 +1090,24 @@ button.link-edit-summary:hover, button.link-edit-summary:focus {
  * with FontAwesome icons.
  ============================================================================ */
 .file a:before {
-  color: #404040;
+  color: #808080;
 }
 
 /**
- * Image upload widget.
+ * File upload widgets.
  ============================================================================ */
-.image-preview {
+.field--widget-file-generic,
+.field--widget-image-image {
+  background-color: #ffffff;
+  border-color: #cccccc;
+}
+
+.field--widget-file-generic details,
+.field--widget-image-image details {
+  background: transparent;
+}
+
+.field--widget-image-image .image-preview {
   background-color: transparent;
 }
 
@@ -775,8 +1117,6 @@ button.link-edit-summary:hover, button.link-edit-summary:focus {
 /**
  * Labels.
  *  -  for example "new" mark on comments, tags etc.
- *
- *  TODO: fix this stuff up, its just a copy/paste from system.theme.css at the moment.
  ============================================================================ */
 .filter-help a:after,
 .more-help-link a:after {
@@ -815,18 +1155,37 @@ body:before {
  *    the root template is called node.html.twg and the base selector is .node {}
  ============================================================================ */
 .node {
-  border-color: #dcdcdc;
+  border-color: #cccccc;
   background-color: #ffffff;
 }
+
 .node__title {
-  border-bottom-color: #dcdcdc;
+  border-bottom-color: #cccccc;
 }
+
 .node--sticky {
   background-color: transparent;
   box-shadow: none;
 }
-.node__content .field-type-image__figure {
+
+.node .field-type-image__item {
   border-color: #dcdcdc;
+}
+
+/**
+ * Node Add Edit Forms.
+ ============================================================================ */
+.layout-region-node-secondary__inner {
+  border-color: #cccccc;
+  background-color: #ffffff;
+}
+
+.layout-region-node-secondary__inner .entity-meta details[open] {
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.085);
+}
+
+.layout-region-node-secondary__inner .entity-meta details[open] > summary {
+  background-color: rgba(0, 0, 0, 0.025);
 }
 
 /**
@@ -872,9 +1231,10 @@ body:before {
  ============================================================================ */
 .block-social-media-links .platform__link,
 .pane-social-media-link-widget .platform__link {
-  color: #404040;
+  color: #dcdcdc;
   opacity: 0.65;
 }
+
 .block-social-media-links .platform__link:hover, .block-social-media-links .platform__link:focus,
 .pane-social-media-link-widget .platform__link:hover,
 .pane-social-media-link-widget .platform__link:focus {
@@ -889,44 +1249,151 @@ body:before {
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
   color: #ffffff;
   background-color: #056fcb;
-  opacity: 0.9;
+  border: 1px #056fcb solid;
 }
+
 .view-empty:not(:empty) .links a[href="/node/add"]:hover, .view-empty:not(:empty) .links a[href="/node/add"]:focus {
   opacity: 1;
 }
+
 .view-empty:not(:empty) .links a[href="/node/add"][disabled]:hover {
   opacity: 1;
 }
+
 .view-empty:not(:empty) .links a[href="/node/add"]:link, .view-empty:not(:empty) .links a[href="/node/add"]:visited {
   color: #ffffff;
   background-color: #056fcb;
-  border-color: #ccc;
+  border-color: #056fcb;
 }
+
 .view-empty:not(:empty) .links a[href="/node/add"]:hover, .view-empty:not(:empty) .links a[href="/node/add"]:focus, .view-empty:not(:empty) .links a[href="/node/add"]:active, .view-empty:not(:empty) .links a[href="/node/add"].active {
   color: #ffffff;
   background-color: #056fcb;
-  border-color: #ccc;
-  opacity: 1;
+  border-color: #056fcb;
 }
 
 /**
- * CKEditor
+ * CKEditor Colors
+ * Pretty brutal, but effective, combines with other editor partials and files,
+ * mainly for Mimic but will color borders for moono also.
  ============================================================================ */
 .cke_chrome {
-  border-color: #dcdcdc !important;
-}
-
-.cke_chrome {
-  border-top-color: #dcdcdc !important;
-  border-bottom-color: #dcdcdc !important;
+  border-color: #cccccc !important;
+  border-top-color: #cccccc !important;
+  border-bottom-color: #cccccc !important;
+  color: #404040 !important;
 }
 
 .cke_top {
-  border-bottom-color: #dcdcdc !important;
+  border-bottom-color: #cccccc !important;
+  background-color: #ffffff !important;
+  color: #404040 !important;
 }
 
 .cke_bottom {
-  border-top-color: #dcdcdc !important;
+  border-top-color: #cccccc !important;
+  background-color: #ffffff !important;
+  color: #404040 !important;
 }
 
-/*# sourceMappingURL=maps/color.css.map */
+.cke_reset,
+.cke_editable,
+.cke_editable *,
+textarea.cke_source,
+.cke_combopanel {
+  background-color: #ffffff !important;
+  color: #404040 !important;
+}
+
+.cke_combo_off a.cke_combo_button,
+a.cke_button_off {
+  color: #404040 !important;
+}
+
+.cke_combo_off a.cke_combo_button:hover, .cke_combo_off a.cke_combo_button:focus, .cke_combo_off a.cke_combo_button:active,
+a.cke_button_off:hover,
+a.cke_button_off:focus,
+a.cke_button_off:active {
+  background-color: #ededed !important;
+  color: #404040 !important;
+}
+
+.cke_combo_on a.cke_combo_button,
+a.cke_button_on {
+  background-color: #ededed !important;
+  color: #404040 !important;
+}
+
+.cke_combo_on a.cke_combo_button:hover, .cke_combo_on a.cke_combo_button:focus, .cke_combo_on a.cke_combo_button:active,
+a.cke_button_on:hover,
+a.cke_button_on:focus,
+a.cke_button_on:active {
+  background-color: #ededed !important;
+  color: #404040 !important;
+}
+
+.cke_panel,
+.cke_combopanel {
+  background-color: #ffffff !important;
+  border-color: #cccccc !important;
+}
+
+.cke_combo_text {
+  color: #404040 !important;
+}
+
+.cke_combo_arrow {
+  border-top-color: #cccccc !important;
+}
+
+.cke_panel_listItem a {
+  color: inherit !important;
+}
+
+* html .cke_panel_listItem a {
+  color: #404040 !important;
+}
+
+*:first-child + html .cke_panel_listItem a {
+  color: #404040 !important;
+}
+
+.cke_panel_listItem.cke_selected a {
+  background-color: #ededed !important;
+}
+
+.cke_panel_listItem a:hover, .cke_panel_listItem a:focus, .cke_panel_listItem a:active {
+  background-color: #ededed !important;
+  color: #404040 !important;
+}
+
+.cke_reset_all,
+.cke_button_icon:before {
+  color: #404040 !important;
+}
+
+.cke_resizer {
+  border-color: transparent #cccccc transparent transparent !important;
+}
+
+a.cke_menu_button:after, a.cke_menu_button:before,
+a.cke_combo_button:after,
+a.cke_combo_button:before,
+a.cke_button:after,
+a.cke_button:before {
+  display: none !important;
+}
+
+input.cke_dialog_ui_input_text,
+input.cke_dialog_ui_input_password {
+  background-color: white !important;
+  color: black !important;
+}
+
+.ckeditor-dialog-loading,
+.ckeditor-dialog-loading * {
+  background-color: #f2f2f2 !important;
+  color: #404040 !important;
+  border-color: #dcdcdc !important;
+}
+/*# sourceMappingURL=color.css.map */

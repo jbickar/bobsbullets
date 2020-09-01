@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\at_core\Theme\ThemeConfig;
+use \Drupal\block_content\BlockContentInterface;
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
@@ -102,19 +103,23 @@ function at_core_theme_suggestions_block_alter(array &$suggestions, array $varia
   }
 
   // Block suggestions for custom block bundles.
-  if (isset($variables['elements']['content']['#block_content'])) {
+  if (isset($variables['elements']['content']['#block_content']) && $variables['elements']['content']['#block_content'] instanceof BlockContentInterface) {
     array_splice($suggestions, 1, 0, 'block__bundle__' . $variables['elements']['content']['#block_content']->bundle());
   }
 
   // Use a custom block suggestion for responsive menus.
-  if (isset($theme['config']['enable_extensions']) && $theme['config']['enable_extensions'] === 1) {
-    if (isset($theme['config']['enable_responsive_menus']) && $theme['config']['enable_responsive_menus'] === 1) {
-      if (isset($theme['config']['responsive_menu_block'])) {
-        if (isset($variables['elements']['#base_plugin_id'])) {
-          // Support System module and Menu Block module blocks.
-          if ($variables['elements']['#base_plugin_id'] === 'system_menu_block' || $variables['elements']['#base_plugin_id'] === 'menu_block') {
-            if (isset($variables['elements']['#derivative_plugin_id'])) {
-              if ($theme['config']['responsive_menu_block'] === $variables['elements']['#id']) {
+  if (isset($theme['path_skin'])) {
+    // Skin themes need to use the base themes block elements id to match the config setting.
+    $variables['elements']['#id'] = str_replace($theme['name'], $theme['base'], $variables['elements']['#id']);
+  }
+  if (isset($theme['config']['responsive_menu_block']) && $theme['config']['responsive_menu_block'] === $variables['elements']['#id']) {
+    if (isset($theme['config']['enable_extensions']) && $theme['config']['enable_extensions'] === 1) {
+      if (isset($theme['config']['enable_responsive_menus']) && $theme['config']['enable_responsive_menus'] === 1) {
+        if (isset($theme['config']['responsive_menu_block'])) {
+          if (isset($variables['elements']['#base_plugin_id'])) {
+            // Support System module and Menu Block module blocks.
+            if ($variables['elements']['#base_plugin_id'] === 'system_menu_block' || $variables['elements']['#base_plugin_id'] === 'menu_block') {
+              if (isset($variables['elements']['#derivative_plugin_id'])) {
                 $suggestions[] = 'block__responsive_menu';
               }
             }
@@ -122,6 +127,14 @@ function at_core_theme_suggestions_block_alter(array &$suggestions, array $varia
         }
       }
     }
+  }
+
+  // Drupal core, may at times, generate a suggestion with camel casing, or even
+  // spaces in the name. Fix it, always. Note this is due to how core adds
+  // suggestions based on the #plugin_id and #id and fails to adequately clean
+  // them up. See: block_theme_suggestions_block()
+  foreach ($suggestions as $key => $suggestion) {
+    $suggestions[$key] = str_replace(' ', '_', strtolower($suggestion));
   }
 }
 

@@ -14,5 +14,10 @@
       //text-align: #{$flow-to};
     }
   }
+
+  .menu__link:after {
+    display: none !important;
+  }
 }
+
 

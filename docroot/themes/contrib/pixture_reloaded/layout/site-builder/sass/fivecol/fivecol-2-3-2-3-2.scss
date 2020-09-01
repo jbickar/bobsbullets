@@ -7,11 +7,12 @@
 
   // Two active regions.
   .arc--2 {
+
     .l-r {
       @include span(6 of 12);
+
     }
   }
-
 
   // Three active regions.
   .arc--3 {

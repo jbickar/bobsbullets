@@ -7,7 +7,7 @@ ul {
   &.inline,
   &.links.inline {
     padding: 0;
-    @include clearfix-micro;
+    @include cfm;
   }
 
   &.inline {
@@ -66,7 +66,7 @@ ul {
 // Simple horizontal list, see: mixins/_list.scss.
 .list-multicolumn {
   padding: 0;
-  @include clearfix-micro;
+  @include cfm;
 
   > li {
     font-weight: $font-weight-bold;

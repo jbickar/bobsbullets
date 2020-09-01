@@ -8,7 +8,7 @@
 @mixin list-multicolumn($list_selector, $col_width: 12em) {
 
   #{$list_selector} {
-    @include clearfix-micro;
+    @include cfm;
 
     > li {
       width: $col_width;

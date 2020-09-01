@@ -15,10 +15,10 @@
 }
 
 .l-pr {
-  display: -webkit-flex;
+  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: center;
+  -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
 }
@@ -28,6 +28,8 @@
 }
 
 .l-r {
+  -webkit-transition: all, 225ms, ease-in-out;
+  -o-transition: all, 225ms, ease-in-out;
   transition: all, 225ms, ease-in-out;
 }
 
@@ -58,7 +60,8 @@ body {
 }
 
 * {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 article,
@@ -336,7 +339,8 @@ hr {
   border: 0;
   border-top: 1px solid;
   padding: 0;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 code,
@@ -448,10 +452,11 @@ ul.inline li ol {
 }
 
 .list-horizontal {
-  display: -webkit-flex;
+  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
 }
@@ -540,6 +545,8 @@ ul.inline li ol {
   background-color: #444;
   border-radius: 0 0 2px 2px;
   opacity: 0;
+  -webkit-transition: opacity 0.15s ease-in;
+  -o-transition: opacity 0.15s ease-in;
   transition: opacity 0.15s ease-in;
   z-index: 50;
   left: 50%;
@@ -601,22 +608,22 @@ ul.inline li ol {
 }
 
 .links.inline {
-  display: -webkit-flex;
+  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-  -webkit-justify-content: flex-start;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
 }
 
 .links.inline li {
-  -webkit-flex: 0 0 auto;
+  -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
   margin: 0 16px 0 0;
@@ -640,8 +647,12 @@ ul.inline li ol {
   width: 100%;
   min-width: 100%;
   background-color: #d1e8f5;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#d1e8f5), to(#d3e8f4));
+  background-image: -webkit-linear-gradient(top, #d1e8f5, #d3e8f4);
+  background-image: -o-linear-gradient(top, #d1e8f5, #d3e8f4);
   background-image: linear-gradient(to bottom, #d1e8f5, #d3e8f4);
-  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.3333);
+  -webkit-box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.3333);
+          box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.3333);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding: 1.25rem 0;
 }
@@ -724,16 +735,16 @@ ul.inline li ol {
  *    the Markup overrides extension.
  ============================================================================ */
 .l-attribution {
-  -webkit-order: 100;
+  -webkit-box-ordinal-group: 101;
       -ms-flex-order: 100;
           order: 100;
 }
 
 .attribution .l-rw {
-  -webkit-justify-content: flex-end;
+  -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;
-  -webkit-align-items: center;
+  -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   min-height: 2rem;
@@ -750,10 +761,11 @@ ul.inline li ol {
  * - useful classes to be used anywhere.
  ============================================================================ */
 .is-flexposition-container {
-  display: -webkit-flex;
+  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
   height: 100%;
@@ -761,50 +773,50 @@ ul.inline li ol {
 }
 
 .flex-container {
-  display: -webkit-flex;
+  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-  -webkit-flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
   width: 100%;
 }
 
 .is-vertical-center {
-  -webkit-align-items: center;
+  -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
 }
 
 .is-vertical-top {
-  -webkit-align-items: flex-start;
+  -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
 }
 
 .is-vertical-bottom {
-  -webkit-align-items: flex-end;
+  -webkit-box-align: end;
       -ms-flex-align: end;
           align-items: flex-end;
 }
 
 .is-horizontal-center {
-  -webkit-justify-content: center;
+  -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
 }
 
 .is-horizontal-left {
-  -webkit-justify-content: flex-start;
+  -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
 }
 
 .is-horizontal-right {
-  -webkit-justify-content: flex-end;
+  -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;
 }

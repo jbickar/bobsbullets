@@ -11,7 +11,8 @@
   margin: 1.25em 0;
   border: 1px solid;
   border-radius: 2px;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .messages + .messages {
@@ -20,7 +21,8 @@
 }
 
 .messages .container {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 .messages__list {

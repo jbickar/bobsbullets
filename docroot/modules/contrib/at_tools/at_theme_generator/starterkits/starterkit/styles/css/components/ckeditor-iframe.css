@@ -20,10 +20,13 @@ textarea {
 .cke_source {
   background-color: inherit !important;
   color: inherit !important;
-  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
   background-image: none !important;
   visibility: visible;
   opacity: 1;
+  -webkit-transition: all, 225ms, ease-in-out;
+  -o-transition: all, 225ms, ease-in-out;
   transition: all, 225ms, ease-in-out;
 }
 

@@ -1,9 +1,9 @@
 name: 'STARTERKIT'
 type: theme
 base theme: at_core
-base theme original: rc2
+base theme original: git-dev
 subtheme type: adaptive_subtheme
-layout: flex-builder
+layout: page-layout
 description: 'Practical starter theme for site builders, themers, and rapid prototyping.'
 alt text: 'Screenshot for STARTERKIT.'
 tags: 'sub-theme'
@@ -46,8 +46,8 @@ libraries-extend:
   quickedit/quickedit:
     - MACHINENAME/quickedit
 
-# Information added by Drupal.org packaging script on 2017-03-02
-version: '8.x-2.0'
+# Information added by Drupal.org packaging script on 2018-02-12
+version: '8.x-3.2'
 core: '8.x'
 project: 'at_tools'
-datestamp: 1488495800
+datestamp: 1518479901

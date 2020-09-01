@@ -2,7 +2,7 @@
 
 namespace Drupal\asset_injector\Form;
 
-use Drupal\Core\Logger\LoggerChannel;
+use Psr\Log\LoggerInterface;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -21,11 +21,11 @@ use Drupal\Core\Plugin\Context\ContextRepositoryInterface;
 class AssetInjectorFormBase extends EntityForm {
 
   /**
-   * Database log the creation/edit/deletion of an asset.
+   * A logger instance.
    *
-   * @var \Drupal\Core\Logger\LoggerChannel
+   * @var \Psr\Log\LoggerInterface
    */
-  private $logger;
+  protected $logger;
 
   /**
    * The Asset entity.
@@ -93,8 +93,8 @@ class AssetInjectorFormBase extends EntityForm {
   /**
    * AssetInjectorFormBase constructor.
    *
-   * @param \Drupal\Core\Logger\LoggerChannel $logger_factory
-   *   Logs the actions.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   A logger instance.
    * @param \Drupal\Core\Executable\ExecutableManagerInterface $manager
    *   The ConditionManager for building the conditions UI.
    * @param \Drupal\Core\Plugin\Context\ContextRepositoryInterface $context_repository
@@ -106,8 +106,8 @@ class AssetInjectorFormBase extends EntityForm {
    * @param \Drupal\Core\Plugin\PluginFormFactoryInterface $plugin_form_manager
    *   The plugin form manager.
    */
-  public function __construct(LoggerChannel $logger_factory, ExecutableManagerInterface $manager, ContextRepositoryInterface $context_repository, LanguageManagerInterface $language, ThemeHandlerInterface $theme_handler, PluginFormFactoryInterface $plugin_form_manager) {
-    $this->logger = $logger_factory;
+  public function __construct(LoggerInterface $logger, ExecutableManagerInterface $manager, ContextRepositoryInterface $context_repository, LanguageManagerInterface $language, ThemeHandlerInterface $theme_handler, PluginFormFactoryInterface $plugin_form_manager) {
+    $this->logger = $logger;
     $this->manager = $manager;
     $this->contextRepository = $context_repository;
     $this->language = $language;
@@ -322,6 +322,12 @@ class AssetInjectorFormBase extends EntityForm {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    // Convert \r\n to \n so that multiline strings are properly formatted.
+    // @see \Symfony\Component\Yaml\Dumper::dump
+    $code = $form_state->getValue('code');
+    $code = preg_replace('~\r\n?~', "\n", $code);
+    $form_state->setValue('code', $code);
+
     parent::submitForm($form, $form_state);
 
     foreach ($form_state->getValue('conditions') as $condition_id => $values) {
@@ -356,7 +362,7 @@ class AssetInjectorFormBase extends EntityForm {
         ]);
         $log = '%type asset %id saved';
     }
-    drupal_set_message($message);
+    $this->messenger()->addMessage($message);
     $this->logger->notice($log, [
       '%type' => $entity->getEntityTypeId(),
       '%id' => $entity->id(),

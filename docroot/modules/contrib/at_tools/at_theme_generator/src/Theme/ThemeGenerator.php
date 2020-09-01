@@ -317,6 +317,21 @@ class ThemeGenerator {
   }
 
   /**
+   * Rewrite the generated layout CSS if it's a float based theme, and remove
+   * the float layout.
+   */
+  public function rewritePageLayoutCSS() {
+    if (file_exists($this->target . '/styles/css/generated/FLOAT.layout.page.css')) {
+      $file_path = $this->target . '/styles/css/generated/STARTERKIT.layout.page.css';
+      $data = file_get_contents($this->target . '/styles/css/generated/FLOAT.layout.page.css', NULL, NULL, 0, 5000);
+      if ($this->layout !== 'flex') {
+        $this->fileOperations->fileReplace($data, $file_path);
+      }
+      unlink($this->target . '/styles/css/generated/FLOAT.layout.page.css');
+    }
+  }
+
+  /**
    * Rename this themes generated CSS files.
    */
   public function renameGeneratedCssFiles() {
@@ -336,32 +351,37 @@ class ThemeGenerator {
    */
   public function removeUnusedLayout() {
     if ($this->layout === 'flex') {
-      $layout_to_remove = 'site-builder';
-      $layout_plugin_to_remove = 'layout_plugin_floats';
+      $remove[] = 'page-layout-float';
+      $remove[] = 'plugin-layout-float';
     }
     else {
-      $layout_to_remove = 'flex-builder';
-      $layout_plugin_to_remove = 'layout_plugin_flex';
+      $remove[] = 'page-layout-flex';
+      $remove[] = 'plugin-layout-flex';
     }
-    $this->directoryOperations->directoryRemove(
-      $this->target . '/layout/' . $layout_to_remove
-    );
-    $this->directoryOperations->directoryRemove(
-      $this->target . '/styles/' . $layout_plugin_to_remove
-    );
+    foreach ($remove as $key => $value) {
+      $this->directoryOperations->directoryRemove(
+        $this->target . '/layout/' . $value
+      );
+    }
   }
 
-  public function renameLayoutPlugin() {
+  /**
+   * Rename layouts.
+   */
+  public function renameLayouts() {
     if ($this->layout === 'flex') {
-      $layout_plugin_to_rename = 'layout_plugin_flex';
+      $rename_dir['page-layout'] = 'page-layout-flex';
+      $rename_dir['plugin-layout'] = 'plugin-layout-flex';
     }
     else {
-      $layout_plugin_to_rename = 'layout_plugin_floats';
+      $rename_dir['page-layout'] = 'page-layout-float';
+      $rename_dir['plugin-layout'] = 'plugin-layout-float';
     }
-    $this->fileOperations->fileRename(
-      $this->target . '/styles/' . $layout_plugin_to_rename,
-      $this->target . '/styles/' . 'layout_plugin'
-    );
+    foreach ($rename_dir as $key => $value) {
+      $this->fileOperations->fileRename(
+        $this->target . '/layout/' . $value, $this->target . '/layout/' . $key
+      );
+    }
   }
 
   /**
@@ -478,9 +498,8 @@ class ThemeGenerator {
     $dirs = [
       '/styles/scss',
       '/styles/uikit',
-      '/layout/site-builder/sass',
-      '/layout/flex-builder/sass',
-      '/styles/layout_plugin/sass',
+      '/layout/page-layout/sass',
+      '/layout/plugin-layout/sass',
       '/bower_components',
       '/node_modules',
     ];
@@ -518,14 +537,7 @@ class ThemeGenerator {
    * @return string
    */
   public function getLayout() {
-    if ($this->layout === 'flex') {
-      $layout_library = 'flex-builder';
-    }
-    else {
-      $layout_library = 'site-builder';
-    }
-
-    return $layout_library;
+    return 'page-layout';
   }
 
   /**

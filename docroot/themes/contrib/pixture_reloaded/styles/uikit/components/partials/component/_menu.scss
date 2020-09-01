@@ -10,9 +10,47 @@
   margin: 0;
   list-style: none;
 
+  .menu__link {
+    display: block;
+    @include output-rhythm(padding, $menu-item-padding 0);
+    @include output-rhythm(margin, $menu-item-margin 0);
+    //border-bottom: $border-width $border-style;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+
+    // Wait for FontAwesome to load.
+    &:before,
+    &:after {
+      display: none;
+      .fa-loaded & {
+        display: inline-block;
+      }
+    }
+
+    &.active {}
+
+    &.button {
+      @include output-rhythm(padding-left, $medium);
+      @include output-rhythm(padding-right, $medium);
+
+      &:after {
+        content: '';
+        display: none;
+      }
+    }
+  }
+
   // Nested menus.
   .menu {
     @include output-rhythm(padding-#{$flow-from}, $medium);
+  }
+
+  // route:<nolink> items
+  .menu__item--no-link .menu__link {
+    cursor: default;
   }
 }
 
@@ -20,15 +58,15 @@
 .menu__item {
   text-align: $menu-text-align;
 
-  &--active-trail > a {}
+  &--active-trail > span > .menu__link {}
 
   // If menu arrows are true, add font-awesome and icons for
   // expanded and collapsed selectors.
   @if $menu-arrows == true {
-    &--collapsed > .menu__link,
-    &--expanded > .menu__link {}
+    &--collapsed > span > .menu__link,
+    &--expanded > span > .menu__link {}
 
-    > .menu__link:after {
+    > span > .menu__link:after {
       font-family: $icon-font;
       content: $menu-arrow-right;
       float: $flow-to;
@@ -37,7 +75,7 @@
       @include output-rhythm(width, $medium);
     }
 
-    &--expanded > .menu__link:after {
+    &--expanded > span > .menu__link:after {
       content: $menu-arrow-down ;
     }
 
@@ -52,45 +90,5 @@
     //border-top: $border-width $border-style;
   }
 }
-
-
-.menu__link {
-  display: block;
-  @include output-rhythm(padding, $xxxx-small 0);
-  //border-bottom: $border-width $border-style;
-
-  &:hover,
-  &:focus {
-    text-decoration: none;
-  }
-
-  // Wait for FontAwesome to load.
-  &:before,
-  &:after {
-    display: none;
-    .fa-loaded & {
-      display: inline-block;
-    }
-  }
-
-  &.active {}
-
-  &.button {
-    @include output-rhythm(padding-left, $medium);
-    @include output-rhythm(padding-right, $medium);
-
-    &:after {
-      content: '';
-      display: none;
-    }
-  }
-}
-
-
-// Region specific menus
-@import "menu.leaderboard";
-@import "menu.footer";
-
-
 
 

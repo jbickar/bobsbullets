@@ -52,7 +52,7 @@
 @mixin list-style-seven-vertical($list_selector) {
 
   #{$list_selector} {
-    @include clearfix-micro;
+    @include cfm;
     text-align: $flow-from;
 
     li {

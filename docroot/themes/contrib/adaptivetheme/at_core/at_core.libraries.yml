@@ -230,28 +230,6 @@ at.enquire:
     - core/jquery
     - core/matchmedia
 
-# Fastclick
-at.fastclick:
-  remote: https://github.com/ftlabs/fastclick
-  version: "1.0.6"
-  license:
-    name: MIT
-    url: https://github.com/ftlabs/fastclick/blob/master/LICENSE
-    gpl-compatible: true
-  js:
-    https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js: { type: external, minified: true }
-  dependencies:
-    - core/jquery
-
-# Fastclick initialize
-at.fastclick_initialize:
-  version: VERSION
-  js:
-    scripts/min/at.fastclickInitialize.min.js: { minified: true }
-    #scripts/at.fastclickInitialize.js: {}
-  dependencies:
-    - at_core/at.fastclick
-
 # Fontfaceobserver
 at.fontfaceobserver:
   remote: https://github.com/bramstein/fontfaceobserver
@@ -352,7 +330,7 @@ at.windowsize:
   version: VERSION
   css:
     component:
-      styles/css/at.windowSize.css: {}
+      styles/css/at--windowSize.css: {}
   js:
     scripts/min/at.windowSize.min.js: { minified: true }
     #scripts/at.windowSize.js: {}
@@ -365,13 +343,13 @@ at.devel_debug_layout:
   version: VERSION
   css:
     theme:
-      styles/css/at.devel.debug.layout.css: {}
+      styles/css/at--devel-debug-layout.css: {}
 
 at.devel_colorize_regions:
   version: VERSION
   css:
     theme:
-      styles/css/at.devel.colorize.regions.css: {}
+      styles/css/at--devel-colorize-regions.css: {}
 
 at.livereload:
   version: VERSION
@@ -382,14 +360,14 @@ at.devel_nuke_toolbar:
   version: VERSION
   css:
     theme:
-      styles/css/at.devel.nuke.toolbar.css: {}
+      styles/css/at--devel-nuke-toolbar.css: {}
 
 # Appearance settings scripts
 at.appearance_settings:
   version: VERSION
   css:
     theme:
-      styles/css/at.appearance.css: {}
+      styles/css/at.css: {}
   js:
     scripts/min/at.appearance.min.js: { minified: true }
     #scripts/at.appearance.js: {}
@@ -419,7 +397,7 @@ at.bc:
   version: VERSION
   css:
     component:
-      styles/css/at.bc.css: {}
+      styles/css/at--bc.css: {}
 
 # Layout Discovery layouts. On Drupal 8.3.x and over Layout Discovery replaces
 # Layout Plugin and uses standard libraries.

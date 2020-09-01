@@ -1899,18 +1899,18 @@
     },
     {
         "name": "drupal/adaptivetheme",
-        "version": "2.0.0",
-        "version_normalized": "2.0.0.0",
+        "version": "3.1.0",
+        "version_normalized": "3.1.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/adaptivetheme.git",
-            "reference": "8.x-2.0"
+            "reference": "8.x-3.1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/adaptivetheme-8.x-2.0.zip",
-            "reference": "8.x-2.0",
-            "shasum": "5e306a5f84ee9ac7a58a669cb0ebcfd3d4fd8846"
+            "url": "https://ftp.drupal.org/files/projects/adaptivetheme-8.x-3.1.zip",
+            "reference": "8.x-3.1",
+            "shasum": "9e76bcf9ab5f141c867a5fb57a5ea59ea2d1e607"
         },
         "require": {
             "drupal/core": "~8.0"
@@ -1918,8 +1918,8 @@
         "type": "drupal-theme",
         "extra": {
             "drupal": {
-                "version": "8.x-2.0",
-                "datestamp": "1511473985",
+                "version": "8.x-3.1",
+                "datestamp": "1518479880",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -2028,27 +2028,27 @@
     },
     {
         "name": "drupal/asset_injector",
-        "version": "2.1.0",
-        "version_normalized": "2.1.0.0",
+        "version": "2.7.0",
+        "version_normalized": "2.7.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/asset_injector.git",
-            "reference": "8.x-2.1"
+            "reference": "8.x-2.7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/asset_injector-8.x-2.1.zip",
-            "reference": "8.x-2.1",
-            "shasum": "a70028cd5608e4035df7ce91f1d1c6b92a9e8945"
+            "url": "https://ftp.drupal.org/files/projects/asset_injector-8.x-2.7.zip",
+            "reference": "8.x-2.7",
+            "shasum": "95287280fc513b4d32f6fc81feac9ada0a6f7948"
         },
         "require": {
-            "drupal/core": "~8.0"
+            "drupal/core": "^8.8 || ^9"
         },
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-2.1",
-                "datestamp": "1523307484",
+                "version": "8.x-2.7",
+                "datestamp": "1591636386",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -2079,28 +2079,28 @@
     },
     {
         "name": "drupal/at_tools",
-        "version": "2.0.0",
-        "version_normalized": "2.0.0.0",
+        "version": "3.2.0",
+        "version_normalized": "3.2.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/at_tools.git",
-            "reference": "8.x-2.0"
+            "reference": "8.x-3.2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/at_tools-8.x-2.0.zip",
-            "reference": "8.x-2.0",
-            "shasum": "5625fda3d5ae649e3b2465ffcf40b33b9b91c379"
+            "url": "https://ftp.drupal.org/files/projects/at_tools-8.x-3.2.zip",
+            "reference": "8.x-3.2",
+            "shasum": "9d065b97a83c8ba48e169b391a36a7f8080916e9"
         },
         "require": {
-            "drupal/core": "~8.0",
-            "drupal/layout_plugin": "*"
+            "drupal/adaptivetheme": "*",
+            "drupal/core": "~8.0"
         },
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-2.0",
-                "datestamp": "1511474584",
+                "version": "8.x-3.2",
+                "datestamp": "1518479880",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -2115,21 +2115,16 @@
         "authors": [
             {
                 "name": "Jeff Burnz",
-                "homepage": "http://adaptivethemes.com/",
+                "homepage": "http://adaptivethemes.com",
                 "role": "Maintainer"
             }
         ],
-        "description": "Tools to support Adaptivetheme and sub-themes.",
+        "description": "Tools to support Adaptivetheme 8.x and sub-themes, includes the AT Theme Generator.",
         "homepage": "https://www.drupal.org/project/at_tools",
-        "keywords": [
-            "adaptivetheme",
-            "base theme",
-            "drupal",
-            "theme"
-        ],
         "support": {
-            "source": "https://www.drupal.org/project/at_tools",
-            "issues": "http://drupal.org/project/issues/at_tools"
+            "source": "http://git.drupal.org/project/at_tools.git",
+            "issues": "https://www.drupal.org/project/issues/at_tools",
+            "irc": "irc://irc.freenode.org/drupal-contribute"
         }
     },
     {
@@ -2456,50 +2451,52 @@
     },
     {
         "name": "drupal/google_analytics",
-        "version": "2.2.0",
-        "version_normalized": "2.2.0.0",
+        "version": "2.5.0",
+        "version_normalized": "2.5.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/google_analytics.git",
-            "reference": "8.x-2.2"
+            "reference": "8.x-2.5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/google_analytics-8.x-2.2.zip",
-            "reference": "8.x-2.2",
-            "shasum": "15cd0642ad99f3776a46b702e5012713405a0733"
+            "url": "https://ftp.drupal.org/files/projects/google_analytics-8.x-2.5.zip",
+            "reference": "8.x-2.5",
+            "shasum": "9e0ff72cc313bf9295fe8bd73a68f5f7688513ab"
         },
         "require": {
-            "drupal/core": "~8.0"
+            "drupal/core": "^8.8.6|^9.0"
         },
         "require-dev": {
-            "drupal/php": "*",
-            "drupal/token": "*"
+            "drupal/token": "^1.7"
         },
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-2.2",
-                "datestamp": "1531469021",
+                "version": "8.x-2.5",
+                "datestamp": "1591298527",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
                 }
+            },
+            "branch-alias": {
+                "dev-8.x-2.x": "2.x-dev"
             }
         },
         "installation-source": "dist",
         "notification-url": "https://packages.drupal.org/8/downloads",
         "license": [
-            "GPL-2.0+"
+            "GPL-2.0-or-later"
         ],
         "authors": [
             {
-                "name": "hass",
-                "homepage": "https://www.drupal.org/u/hass"
+                "name": "See contributors",
+                "homepage": "https://www.drupal.org/node/49388/committers"
             },
             {
-                "name": "See other contributors",
-                "homepage": "https://www.drupal.org/node/49388/committers"
+                "name": "budda",
+                "homepage": "https://www.drupal.org/user/13164"
             },
             {
                 "name": "ixismark",
@@ -2521,66 +2518,8 @@
         "description": "Allows your site to be tracked by Google Analytics by adding a Javascript tracking code to every page.",
         "homepage": "https://www.drupal.org/project/google_analytics",
         "support": {
-            "source": "http://git.drupal.org/project/google_analytics.git",
+            "source": "https://git.drupal.org/project/google_analytics.git",
             "issues": "https://www.drupal.org/project/issues/google_analytics"
-        }
-    },
-    {
-        "name": "drupal/layout_plugin",
-        "version": "1.0.0-alpha23",
-        "version_normalized": "1.0.0.0-alpha23",
-        "source": {
-            "type": "git",
-            "url": "https://git.drupalcode.org/project/layout_plugin.git",
-            "reference": "8.x-1.0-alpha23"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/layout_plugin-8.x-1.0-alpha23.zip",
-            "reference": "8.x-1.0-alpha23",
-            "shasum": "c79992e2f52ac6a7c8dc0706512f2c70fc9f5e11"
-        },
-        "require": {
-            "drupal/core": "~8.0"
-        },
-        "type": "drupal-module",
-        "extra": {
-            "drupal": {
-                "version": "8.x-1.0-alpha23",
-                "datestamp": "1476269960",
-                "security-coverage": {
-                    "status": "not-covered",
-                    "message": "Project has not opted into security advisory coverage!"
-                }
-            }
-        },
-        "installation-source": "dist",
-        "notification-url": "https://packages.drupal.org/8/downloads",
-        "license": [
-            "GPL-2.0+"
-        ],
-        "authors": [
-            {
-                "name": "David Snopek",
-                "homepage": "https://www.drupal.org/user/172527"
-            },
-            {
-                "name": "Bram Goffings",
-                "homepage": "https://www.drupal.org/user/266527"
-            },
-            {
-                "name": "Fredrik Lassen",
-                "homepage": "https://www.drupal.org/user/243377"
-            }
-        ],
-        "description": "An API module to hold the Drupal 8 plugin manager for layouts.",
-        "homepage": "https://www.drupal.org/project/layout_plugin",
-        "keywords": [
-            "layout",
-            "php"
-        ],
-        "support": {
-            "source": "https://git.drupalcode.org/project/layout_plugin"
         }
     },
     {
@@ -2650,27 +2589,27 @@
     },
     {
         "name": "drupal/migrate_manifest",
-        "version": "1.5.0",
-        "version_normalized": "1.5.0.0",
+        "version": "1.9.0",
+        "version_normalized": "1.9.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/migrate_manifest.git",
-            "reference": "8.x-1.5"
+            "reference": "8.x-1.9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/migrate_manifest-8.x-1.5.zip",
-            "reference": "8.x-1.5",
-            "shasum": "ea76943ccf4ecad9dcc789a2173fe6976ecc6047"
+            "url": "https://ftp.drupal.org/files/projects/migrate_manifest-8.x-1.9.zip",
+            "reference": "8.x-1.9",
+            "shasum": "75a68d7b513ca0ed00943cb791a9e0c28fe03dc2"
         },
         "require": {
-            "drupal/core": "~8.0"
+            "drupal/core": "^8"
         },
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-1.5",
-                "datestamp": "1508906348",
+                "version": "8.x-1.9",
+                "datestamp": "1562733187",
                 "security-coverage": {
                     "status": "covered",
                     "message": "Covered by Drupal's security advisory policy"
@@ -2703,37 +2642,41 @@
     },
     {
         "name": "drupal/migrate_plus",
-        "version": "4.0.0-beta1",
-        "version_normalized": "4.0.0.0-beta1",
+        "version": "4.2.0",
+        "version_normalized": "4.2.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/migrate_plus.git",
-            "reference": "8.x-4.0-beta1"
+            "reference": "8.x-4.2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/migrate_plus-8.x-4.0-beta1.zip",
-            "reference": "8.x-4.0-beta1",
-            "shasum": "e64bac006e3ef9ae697b0f2c4b3744af0524e208"
+            "url": "https://ftp.drupal.org/files/projects/migrate_plus-8.x-4.2.zip",
+            "reference": "8.x-4.2",
+            "shasum": "5736a43e39cc5c091d54ceef2849ea35ba979af3"
         },
         "require": {
             "drupal/core": "^8.3"
         },
         "require-dev": {
+            "drupal/entity": "*",
             "drupal/migrate_example_advanced_setup": "*",
-            "drupal/migrate_example_setup": "*"
+            "drupal/migrate_example_setup": "*",
+            "drupal/migrate_tools": "*",
+            "drupal/profile": "*"
         },
         "suggest": {
+            "ext-soap": "*",
             "sainsburys/guzzle-oauth2-plugin": "3.0 required for the OAuth2 authentication plugin"
         },
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-4.0-beta1",
-                "datestamp": "1513088288",
+                "version": "8.x-4.2",
+                "datestamp": "1555683487",
                 "security-coverage": {
-                    "status": "not-covered",
-                    "message": "Beta releases are not covered by Drupal security advisories."
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
                 }
             }
         },
@@ -2763,31 +2706,41 @@
     },
     {
         "name": "drupal/migrate_tools",
-        "version": "4.0.0-beta1",
-        "version_normalized": "4.0.0.0-beta1",
+        "version": "4.5.0",
+        "version_normalized": "4.5.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/migrate_tools.git",
-            "reference": "8.x-4.0-beta1"
+            "reference": "8.x-4.5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/migrate_tools-8.x-4.0-beta1.zip",
-            "reference": "8.x-4.0-beta1",
-            "shasum": "81ef335ea37053c26d4bcb4f5339fd77051e59e0"
+            "url": "https://ftp.drupal.org/files/projects/migrate_tools-8.x-4.5.zip",
+            "reference": "8.x-4.5",
+            "shasum": "06390b359bf53c50a30f2d6dc4c7542bfb1fe7ca"
         },
         "require": {
-            "drupal/core": "^8.3",
-            "drupal/migrate_plus": "*"
+            "drupal/core": "^8 || ^9",
+            "drupal/migrate_plus": "^4 || ^5"
+        },
+        "require-dev": {
+            "drupal/migrate_plus": "4.x-dev",
+            "drupal/migrate_source_csv": "^2.2",
+            "drush/drush": "^10"
         },
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-4.0-beta1",
-                "datestamp": "1511790485",
+                "version": "8.x-4.5",
+                "datestamp": "1574693285",
                 "security-coverage": {
-                    "status": "not-covered",
-                    "message": "Beta releases are not covered by Drupal security advisories."
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            },
+            "drush": {
+                "services": {
+                    "drush.services.yml": "^9 || ^10"
                 }
             }
         },
@@ -2807,91 +2760,51 @@
             }
         ],
         "description": "Tools to assist in developing and running migrations.",
-        "homepage": "https://www.drupal.org/project/migrate_tools",
+        "homepage": "http://drupal.org/project/migrate_tools",
         "support": {
-            "source": "https://git.drupalcode.org/project/migrate_tools"
+            "source": "http://cgit.drupalcode.org/migrate_tools",
+            "issues": "http://drupal.org/project/migrate_tools",
+            "irc": "irc://irc.freenode.org/drupal-migrate"
         }
     },
     {
         "name": "drupal/migrate_upgrade",
-        "version": "3.0.0-rc2",
-        "version_normalized": "3.0.0.0-RC2",
+        "version": "3.2.0",
+        "version_normalized": "3.2.0.0",
         "source": {
             "type": "git",
             "url": "https://git.drupalcode.org/project/migrate_upgrade.git",
-            "reference": "8.x-3.0-rc2"
+            "reference": "8.x-3.2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/migrate_upgrade-8.x-3.0-rc2.zip",
-            "reference": "8.x-3.0-rc2",
-            "shasum": "55df65ac7b6104b5e8f8f673591b8dc0a7f6cce6"
+            "url": "https://ftp.drupal.org/files/projects/migrate_upgrade-8.x-3.2.zip",
+            "reference": "8.x-3.2",
+            "shasum": "f7be28c9fa9e2c56db24fafaf4e9cd6815582aed"
         },
         "require": {
-            "drupal/core": "^8",
-            "drupal/migrate_plus": "*"
+            "drupal/core": "^8 || ^9",
+            "drupal/migrate_plus": "^4 || ^5",
+            "drush/drush": "^8 || ^9 || ^10",
+            "php": ">7.1"
         },
         "require-dev": {
-            "drupal/coder": "^8"
+            "drupal/migrate_plus": "^5",
+            "drush/drush": "^10"
         },
         "type": "drupal-module",
         "extra": {
             "drupal": {
-                "version": "8.x-3.0-rc2",
-                "datestamp": "1513177684",
+                "version": "8.x-3.2",
+                "datestamp": "1588260599",
                 "security-coverage": {
-                    "status": "not-covered",
-                    "message": "RC releases are not covered by Drupal security advisories."
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
                 }
-            }
-        },
-        "installation-source": "dist",
-        "notification-url": "https://packages.drupal.org/8/downloads",
-        "license": [
-            "GPL-2.0+"
-        ],
-        "authors": [
-            {
-                "name": "drupalspoons",
-                "homepage": "https://www.drupal.org/user/3647684"
             },
-            {
-                "name": "mikeryan",
-                "homepage": "https://www.drupal.org/user/4420"
-            }
-        ],
-        "description": "Drush support for direct upgrades from older Drupal versions.",
-        "homepage": "https://www.drupal.org/project/migrate_upgrade",
-        "support": {
-            "source": "https://git.drupalcode.org/project/migrate_upgrade"
-        }
-    },
-    {
-        "name": "drupal/pixture_reloaded",
-        "version": "1.0.0-rc1",
-        "version_normalized": "1.0.0.0-RC1",
-        "source": {
-            "type": "git",
-            "url": "https://git.drupalcode.org/project/pixture_reloaded.git",
-            "reference": "8.x-1.0-rc1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/pixture_reloaded-8.x-1.0-rc1.zip",
-            "reference": "8.x-1.0-rc1",
-            "shasum": "f88c0e7df29d1dddf12f459b13e930edbe5490f0"
-        },
-        "require": {
-            "drupal/core": "~8.0"
-        },
-        "type": "drupal-theme",
-        "extra": {
-            "drupal": {
-                "version": "8.x-1.0-rc1",
-                "datestamp": "1464181764",
-                "security-coverage": {
-                    "status": "not-covered",
-                    "message": "RC releases are not covered by Drupal security advisories."
+            "drush": {
+                "services": {
+                    "drush.services.yml": "^9 || ^10"
                 }
             }
         },
@@ -2902,14 +2815,72 @@
         ],
         "authors": [
             {
-                "name": "Jeff Burnz",
-                "homepage": "https://www.drupal.org/user/61393"
+                "name": "Mike Ryan",
+                "homepage": "https://www.drupal.org/u/mikeryan",
+                "role": "Maintainer"
+            },
+            {
+                "name": "Lucas Hedding",
+                "homepage": "https://www.drupal.org/u/heddn",
+                "role": "Maintainer"
             }
         ],
-        "description": "Recolorable theme with many regions and theme settings. (base theme: at_core).<br /> Generated: Wed 25th, May - 19:46",
+        "description": "Drush support for direct upgrades from older Drupal versions.",
+        "homepage": "https://www.drupal.org/project/migrate_upgrade",
+        "support": {
+            "source": "https://git.drupalcode.org/project/migrate_upgrade",
+            "issues": "https://www.drupal.org/project/issues/migrate_upgrade",
+            "slack": "#migrate"
+        }
+    },
+    {
+        "name": "drupal/pixture_reloaded",
+        "version": "3.0.0",
+        "version_normalized": "3.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupalcode.org/project/pixture_reloaded.git",
+            "reference": "8.x-3.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/pixture_reloaded-8.x-3.0.zip",
+            "reference": "8.x-3.0",
+            "shasum": "f2ea0e68e285199cdf1884a398c0d98d23ad89fe"
+        },
+        "require": {
+            "drupal/adaptivetheme": "*",
+            "drupal/core": "~8.0"
+        },
+        "type": "drupal-theme",
+        "extra": {
+            "drupal": {
+                "version": "8.x-3.0",
+                "datestamp": "1511474584",
+                "security-coverage": {
+                    "status": "covered",
+                    "message": "Covered by Drupal's security advisory policy"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Jeff Burnz",
+                "homepage": "http://adaptivethemes.com",
+                "role": "Maintainer"
+            }
+        ],
+        "description": "Advanced colorable theme for Drupal.",
         "homepage": "https://www.drupal.org/project/pixture_reloaded",
         "support": {
-            "source": "https://git.drupalcode.org/project/pixture_reloaded"
+            "source": "http://git.drupal.org/project/pixture_reloaded.git",
+            "issues": "https://www.drupal.org/project/issues/pixture_reloaded",
+            "irc": "irc://irc.freenode.org/drupal-contribute"
         }
     },
     {

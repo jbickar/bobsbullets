@@ -8,6 +8,8 @@ use Drupal\Tests\BrowserTestBase;
  * Class AssetInjectorCssTest.
  *
  * @package Drupal\Tests\asset_injector\Functional
+ *
+ * @group asset_injector
  */
 class AssetInjectorCssTest extends BrowserTestBase {
 
@@ -24,13 +26,15 @@ class AssetInjectorCssTest extends BrowserTestBase {
   public function setUp() {
     parent::setUp();
 
-    $this->container->get('theme_installer')->install(['bartik', 'seven']);
     $this->drupalPlaceBlock('local_tasks_block');
     $this->drupalPlaceBlock('page_title_block');
+    $this->drupalPlaceBlock('system_messages_block');
   }
 
   /**
    * Tests a user without permissions gets access denied.
+   *
+   * @throws \Exception
    */
   public function testCssPermissionDenied() {
     $account = $this->drupalCreateUser();
@@ -41,6 +45,8 @@ class AssetInjectorCssTest extends BrowserTestBase {
 
   /**
    * Tests a user WITH permission has access.
+   *
+   * @throws \Exception
    */
   public function testCssPermissionGranted() {
     $account = $this->drupalCreateUser(['administer css assets injector']);
@@ -65,11 +71,7 @@ class AssetInjectorCssTest extends BrowserTestBase {
       'code' => '.block {border:1px solid black;}',
     ], t('Save'));
 
-    $html = $this->getSession()->getPage()->getOuterHtml();
-    if (strpos($html, 'asset_injector/css/blocks') === FALSE) {
-      throw new \Exception(t('Css not applied to page.'));
-    }
-
+    $this->getSession()->getPage()->hasContent('asset_injector/css/blocks');
     /** @var \Drupal\asset_injector\Entity\AssetInjectorCss $asset */
     foreach (asset_injector_get_assets(NULL, ['asset_injector_css']) as $asset) {
       $path = parse_url(file_create_url($asset->internalFileUri()), PHP_URL_PATH);
@@ -78,6 +80,27 @@ class AssetInjectorCssTest extends BrowserTestBase {
       $this->drupalGet($path);
       $this->assertSession()->statusCodeEquals(200);
     }
+  }
+
+  /**
+   * Tests if the save and continue button works accurately.
+   *
+   * @throws \Exception
+   */
+  public function testSaveContinue() {
+    $page = $this->getSession()->getPage();
+    $this->testCssPermissionGranted();
+    $this->drupalGet('admin/config/development/asset-injector/css/add');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->pageTextContains(t('Code'));
+    $page->fillField('Label', 'test save continue');
+    $page->fillField('Machine-readable name', 'test_save_continue');
+    $page->fillField('Code', '.block{}');
+    $page->pressButton('Save and Continue Editing');
+    $this->assertSession()
+      ->pageTextContains('Created the test save continue Asset Injector');
+    $this->assertSession()
+      ->addressEquals('admin/config/development/asset-injector/css/test_save_continue');
   }
 
 }

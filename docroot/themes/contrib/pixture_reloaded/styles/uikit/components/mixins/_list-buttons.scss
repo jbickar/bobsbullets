@@ -47,6 +47,7 @@
 
   #{$list_selector} {
     @include list-horizontal($flow-from, $margin: (t: 0, r: 0, b: 0, l: 0));
+    border-bottom: 0;
 
     li {
       // LTR, RTL
@@ -94,11 +95,9 @@
 @mixin list-style-button-group-vertical($list_selector) {
 
   #{$list_selector} {
-    @include clearfix-micro;
     border-bottom: 0;
 
     li {
-      float: none;
       list-style: none;
 
       &:first-child a {

@@ -19,6 +19,7 @@
 //   mobile-isolate - 0 to 45em (0 to 720px), small screens only.
 //   tablet-isolate - 45.063em and max-width 65em (721px to 960px), isolate tablets.
 //   wide-isolate   - 60.063em and max-width 120em (961px to 1920px), isolate tablets.
+//   tablet         - 45.063em (721px) and up.
 //   wide           - 60.063em (961px) and up.
 //   huge           - 120.063em (1921px) and up, for big resolution.
 //
@@ -29,12 +30,16 @@
 // | $mobile-isolate -->|
 //                      | $tablet-isolate -->|
 //                                           | $wide-isolate ---->|
+//                      | $tablet --------------------------------------------->
 //                                           | $wide -------------------------->
 //                                                                | $huge ----->
 //
+// Isolate with min/max.
 $mobile-isolate : "all and (max-width: 45em)";
 $tablet-isolate : "all and (min-width: 45.063em) and (max-width: 60em)";
 $wide-isolate   : "all and (min-width: 60.063em) and (max-width: 120em)";
+// Min width only.
+$tablet         : "all and (min-width: 45.063em)";
 $wide           : "all and (min-width: 60.063em)";
 $huge           : "all and (min-width: 120.063em)";
 

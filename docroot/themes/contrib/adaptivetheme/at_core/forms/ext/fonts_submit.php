@@ -100,7 +100,8 @@ function at_core_submit_fonts($values, $generated_files_path) {
       // Google.
       if ($values['settings_font_' . $font_key] == 'google') {
         if (isset($values['settings_font_google_' . $font_key])) {
-          $fonts[$font_key]['family'] = 'font-family: ' . $values['settings_font_google_' . $font_key] . ', ' . trim($fallback_font_family) . ';';
+          $str_replace_underscores = str_replace('_', ' ', $values['settings_font_google_' . $font_key]);
+          $fonts[$font_key]['family'] = 'font-family: "' . trim($str_replace_underscores) . '", ' . trim($fallback_font_family) . ';';
           // Inject settings into the config.
           $values['settings_font_use_google_fonts'] = TRUE;
         }
@@ -112,7 +113,8 @@ function at_core_submit_fonts($values, $generated_files_path) {
       // Typekit.
       if ($values['settings_font_' . $font_key] == 'typekit') {
         if (!empty($values['settings_font_typekit_' . $font_key])) {
-          $fonts[$font_key]['family'] = 'font-family: ' . $values['settings_font_typekit_' . $font_key] . ', ' . trim($fallback_font_family) . ';';
+          $str_replace_underscores = str_replace('_', ' ', $values['settings_font_typekit_' . $font_key]);
+          $fonts[$font_key]['family'] = 'font-family: "' . trim($str_replace_underscores) . '", ' . trim($fallback_font_family) . ';';
           // Inject settings into the config.
           $values['settings_font_use_typekit'] = TRUE;
         }

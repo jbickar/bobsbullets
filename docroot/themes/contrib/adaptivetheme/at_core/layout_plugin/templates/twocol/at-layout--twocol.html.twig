@@ -14,8 +14,8 @@
   {%- endif -%}
 {%- endfor -%}
 {%- set layout_classes = ['l-arc--' ~ int|length, 'l-ac--' ~ int|join('-')] -%}
-
-<{{ html_element }}{{ attributes.addClass(layout_classes) }}>
+{%- set element = html_element|default('div') -%}
+<{{- element }}{{ attributes.addClass(layout_classes) -}}>
   {% if content.top|render|trim is not empty %}
     <div class="atl__lr">
       <div class="atl__lc atl__top">
@@ -47,4 +47,4 @@
       </div>
     </div>
   {% endif %}
-</{{ html_element }}>
+</{{- element -}}>

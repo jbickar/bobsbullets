@@ -41,7 +41,7 @@ function _at_core_layout_plugin_attributes($variables) {
   $bundle = NULL;
   $entity_type = NULL;
   $view_mode = NULL;
-  $id = NULL;;
+  $id = NULL;
 
   // Entity and bundle.
   if (isset($variables['content']['#entity_type'])) {
@@ -62,15 +62,31 @@ function _at_core_layout_plugin_attributes($variables) {
       $html_element = 'article';
       $role = 'article';
     }
+
     if ($entity_type == 'comment') {
+      $comment = $variables['content']['#comment'];
       $classes[] = 'js-comment';
-      $classes[] = $variables['content']['#comment']->getStatus() != 1 ? 'unpublished' : '';
-      if ($variables['content']['#comment']->getCommentedEntityTypeId() !== 'block_content') {
-        $comment_owner = $variables['content']['#comment']->getOwnerId();
-        $commented_entity_owner = $variables['content']['#comment']->getCommentedEntity()->getOwnerId();
+      $classes[] = $comment->getStatus() != 1 ? 'unpublished' : '';
+      if ($comment->getCommentedEntityTypeId() !== 'block_content') {
+        $comment_owner = $comment->getOwnerId();
+        $commented_entity_owner = $comment->getCommentedEntity()->getOwnerId();
         if ($comment_owner === $commented_entity_owner) {
-          $classes[] = 'by-' . $variables['content']['#comment']->getCommentedEntity()->getEntityTypeId() . '-author';
+          $classes[] = 'by-' . $comment->getCommentedEntity()->getEntityTypeId() . '-author';
         }
+      }
+    }
+
+    if ($entity_type == 'node') {
+      $node = $variables['content']['#node'];
+      // Add classes reflecting the current node's attributes.
+      if (!empty($node->isPromoted())) {
+        $classes[] = 'node--promoted';
+      }
+      if (!empty($node->isSticky())) {
+        $classes[] = 'node--sticky';
+      }
+      if (empty($node->isPublished()))  {
+        $classes[] = 'node--unpublished';
       }
     }
 
@@ -79,9 +95,6 @@ function _at_core_layout_plugin_attributes($variables) {
       if ($variables['theme']['shortcodes']['is_enabled'] === TRUE) {
         $shortcodes_config = $variables['theme'][$variables['theme']['shortcodes']['config']];
         if (isset($variables['content'])) {
-
-          //kint($shortcodes_config);
-
           $entity_type_bundle_setting = $entity_type . 'type_classes_' . $bundle;
           if (isset($shortcodes_config[$entity_type_bundle_setting]) && !empty($shortcodes_config[$entity_type_bundle_setting])) {
             $shortcodes = Tags::explode($shortcodes_config[$entity_type_bundle_setting]);
@@ -103,7 +116,7 @@ function _at_core_layout_plugin_attributes($variables) {
   // Global classes
   $layout = 'none';
   // Layout plugin contrib module, Drupal core 8.2.x and below.
-  if (isset($variables['layout']['id'])) {
+  if (isset($variables['layout']) && is_array($variables['layout']) && isset($variables['layout']['id'])) {
     $layout = $variables['layout']['id'];
   }
   // Layout discovery, Drupal core 8.3.x and up.

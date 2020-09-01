@@ -339,9 +339,8 @@ samp {
   }
 }
 
-.site-logo {}
-.site-name {}
-.site-slogan {}
+.site-branding__logo-link {}
+.site-branding__slogan {}
 
 
 /**
@@ -360,7 +359,7 @@ samp {
  ============================================================================ */
 
 .menu {
-  a {
+  .menu__link {
     color: $menu-color;
     border-color: $border-color;
     //background-color: $menu-background-color;
@@ -379,7 +378,7 @@ samp {
 
   // Nested menus.
   .menu {
-    a {
+    .menu__link {
       &:hover,
       &:focus {}
       &.active-trail {}
@@ -388,7 +387,7 @@ samp {
 }
 
 .menu__item {
-  &--active-trail > a {
+  &--active-trail > .menu__link {
     //color: $menu-active-color;
     //background-color: $menu-background-active-color;
   }
@@ -397,14 +396,14 @@ samp {
   @if $menu-arrows == true {
     &--collapsed,
     &--expanded {
-      > a:after {
+      > .menu__link:after {
         //color: $text-color;
       }
     }
   }
 
   // Add the border top to the first item only.
-  &:first-child a {
+  &:first-child .menu__link {
     border-color: $border-color;
   }
 }
@@ -464,7 +463,7 @@ samp {
 .ms-tiles {
   .rm-block__content {
     .menu {
-      a,
+      .menu__link,
       .rm-accordion-trigger {
         color: $resp-menu-color;
         background-color: $resp-menu-background-color;
@@ -476,7 +475,7 @@ samp {
         }
       }
 
-      a.is-active {
+      .menu__link.is-active {
         color: $resp-menu-active-color ;
         background-color: $resp-menu-active-background-color;
 
@@ -513,7 +512,7 @@ samp {
 .ms-horizontal {
   .rm-block__content {
     .menu-level-1 {
-      > li > span > a {
+      > li > span > .menu__link {
         color: inherit;
         background-color: transparent;
 
@@ -542,7 +541,7 @@ samp {
     }
 
     .menu-level-2 {
-      a {
+      .menu__link {
         color: $resp-menu-color;
         background-color: $resp-menu-background-color;
 
@@ -599,7 +598,7 @@ samp {
     .menu {
       background-color: transparent;
 
-      a {
+      .menu__link {
         color: white;
         background-color: rgba(0, 0, 0, 0.95);
 
@@ -641,7 +640,7 @@ samp {
 .ms-meganav {
   .rm-block__content {
     .menu {
-      a {
+      .menu__link {
         color: inherit;
         background-color: transparent;
 
@@ -664,7 +663,7 @@ samp {
       .menu-level-1 > .menu__item {
         border-bottom: $border-width $border-style $border-color;
 
-        > span > a {
+        > span > .menu__link {
           color: $resp-menu-color;
           background-color: $resp-menu-background-color;
 
@@ -895,6 +894,13 @@ input.placeholder_text,
 textarea.placeholder_text {
   color: $form-text-color;
 }
+
+// Search form submit example with svg and a gradient.
+//.search-block-form__form .form-submit {
+//  background-image:
+//    url(../images/search-icon.svg),
+//    linear-gradient(to bottom, lighten($button-background-color, $lighten-most), $button-background-color);
+//}
 
 
 /**

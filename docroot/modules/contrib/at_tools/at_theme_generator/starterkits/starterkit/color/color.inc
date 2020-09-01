@@ -6,6 +6,11 @@
  * changes the base color and all other unspecified colors shift relative to
  * the new base.
  */
+use Drupal\at_core\Ext\ExtGet;
+$theme_name = \Drupal::service('theme.manager')->getActiveTheme()->getName();
+$file_path = drupal_get_path('theme', $theme_name) . '/styles/uikit/components/partials/_variables.scss';
+$sass_variables = (new ExtGet)->getSassVariables($file_path);
+
 $info = [
   // Available colors and color labels used in theme.
   'fields' => [
@@ -18,9 +23,9 @@ $info = [
     'default' => [
       'title' => t('Carbon Neutral'),
       'colors' => [
-        'base' => '#000000',
-        'text' => '#555555', // $text-color
-        'link' => '#0066cc', // $link-color
+        'base' => $sass_variables['base-color'],
+        'text' => $sass_variables['text-color'],
+        'link' => $sass_variables['link-color'],
       ],
     ],
     'goodearth' => [

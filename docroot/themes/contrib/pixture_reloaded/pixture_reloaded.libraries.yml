@@ -3,7 +3,26 @@ base:
   version: 8.x-1.0
   css:
     base:
+      styles/css/components/font-awesome.css: {}
+      styles/css/components/webfonts.css: {}
       styles/css/components/base.css: {}
+      styles/css/components/tables.css: {}
+      styles/css/components/form.css: {}
+      styles/css/components/field.css: {}
+      styles/css/components/image.css: {}
+      styles/css/components/page.css: {}
+      styles/css/components/block.css: {}
+      styles/css/components/block--branding.css: {}
+      styles/css/components/block--breadcrumb.css: {}
+      styles/css/components/node.css: {}
+      styles/css/components/user.css: {}
+      styles/css/components/views.css: {}
+      styles/css/components/menu.css: {}
+      styles/css/components/pagers.css: {}
+      styles/css/components/labels.css: {}
+      styles/css/components/markers.css: {}
+      styles/css/components/messages.css: {}
+      styles/css/components/print.css: {}
 
 # Aggregator
 aggregator:
@@ -24,7 +43,7 @@ login_block:
   version: 8.x-1.0
   css:
     theme:
-      styles/css/components/login-block.css: {}
+      styles/css/components/block--user-login.css: {}
 
 # Comment
 comment:
@@ -52,7 +71,7 @@ language:
   version: 8.x-1.0
   css:
     component:
-      styles/css/components/language.css: {}
+      styles/css/components/block--language-switcher.css: {}
 
 # Responsive Menus
 responsive_menus:
@@ -60,8 +79,13 @@ responsive_menus:
   css:
     component:
       styles/css/components/responsive-menus.css: {}
-  dependencies:
-    - at_core/at.responsivemenus
+
+# Responsive Menu Accordion
+responsive_menus_accordion:
+  version: 8.x-1.0
+  css:
+    component:
+      styles/css/components/responsive-menus--accordion.css: {}
 
 # Responsive Menu Tiles
 responsive_menus_tiles:
@@ -112,6 +136,13 @@ responsive_menus_horizontal:
     component:
       styles/css/components/responsive-menus--horizontal.css: {}
 
+# Responsive Menu Vertical
+responsive_menus_vertical:
+  version: 8.x-1.0
+  css:
+    component:
+      styles/css/components/responsive-menus--vertical.css: {}
+
 # Responsive Tables
 responsive_tables:
   version: 8.x-1.0
@@ -135,12 +166,22 @@ taxonomy:
     component:
       styles/css/components/taxonomy.css: {}
 
+# Node Add Edit.
+node_form:
+  version: 8.x-1.0
+  css:
+    component:
+      styles/css/components/node-form.css: {}
+  dependencies:
+    - at_core/at.responsivecolumns
+
 # Color
 color:
   version: 8.x-1.0
   css:
     theme:
       styles/css/components/color.css: {}
+      styles/css/components/tabs.css: {}
 
 # Shortcodes Text Align
 shortcodes_textalign:
@@ -233,13 +274,34 @@ quickedit:
     theme:
       styles/css/components/quickedit.css: {}
 
+# CKEditor
+ckeditor:
+  version: 8.x-1.0
+  css:
+    state:
+      styles/css/components/ckeditor.css: {}
+
+# Toolbar
+toolbar:
+  version: 8.x-1.0
+  css:
+    theme:
+      styles/css/components/toolbar.css: {}
+
+# jQuery UI CSS overrides.
+jquery_ui:
+  version: 8.x-1.0
+  css:
+    theme:
+      styles/css/components/jquery-ui.css: {}
+
 # Form Layout Widget CSS, do not use this in the front end, its only
 # for the layout theme settings.
 layout_settings:
   version: 8.x-1.0
   css:
     theme:
-      layout/site-builder/css/site-builder-form.css: {} # You probably need to change this if your theme uses a different layout plugin, i.e. you built your own.
+      layout/flex-builder/css/flex-builder-form.css: {} # You probably need to change this if your theme uses a different layout plugin, i.e. you built your own.
 
 #
 # Vendor Libraries - CSS plugins from github etc.
@@ -276,6 +338,7 @@ show_grid:
     theme:
       styles/css/show-grid.css: {}
 
+# Theme settings generated libraries.
 fonts:
   version: 8.x-1.0
   css:
@@ -313,6 +376,12 @@ addtoany:
     theme:
       styles/css/components/add-to-any.css: {}
 
+ds:
+  version: 8.x-1.0
+  css:
+    theme:
+      styles/css/components/display-suite-fields.css: {}
+
 superfish:
   version: 8.x-1.0
   css:
@@ -330,4 +399,4 @@ custom_css_file:
   version: 8.x-1.0
   css:
     theme:
-      styles/css/custom.css: {  weight: 1000 }
+      styles/css/custom.css: { weight: 1000 }

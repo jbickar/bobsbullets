@@ -15,7 +15,8 @@
 }
 
 #toolbar-administration button {
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   text-shadow: none;
 }
 

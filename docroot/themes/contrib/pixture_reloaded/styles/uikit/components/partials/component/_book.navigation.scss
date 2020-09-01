@@ -4,7 +4,11 @@
  ============================================================================ */
 
 // Menu tree in book navigation links.
-.book-menu-tree {}
+.menu--book-tree {
+  .menu__item {
+    a {}
+  }
+}
 
 
 .book-pager {

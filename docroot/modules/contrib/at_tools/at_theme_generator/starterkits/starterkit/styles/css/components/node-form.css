@@ -10,17 +10,18 @@
 }
 
 .is-horizontal .layout-node-form {
-  display: -webkit-flex;
+  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
 }
 
 .is-horizontal .layout-region-node-main,
 .is-horizontal .layout-region-node-secondary {
-  -webkit-flex: 0 0 100%;
+  -webkit-box-flex: 0;
       -ms-flex: 0 0 100%;
           flex: 0 0 100%;
   width: 100%;
@@ -28,15 +29,13 @@
 
 .is-horizontal .layout-region-node-main,
 .is-horizontal .layout-region-node-footer {
-  -webkit-flex-basis: 66.66667%;
-      -ms-flex-preferred-size: 66.66667%;
-          flex-basis: 66.66667%;
+  -ms-flex-preferred-size: 66.66667%;
+      flex-basis: 66.66667%;
 }
 
 .is-horizontal .layout-region-node-secondary {
-  -webkit-flex-basis: 33.33333%;
-      -ms-flex-preferred-size: 33.33333%;
-          flex-basis: 33.33333%;
+  -ms-flex-preferred-size: 33.33333%;
+      flex-basis: 33.33333%;
 }
 
 .is-horizontal .form-autocomplete,
@@ -50,13 +49,13 @@
 }
 
 .layout-region-node-footer .form-actions {
-  display: -webkit-flex;
+  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-align-items: flex-start;
+  -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
-  -webkit-justify-content: flex-start;
+  -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
 }

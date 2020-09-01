@@ -3,7 +3,13 @@
 
 // Basic horizontal list, uses a map and the familiar trbl (top, left, bottom,
 // right) CSS syntax.
-@mixin list-horizontal($float-direction, $margin: (t: 0, r: $medium, b: 0, l: $medium), $list_item_selector: null) {
+@mixin list-horizontal($direction, $margin: (t: 0, r: $medium, b: 0, l: $medium), $list_item_selector: null, $sub-levels: null) {
+
+  // Set the row direction.
+  $row-direction: if($direction == left, row, row-reverse);
+
+  display: flex;
+  flex-direction: $row-direction;
 
   $item_selector: 'li';
   @if $list_item_selector {
@@ -11,13 +17,14 @@
   }
 
   #{$item_selector} {
-    float: #{$float-direction};
     @include output-rhythm(margin, map-get($margin, t) map-get($margin, r) map-get($margin, b) map-get($margin, l));
     list-style: none;
 
     ul,
     ol {
-      display: none;
+      @if $sub-levels == hidden {
+        display: none;
+      }
     }
 
     [dir="rtl"] & {
@@ -28,6 +35,7 @@
 }
 
 // Use display property instead of float.
+// TODO change to FLEX ?
 @mixin list-horizontal-inline($display: inline-block, $margin: (t: 0, r: $medium, b: 0, l: $medium), $list_item_selector: null) {
 
   $item_selector: 'li';

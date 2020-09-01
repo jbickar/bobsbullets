@@ -21,6 +21,16 @@ function at_core_preprocess(&$variables) {
     $theme = $data->getConfig();
   }
   $variables['theme'] = $theme;
+
+  // Set global is_front.
+  try {
+    $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+  }
+  catch (Exception $e) {
+    $variables['is_front'] = FALSE;
+  }
+  // Ensure the cache varies correctly (new in Drupal 8.3).
+  $variables['#cache']['contexts'][] = 'url.path.is_front';
 }
 
 /**
@@ -32,13 +42,16 @@ function at_core_preprocess_html(&$variables) {
   //$themeConfig = new ThemeConfig($active_theme_name);
   $config = $variables['theme']['config'];
 
+  // Set active theme name.
+  $active_theme_name = $variables['theme']['name'];
+
   // Reset $variables['directory'] if this is a skin theme.
   if ($variables['theme']['type'] === 'adaptive_skin' && !empty($variables['theme']['base'])) {
     $variables['directory'] = $variables['theme']['path'];
   }
 
   // Set the skip navigation target ID
-  $variables['skip_link_target'] = '#main-content';
+  $variables['skip_link_target'] = '#block-' . Html::cleanCssIdentifier($active_theme_name) . '-content';
 
   // Defaults for Appearance setting variables.
   $variables['touch_icons'] = [];
@@ -69,11 +82,6 @@ function at_core_preprocess_html(&$variables) {
   $path_args = explode('/', $path);
   if (count($path_args) >= 3) {
     $variables['path_info']['args'] = Html::cleanCssIdentifier(ltrim($path, '/'));
-  }
-
-  // Bring back our beloved D7 is_front.
-  if (\Drupal::service('path.matcher')->isFrontPage() === TRUE) {
-    $variables['is_front'] = TRUE;
   }
 
   // Extensions

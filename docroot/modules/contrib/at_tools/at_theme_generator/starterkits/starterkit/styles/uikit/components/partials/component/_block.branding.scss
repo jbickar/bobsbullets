@@ -3,7 +3,7 @@
  *  - Drupal core branding block.
  ============================================================================ */
 
-.block--system-branding-block {
+.block-plugin-id--system-branding-block {
   @include output-rhythm(margin, $large 0);
 }
 
@@ -65,4 +65,9 @@
   }
 }
 
+
+// Conditional classes
+.has-logo {}
+.has-name {}
+.has-slogan {}
 

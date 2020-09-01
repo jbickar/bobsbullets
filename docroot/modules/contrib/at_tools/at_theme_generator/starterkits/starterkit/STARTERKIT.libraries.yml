@@ -303,7 +303,7 @@ layout_settings:
   version: VERSION_STRING
   css:
     theme:
-      layout/flex-builder/css/flex-builder-form.css: {}
+      layout/page-layout/css/page-layout-form.css: {}
 
 #
 # Vendor Libraries - CSS plugins from github etc.
@@ -362,12 +362,6 @@ title_styles:
     theme:
       styles/css/generated/title-styles.css: {}
 
-custom_css:
-  version: VERSION_STRING
-  css:
-    theme:
-      styles/css/generated/custom-css.css: { weight: 1000 }
-
 breadcrumb:
   version: VERSION_STRING
   css:
@@ -411,7 +405,14 @@ social_media_links:
     theme:
       styles/css/components/social-media-links.css: {}
 
-# Custom CSS library for novice users.
+# Custom CSS extension for novice users.
+custom_css:
+  version: VERSION_STRING
+  css:
+    theme:
+      styles/css/generated/custom-css.css: { weight: 999 }
+
+# Custom CSS file.
 custom_css_file:
   version: VERSION_STRING
   css:
