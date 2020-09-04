@@ -25,7 +25,8 @@
         "drupal/migrate_plus": "~4.2",
         "drupal/migrate_tools": "~4.5",
         "drupal/migrate_manifest": "~1.9",
-        "drupal/pixture_reloaded": "~3.0"
+        "drupal/pixture_reloaded": "~3.0",
+        "drupal/pathauto": "^1.8"
     },
     "repositories": [
         {
