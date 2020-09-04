@@ -8,6 +8,7 @@ $aliases['prod'] = array(
   'path-aliases' => array(
     '%drush' => '/home/jbickar/dr8/',
     '%drush-script' => '/home/jbickar/dr8/drush',
+    '%files' => '/home/jbickar/bobsbullets.net/docroot/sites/default/files',
    ),
 );
 $aliases['test'] = array(
@@ -18,6 +19,7 @@ $aliases['test'] = array(
   'path-aliases' => array(
     '%drush' => '/home/jbickar/dr8/',
     '%drush-script' => '/home/jbickar/dr8/drush',
+    '%files' => '/home/jbickar/test.bobsbullets.net/docroot/sites/default/files',
    ),
 );
 $aliases['dev'] = array(
@@ -28,6 +30,18 @@ $aliases['dev'] = array(
   'path-aliases' => array(
     '%drush' => '/home/jbickar/dr8/',
     '%drush-script' => '/home/jbickar/dr8/drush',
+    '%files' => '/home/jbickar/dev.bobsbullets.net/docroot/sites/default/files',
+   ),
+);
+$aliases['2020'] = array(
+  'remote-host' => 'bobsbullets.net',
+  'remote-user' => 'jbickar',
+  'root' => '/home/jbickar/2020.bobsbullets.net/docroot',
+  'uri' => 'https://2020.bobsbullets.net',
+  'path-aliases' => array(
+    '%drush' => '/home/jbickar/dr8/',
+    '%drush-script' => '/home/jbickar/dr8/drush',
+    '%files' => '/home/jbickar/2020.bobsbullets.net/docroot/sites/default/files',
    ),
 );
 $aliases['local'] = array(
