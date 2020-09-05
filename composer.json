@@ -27,7 +27,8 @@
         "drupal/migrate_manifest": "~1.9",
         "drupal/pixture_reloaded": "~3.0",
         "drupal/pathauto": "^1.8",
-        "drupal/honeypot": "^2.0"
+        "drupal/honeypot": "^2.0",
+        "drupal/redirect": "^1.6"
     },
     "repositories": [
         {
