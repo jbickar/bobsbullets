@@ -2129,17 +2129,17 @@
     },
     {
         "name": "drupal/core",
-        "version": "8.9.3",
-        "version_normalized": "8.9.3.0",
+        "version": "8.9.5",
+        "version_normalized": "8.9.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/drupal/core.git",
-            "reference": "ee02fd4cbe4ac148b4d7e297ec63b3459983862e"
+            "reference": "c9b9643663b80f02c038f9dea15b8717a22c3339"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/drupal/core/zipball/ee02fd4cbe4ac148b4d7e297ec63b3459983862e",
-            "reference": "ee02fd4cbe4ac148b4d7e297ec63b3459983862e",
+            "url": "https://api.github.com/repos/drupal/core/zipball/c9b9643663b80f02c038f9dea15b8717a22c3339",
+            "reference": "c9b9643663b80f02c038f9dea15b8717a22c3339",
             "shasum": ""
         },
         "require": {
@@ -2306,7 +2306,7 @@
             "drupal/workflows": "self.version",
             "drupal/workspaces": "self.version"
         },
-        "time": "2020-08-05T21:49:40+00:00",
+        "time": "2020-09-03T21:07:45+00:00",
         "type": "drupal-core",
         "extra": {
             "drupal-scaffold": {
@@ -5375,8 +5375,8 @@
     },
     {
         "name": "symfony/debug",
-        "version": "v4.4.12",
-        "version_normalized": "4.4.12.0",
+        "version": "v4.4.13",
+        "version_normalized": "4.4.13.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/debug.git",
@@ -5614,8 +5614,8 @@
     },
     {
         "name": "symfony/filesystem",
-        "version": "v4.4.12",
-        "version_normalized": "4.4.12.0",
+        "version": "v4.4.13",
+        "version_normalized": "4.4.13.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/filesystem.git",
