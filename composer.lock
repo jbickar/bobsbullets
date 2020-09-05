@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "90773e4bbdc0c96a848b9ae89d141c99",
+    "content-hash": "04d67eab1eae0df4bfbee0e3bebbc770",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2988,17 +2988,11 @@
         },
         {
             "name": "drupal/pixture_reloaded",
-            "version": "3.0.0",
+            "version": "dev-3.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/pixture_reloaded.git",
-                "reference": "8.x-3.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/pixture_reloaded-8.x-3.0.zip",
-                "reference": "8.x-3.0",
-                "shasum": "f2ea0e68e285199cdf1884a398c0d98d23ad89fe"
+                "reference": "bc0824b68d6b98c78c30cb268f3dbf602872942b"
             },
             "require": {
                 "drupal/adaptivetheme": "*",
@@ -3006,12 +3000,15 @@
             },
             "type": "drupal-theme",
             "extra": {
+                "branch-alias": {
+                    "dev-3.x": "3.x-dev"
+                },
                 "drupal": {
-                    "version": "8.x-3.0",
-                    "datestamp": "1511474584",
+                    "version": "8.x-3.0+1-dev",
+                    "datestamp": "1518304380",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -3032,7 +3029,8 @@
                 "source": "http://git.drupal.org/project/pixture_reloaded.git",
                 "issues": "https://www.drupal.org/project/issues/pixture_reloaded",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
-            }
+            },
+            "time": "2018-02-10T23:12:50+00:00"
         },
         {
             "name": "drupal/redirect",
@@ -7441,7 +7439,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "drupal/pixture_reloaded": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],

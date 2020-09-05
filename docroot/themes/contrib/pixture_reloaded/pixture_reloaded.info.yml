@@ -7,7 +7,7 @@ layout: flex-builder
 description: 'Recolorable theme with many regions and theme settings. (base theme: at_core).'
 'alt text': 'Screenshot for Pixture Reloaded'
 tags: sub-theme
-# core: 8.x
+core: 8.x
 regions:
   leaderboard: Leaderboard
   header_first: 'Header first'
@@ -44,9 +44,3 @@ stylesheets-remove:
 libraries-extend:
   quickedit/quickedit:
     - pixture_reloaded/quickedit
-
-# Information added by Drupal.org packaging script on 2017-11-23
-version: '8.x-3.0'
-core: '8.x'
-project: 'pixture_reloaded'
-datestamp: 1511474614
