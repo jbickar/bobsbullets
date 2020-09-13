@@ -54,6 +54,11 @@
       ],
       "post-update-cmd": [
         "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
+      ],
+      "init-lando": [
+        "cp lando/example.env .env",
+        "cp lando/example.lando.yml .lando.yml",
+        "cp lando/example.php.ini lando/php.ini"
       ]
     },
     "config": {
