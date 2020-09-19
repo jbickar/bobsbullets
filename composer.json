@@ -28,7 +28,8 @@
         "drupal/pixture_reloaded": "dev-3.x",
         "drupal/pathauto": "^1.8",
         "drupal/honeypot": "^2.0",
-        "drupal/redirect": "^1.6"
+        "drupal/redirect": "^1.6",
+        "drupal/module_filter": "^3.1"
     },
     "repositories": [
         {
