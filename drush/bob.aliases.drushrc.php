@@ -3,12 +3,12 @@
 $aliases['prod'] = array(
   'remote-host' => 'bobsbullets.net',
   'remote-user' => 'jbickar',
-  'root' => '/home/jbickar/bobsbullets.net/docroot',
+  'root' => '/home/jbickar/2020.bobsbullets.net/docroot',
   'uri' => 'https://bobsbullets.net',
   'path-aliases' => array(
     '%drush' => '/home/jbickar/dr8/',
     '%drush-script' => '/home/jbickar/dr8/drush',
-    '%files' => '/home/jbickar/bobsbullets.net/docroot/sites/default/files',
+    '%files' => '/home/jbickar/2020.bobsbullets.net/docroot/sites/default/files',
    ),
 );
 $aliases['test'] = array(
