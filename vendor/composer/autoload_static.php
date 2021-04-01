@@ -503,13 +503,6 @@ class ComposerStaticInit49a7980636e66441f2a92d40ba8a5e47
                 0 => __DIR__ . '/..' . '/stack/builder/src',
             ),
         ),
-        'K' => 
-        array (
-            'KubAT\\PhpSimple\\HtmlDomParser' => 
-            array (
-                0 => __DIR__ . '/..' . '/kub-at/php-simple-html-dom-parser/src',
-            ),
-        ),
         'H' => 
         array (
             'HTMLPurifier' => 
