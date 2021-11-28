@@ -1,3 +1,7 @@
+AuthUserFile /home/jbickar/2020.bobsbullets.net/.htpasswd
+AuthType Basic
+AuthName "Authentication Required"
+Require valid-user
 #
 # Apache/PHP/Drupal settings:
 #
