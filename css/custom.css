@@ -6,3 +6,7 @@ body p, body table {
 body h1 {
   padding-left: 1.6em;
 }
+
+.su-brand-bar {
+  background-color: #4a9745
+}
