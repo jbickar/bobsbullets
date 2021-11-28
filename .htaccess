@@ -1,5 +1,5 @@
 <IfModule mod_rewrite.c>
   RewriteEngine on
-  RewriteRule .* index.html [L,R=404]
+  RewriteRule .* index.html [NC,L]
 </IfModule>
 
